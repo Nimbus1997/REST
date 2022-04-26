@@ -862,13 +862,11 @@ class   ellen_dwt_uresnet2_1(nn.Module):
         dwt_transform_type = 'bior1.3'  
         #bior1.3 dwt한후 size: s/2 +2 가 됨 --> [1:-1,1:-1]로 해서 딱 1/2이 되도록
         #haar dwt한후 size: s/2가 됨
-
-
         
         ll0, (lh0,hl0,hh0) = pywt.dwt2(input0,dwt_transform_type)
         ll1, (lh1,hl1,hh1) = pywt.dwt2(input1,dwt_transform_type)
         ll2, (lh2,hl2,hh2) = pywt.dwt2(input2,dwt_transform_type)
-        input_h, input_w= ll0.shpae
+        input_h, input_w= ll0.shape
 
         ll_f = np.array([ll0[1:-1,1:-1],ll1[1:-1,1:-1],ll2[1:-1,1:-1]]).reshape(1,3,input_h,input_w) # shape (1,3,512,512)
 
