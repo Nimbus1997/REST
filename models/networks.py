@@ -1,9 +1,12 @@
+import numbers
+from cv2 import norm
 import torch
 import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
-
+import pywt
+import numpy as np
 
 ###############################################################################
 # Helper Functions
@@ -19,7 +22,7 @@ def get_norm_layer(norm_type='instance'):
     """Return a normalization layer
 
     Parameters:
-        norm_type (str) -- the name of the normalization layer: batch | instance | none
+        norm _type (str) -- the name of the normalization layer: batch | instance | none --> default norm is " instance" 
 
     For BatchNorm, we use learnable affine parameters and track running statistics (mean/stddev).
     For InstanceNorm, we do not use learnable affine parameters. We do not track running statistics.
@@ -154,6 +157,20 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
         net = UnetGenerator(input_nc, output_nc, 7, ngf, norm_layer=norm_layer, use_dropout=use_dropout)
     elif netG == 'unet_256':
         net = UnetGenerator(input_nc, output_nc, 8, ngf, norm_layer=norm_layer, use_dropout=use_dropout)
+    elif netG == 'unet_512': # ellen made
+        net = UnetGenerator(input_nc, output_nc, 9, ngf, norm_layer=norm_layer, use_dropout=use_dropout)
+    elif netG == 'ellen_resunet':
+        # uresent
+        net = UResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=9)
+        print(net)
+        #defalut - num_down
+    elif netG == 'ellen_dwt_uresnet2_1':
+        #dwgan + uresnet
+        net = ellen_dwt_uresnet2_1(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=3)
+    elif netG == 'ellen_dwt_uresnet1_1':
+        #dwgan + uresnet
+        net = ellen_dwt_uresnet2_1(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=3)
+
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % netG)
     return init_net(net, init_type, init_gain, gpu_ids)
@@ -479,13 +496,15 @@ class UnetSkipConnectionBlock(nn.Module):
             outer_nc (int) -- the number of filters in the outer conv layer
             inner_nc (int) -- the number of filters in the inner conv layer
             input_nc (int) -- the number of channels in input images/features
-            submodule (UnetSkipConnectionBlock) -- previously defined submodules
+            submodule (UnetSkipConnectionBlock) -- previously defined submodules -전에 define한 모듈
             outermost (bool)    -- if this module is the outermost module
             innermost (bool)    -- if this module is the innermost module
             norm_layer          -- normalization layer
             use_dropout (bool)  -- if use dropout layers.
         """
         super(UnetSkipConnectionBlock, self).__init__()
+
+        # 정의 
         self.outermost = outermost
         if type(norm_layer) == functools.partial:
             use_bias = norm_layer.func == nn.InstanceNorm2d
@@ -496,25 +515,26 @@ class UnetSkipConnectionBlock(nn.Module):
         downconv = nn.Conv2d(input_nc, inner_nc, kernel_size=4,
                              stride=2, padding=1, bias=use_bias)
         downrelu = nn.LeakyReLU(0.2, True)
-        downnorm = norm_layer(inner_nc)
+        downnorm = norm_layer(inner_nc) # inner_nc:the # of filters in the inner conv layer
         uprelu = nn.ReLU(True)
         upnorm = norm_layer(outer_nc)
 
-        if outermost:
+        #실질적 모델 구성 - becuase it has a word "model" in it & upconv가 keep changing
+        if outermost: # 제일 마지막 module
             upconv = nn.ConvTranspose2d(inner_nc * 2, outer_nc,
                                         kernel_size=4, stride=2,
                                         padding=1)
             down = [downconv]
             up = [uprelu, upconv, nn.Tanh()]
             model = down + [submodule] + up
-        elif innermost:
+        elif innermost: # 제일 처음 module
             upconv = nn.ConvTranspose2d(inner_nc, outer_nc,
                                         kernel_size=4, stride=2,
                                         padding=1, bias=use_bias)
             down = [downrelu, downconv]
             up = [uprelu, upconv, upnorm]
             model = down + up
-        else:
+        else: # 그 중간 module
             upconv = nn.ConvTranspose2d(inner_nc * 2, outer_nc,
                                         kernel_size=4, stride=2,
                                         padding=1, bias=use_bias)
@@ -533,6 +553,356 @@ class UnetSkipConnectionBlock(nn.Module):
             return self.model(x)
         else:   # add skip connections
             return torch.cat([x, self.model(x)], 1)
+
+
+class   UResnetGenerator(nn.Module):
+    """
+    made by ellen 
+    Unet + Resnet 
+    encoder & decoder 부분 : Unet 으로 
+    Transformer 부분: Resnet으로 
+
+    왜? Unet이 세부 디테일을 잘 살려 줄 것 같은데, 너무 압축하다보니 오히려 안좋은 결과를 내는 것 같아서
+    (unet 256일때는 nums of down이 8, 512 일때는 9로 했는데, 후자의 결과가 훨씬 안좋았음.)
+    그래서 unet부분은 nums of down을 적게하고, (resnet이 할때와 비슷하게)
+
+    Transformer part를 늘리기 like resnet  
+
+    input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=9)  
+    """
+    
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, padding_type='reflect'):
+        super(UResnetGenerator, self).__init__()
+        if type(norm_layer) == functools.partial:
+            use_bias = norm_layer.func == nn.InstanceNorm2d
+        else:
+            use_bias = norm_layer == nn.InstanceNorm2d
+
+        # e1 크기는 일정, chanel 수 변환3-> 64
+        model = [nn.ReflectionPad2d(3), nn.Conv2d(input_nc, ngf, kernel_size=7, padding=0, bias=use_bias), norm_layer(ngf), nn.ReLU(True)]
+        print("----e1")
+        # resnet 구조(unet안에 있는)
+        # default: 64*8 -> 64*8 반복
+        multi = 2**(num_downs) # 내려가는 만큼 채널수 : 64*2^n  
+        resnet_inUnet=[]
+        for i in range(n_blocks):
+            resnet_inUnet += [ResnetBlock(ngf*multi, padding_type=padding_type, norm_layer=norm_layer, use_dropout= use_dropout, use_bias=use_bias )]
+            print("-----resnet", i, " 번째")
+
+        # unet 구조 시작(resnet을 감싸는)
+        # i : 0,1,2,3,, n
+        # default: 안 64*8
+        resnet_inUnets= nn.Sequential(*resnet_inUnet) # submodule
+        unetblock = UnetSkipConnectionBlock(ngf*multi, ngf*multi, input_nc=None, submodule=resnet_inUnets, norm_layer=norm_layer, innermost=True) # 젤 안쪽에서 resnet과 닿아 있는 것 > 64*8 64*8
+        unetblock = UnetSkipConnectionBlock(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock , norm_layer=norm_layer) # > 64*4 64*8
+        print(">> in, out: ", ngf*(multi/2),", ", ngf*multi)
+        for i in range(num_downs-2):
+            multi = int(multi/2)
+            unetblock = UnetSkipConnectionBlock(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer)
+            print("-----unet", i, " 번째")
+            print(">> in, out: ", ngf*(multi/2),", ", ngf*multi)
+        multi = int(multi/2)    
+        unetblock = UnetSkipConnectionBlock(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer, outermost=True)
+        
+        model = model + [unetblock]
+        print("----- e1+unet+resent+uent+")
+
+        # d1 크기는 일정, chanel 수 변환64->3
+        model +=[nn.ReflectionPad2d(3), nn.Conv2d(ngf,output_nc, kernel_size=7, padding=0), nn.Tanh()]
+        print("----- e1+unet+resent+uent+d1")
+
+
+        self.model = nn.Sequential(*model)
+        print(model)
+
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+
+        return self.model(input)
+
+# ellen - from DWGAN _ 2022.04.19
+
+def dwt_init(x):
+    x01 = x[:, :, 0::2, :] / 2
+    x02 = x[:, :, 1::2, :] / 2
+    x1 = x01[:, :, :, 0::2]
+    x2 = x02[:, :, :, 0::2]
+    x3 = x01[:, :, :, 1::2]
+    x4 = x02[:, :, :, 1::2]
+    x_LL = x1 + x2 + x3 + x4
+    x_HL = -x1 - x2 + x3 + x4
+    x_LH = -x1 + x2 - x3 + x4
+    x_HH = x1 - x2 - x3 + x4
+    return x_LL, torch.cat((x_HL, x_LH, x_HH), 1)
+
+class DWT(nn.Module):
+    def __init__(self):
+        super(DWT, self).__init__()
+        self.requires_grad = False
+    def forward(self, x):
+        return dwt_init(x)
+
+
+class DWT_transform(nn.Module):
+    def __init__(self, in_channels,out_channels):
+        super().__init__()
+        self.dwt = DWT()
+        self.conv1x1_low = nn.Conv2d(in_channels, out_channels, kernel_size=1, padding=0)
+        self.conv1x1_high = nn.Conv2d(in_channels*3, out_channels, kernel_size=1, padding=0)
+    def forward(self, x):
+        dwt_low_frequency,dwt_high_frequency = self.dwt(x)
+        dwt_low_frequency = self.conv1x1_low(dwt_low_frequency)
+        dwt_high_frequency = self.conv1x1_high(dwt_high_frequency)
+        return dwt_low_frequency,dwt_high_frequency
+
+def blockUNet(in_c, out_c, name, transposed=False, bn=False, relu=True, dropout=False):
+    block = nn.Sequential()
+    if relu:
+        block.add_module('%s_relu' % name, nn.ReLU(inplace=True))
+    else:
+        block.add_module('%s_leakyrelu' % name, nn.LeakyReLU(0.2, inplace=True))
+    if not transposed:
+        block.add_module('%s_conv' % name, nn.Conv2d(in_c, out_c, 4, 2, 1, bias=False))
+    else:
+        block.add_module('%s_tconv' % name, nn.ConvTranspose2d(in_c, out_c, 4, 2, 1, bias=False))
+    if bn:
+        block.add_module('%s_bn' % name, nn.BatchNorm2d(out_c))
+    if dropout:
+        block.add_module('%s_dropout' % name, nn.Dropout2d(0.5, inplace=True))
+    return block
+
+class dwt_Unet(nn.Module):
+    def __init__(self,output_nc=3, nf=16):
+        super(dwt_Unet, self).__init__()
+        layer_idx = 1
+        name = 'layer%d' % layer_idx
+        layer1 = nn.Sequential()
+        layer1.add_module(name, nn.Conv2d(16, nf-1, 4, 2, 1, bias=False))
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer2 = blockUNet(nf, nf*2-2, name, transposed=False, bn=True, relu=False, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer3 = blockUNet(nf*2, nf*4-4, name, transposed=False, bn=True, relu=False, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer4 = blockUNet(nf*4, nf*8-8, name, transposed=False, bn=True, relu=False, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer5 = blockUNet(nf*8, nf*8-16, name, transposed=False, bn=True, relu=False, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer6 = blockUNet(nf*8, nf*8, name, transposed=False, bn=False, relu=False, dropout=False)
+
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer6 = blockUNet(nf * 8, nf * 8, name, transposed=True, bn=True, relu=True, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer5 = blockUNet(nf * 16+16, nf * 8, name, transposed=True, bn=True, relu=True, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer4 = blockUNet(nf * 16+8, nf * 4, name, transposed=True, bn=True, relu=True, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer3 = blockUNet(nf * 8+4, nf * 2, name, transposed=True, bn=True, relu=True, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer2 = blockUNet(nf * 4+2, nf, name, transposed=True, bn=True, relu=True, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer1 = blockUNet(nf * 2+1, nf * 2, name, transposed=True, bn=True, relu=True, dropout=False)
+
+        self.initial_conv=nn.Conv2d(3,16,3,padding=1)
+        self.bn1=nn.BatchNorm2d(16)
+        self.layer1 = layer1
+        self.DWT_down_0= DWT_transform(3,1)
+        self.layer2 = layer2
+        self.DWT_down_1 = DWT_transform(16, 2)
+        self.layer3 = layer3
+        self.DWT_down_2 = DWT_transform(32, 4)
+        self.layer4 = layer4
+        self.DWT_down_3 = DWT_transform(64, 8)
+        self.layer5 = layer5
+        self.DWT_down_4 = DWT_transform(128, 16)
+        self.layer6 = layer6
+        self.dlayer6 = dlayer6
+        self.dlayer5 = dlayer5
+        self.dlayer4 = dlayer4
+        self.dlayer3 = dlayer3
+        self.dlayer2 = dlayer2
+        self.dlayer1 = dlayer1
+        self.tail_conv1 = nn.Conv2d(48, 32, 3, padding=1, bias=True)
+        self.bn2=nn.BatchNorm2d(32)
+        self.tail_conv2 = nn.Conv2d(nf*2, output_nc, 3,padding=1, bias=True)
+
+    def forward(self, x):
+        conv_start=self.initial_conv(x)
+        conv_start=self.bn1(conv_start)
+        conv_out1 = self.layer1(conv_start)
+        dwt_low_0,dwt_high_0=self.DWT_down_0(x)
+        out1=torch.cat([conv_out1, dwt_low_0], 1)
+        conv_out2 = self.layer2(out1)
+        dwt_low_1,dwt_high_1= self.DWT_down_1(out1)
+        out2 = torch.cat([conv_out2, dwt_low_1], 1)
+        conv_out3 = self.layer3(out2)
+        dwt_low_2,dwt_high_2 = self.DWT_down_2(out2)
+        out3 = torch.cat([conv_out3, dwt_low_2], 1)
+        conv_out4 = self.layer4(out3)
+        dwt_low_3,dwt_high_3 = self.DWT_down_3(out3)
+        out4 = torch.cat([conv_out4, dwt_low_3], 1)
+        conv_out5 = self.layer5(out4)
+        dwt_low_4,dwt_high_4 = self.DWT_down_4(out4)
+        out5 = torch.cat([conv_out5, dwt_low_4], 1)
+        out6 = self.layer6(out5)
+        dout6 = self.dlayer6(out6)
+
+        Tout6_out5 = torch.cat([dout6, out5, dwt_high_4], 1)
+        Tout5 = self.dlayer5(Tout6_out5)
+        Tout5_out4 = torch.cat([Tout5, out4,dwt_high_3], 1)
+        Tout4 = self.dlayer4(Tout5_out4)
+        Tout4_out3 = torch.cat([Tout4, out3,dwt_high_2], 1)
+        Tout3 = self.dlayer3(Tout4_out3)
+        Tout3_out2 = torch.cat([Tout3, out2,dwt_high_1], 1)
+        Tout2 = self.dlayer2(Tout3_out2)
+        Tout2_out1 = torch.cat([Tout2, out1,dwt_high_0], 1)
+        Tout1 = self.dlayer1(Tout2_out1)
+        Tout1_outinit = torch.cat([Tout1, conv_start], 1)
+        tail1=self.tail_conv1(Tout1_outinit)
+        tail2=self.bn2(tail1)
+        dout1 = self.tail_conv2(tail2)
+        return dout1    
+
+
+class   ellen_dwt_uresnet2_1(nn.Module):
+    """
+    made by ellen _2022.04.19 
+    dwt_network & uresnet 
+    dwt 부분: https://github.com/liuh127/NTIRE-2021-Dehazing-DWGAN/blob/e0d2f4f2dfcfd66bdb77d6aa122392e1bb51cef0/model.py#L184 참고
+    
+    input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
+    """
+    
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, padding_type='reflect'):
+        super(ellen_dwt_uresnet2_1, self).__init__()
+        self.uresnet = UResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=9)
+        self.dwt_model = dwt_Unet()
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(3), nn.Conv2d(6,3, kernel_size=7, padding=0), nn.Tanh())
+    
+    
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        result_uresnet= self.uresnet(input)
+        result_dwt = self.dwt_model(input)
+        x = torch.cat([result_dwt, result_uresnet],1)     
+
+        return self.fusion(x)
+
+class   ellen_dwt_uresnet2_1(nn.Module):
+    """
+    made by ellen _2022.04.19 
+    dwt_network + uresnet 
+    
+    input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
+    """
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, padding_type='reflect'):
+        super(ellen_dwt_uresnet2_1, self).__init__()
+        if type(norm_layer) == functools.partial:
+            use_bias = norm_layer.func == nn.InstanceNorm2d
+        else:
+            use_bias = norm_layer == nn.InstanceNorm2d
+
+        # e1 크기는 일정, chanel 수 변환3-> 64
+        model = [nn.ReflectionPad2d(3), nn.Conv2d(input_nc, ngf, kernel_size=7, padding=0, bias=use_bias), norm_layer(ngf), nn.ReLU(True)]
+        print("----e1")
+        # resnet 구조(unet안에 있는)
+        # default: 64*8 -> 64*8 반복
+        multi = 2**(num_downs) # 내려가는 만큼 채널수 : 64*2^n  
+        resnet_inUnet=[]
+        for i in range(n_blocks):
+            resnet_inUnet += [ResnetBlock(ngf*multi, padding_type=padding_type, norm_layer=norm_layer, use_dropout= use_dropout, use_bias=use_bias )]
+            print("-----resnet", i, " 번째")
+
+        # unet 구조 시작(resnet을 감싸는)
+        # i : 0,1,2,3,, n
+        # default: 안 64*8
+        resnet_inUnets= nn.Sequential(*resnet_inUnet) # submodule
+        unetblock = UnetSkipConnectionBlock(ngf*multi, ngf*multi, input_nc=None, submodule=resnet_inUnets, norm_layer=norm_layer, innermost=True) # 젤 안쪽에서 resnet과 닿아 있는 것 > 64*8 64*8
+        unetblock = UnetSkipConnectionBlock(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock , norm_layer=norm_layer) # > 64*4 64*8
+        print(">> in, out: ", ngf*(multi/2),", ", ngf*multi)
+        for i in range(num_downs-2):
+            multi = int(multi/2)
+            unetblock = UnetSkipConnectionBlock(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer)
+            print("-----unet", i, " 번째")
+            print(">> in, out: ", ngf*(multi/2),", ", ngf*multi)
+        multi = int(multi/2)    
+        unetblock = UnetSkipConnectionBlock(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer, outermost=True)
+        
+        model = model + [unetblock]
+        print("----- e1+unet+resent+uent+")
+
+        # d1 크기는 일정, chanel 수 변환64->3
+        model +=[nn.ReflectionPad2d(3), nn.Conv2d(ngf,output_nc, kernel_size=7, padding=0), nn.Tanh()]
+        print("----- e1+unet+resent+uent+d1")
+
+
+        self.model = nn.Sequential(*model)
+        print(model)
+
+    def dwt_conv(slef, input):
+        input0= input[0,:,:]
+        input1= input[1,:,:]
+        input2= input[2,:,:]
+
+        dwt_transform_type = 'bior1.3'  
+        #bior1.3 dwt한후 size: s/2 +2 가 됨 --> [1:-1,1:-1]로 해서 딱 1/2이 되도록
+        #haar dwt한후 size: s/2가 됨
+
+
+        
+        ll0, (lh0,hl0,hh0) = pywt.dwt2(input0,dwt_transform_type)
+        ll1, (lh1,hl1,hh1) = pywt.dwt2(input1,dwt_transform_type)
+        ll2, (lh2,hl2,hh2) = pywt.dwt2(input2,dwt_transform_type)
+        input_h, input_w= ll0.shpae
+
+        ll_f = np.array([ll0[1:-1,1:-1],ll1[1:-1,1:-1],ll2[1:-1,1:-1]]).reshape(1,3,input_h,input_w) # shape (1,3,512,512)
+
+        
+        high_f =  nn.conv
+
+        return ll_f, 
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        ll, hight_f = self.dwt_conv(input.reshape(3,512,512))
+
+        return self.model(input)
+
+    
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, padding_type='reflect'):
+        super(ellen_dwt_uresnet2_1, self).__init__()
+        self.uresnet = UResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=9)
+        self.dwt_model = dwt_Unet()
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(3), nn.Conv2d(6,3, kernel_size=7, padding=0), nn.Tanh())
+    
+    
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        result_uresnet= self.uresnet(input)
+        result_dwt = self.dwt_model(input)
+        x = torch.cat([result_dwt, result_uresnet],1)     
+
+        return self.fusion(x)
 
 
 class NLayerDiscriminator(nn.Module):
