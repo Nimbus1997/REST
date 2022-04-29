@@ -554,7 +554,7 @@ class UnetSkipConnectionBlock(nn.Module):
         else:   # add skip connections
             return torch.cat([x, self.model(x)], 1)
 
-
+# ---------------------------------------------------------------------------------
 class   ellen_uresent(nn.Module):
     """
     made by ellen 
@@ -623,6 +623,8 @@ class   ellen_uresent(nn.Module):
 
         return self.model(input)
 
+
+# -------------------------------------------------------------------------------------------------------------
 # ellen - from DWGAN _ 2022.04.19
 
 def dwt_init(x):
@@ -803,88 +805,8 @@ class   ellen_dwt_uresnet2_1(nn.Module):
 
         return self.fusion(x)
 
-class ellen_UnetSkipConnectionBlock_dw(nn.Module):
-    """
-    ellen modified 
-        날짜: 2022.04.28
-        이유: ellen_dwt_uresnet1_1 (dw한것과 ureset을 합쳐서 모델)을 만드려니 forward 부분에서 다르게 받아야함.
-            - forward에서 달라지는 부분: outermost layer에서는 high f 와 concat해서 합치기 
-            만약 원래 코드에 if문을 써서하면, 연산량이 늘 것 같아서 따로 분리함
-    ----------------------------------------------------------------------
-    원래 UnetSikpConnectionBlock 설명: 
-        Defines the Unet submodule with skip connection.
-            X -------------------identity----------------------
-            |-- downsampling -- |submodule| -- upsampling --|
-    """
+#------------------------------------------------------------------------------------------------------------
 
-    def __init__(self, outer_nc, inner_nc, input_nc=None,
-                 submodule=None, outermost=False, innermost=False, norm_layer=nn.BatchNorm2d, use_dropout=False):
-        """Construct a Unet submodule with skip connections.
-
-        Parameters:
-            outer_nc (int) -- the number of filters in the outer conv layer
-            inner_nc (int) -- the number of filters in the inner conv layer
-            input_nc (int) -- the number of channels in input images/features
-            submodule (UnetSkipConnectionBlock) -- previously defined submodules -전에 define한 모듈
-            outermost (bool)    -- if this module is the outermost module
-            innermost (bool)    -- if this module is the innermost module
-            norm_layer          -- normalization layer
-            use_dropout (bool)  -- if use dropout layers.
-        """
-        super(UnetSkipConnectionBlock, self).__init__()
-
-        # 정의 
-        self.outermost = outermost
-        if type(norm_layer) == functools.partial:
-            use_bias = norm_layer.func == nn.InstanceNorm2d
-        else:
-            use_bias = norm_layer == nn.InstanceNorm2d
-        if input_nc is None:
-            input_nc = outer_nc
-        downconv = nn.Conv2d(input_nc, inner_nc, kernel_size=4,
-                             stride=2, padding=1, bias=use_bias)
-        downrelu = nn.LeakyReLU(0.2, True)
-        downnorm = norm_layer(inner_nc) # inner_nc:the # of filters in the inner conv layer
-        uprelu = nn.ReLU(True)
-        upnorm = norm_layer(outer_nc)
-
-        #실질적 모델 구성 - becuase it has a word "model" in it & upconv가 keep changing
-        if outermost: # 제일 마지막 module
-            upconv = nn.ConvTranspose2d(inner_nc * 2, outer_nc,
-                                        kernel_size=4, stride=2,
-                                        padding=1)
-            down = [downconv]
-            up = [uprelu, upconv, nn.Tanh()]
-            model = down + [submodule] + up
-        elif innermost: # 제일 안 module -resnet과 연결
-            upconv = nn.ConvTranspose2d(inner_nc, outer_nc,
-                                        kernel_size=4, stride=2,
-                                        padding=1, bias=use_bias)
-            down = [downrelu, downconv]
-            up = [uprelu, upconv, upnorm]
-            model = down + up
-        else: # 그 중간 module
-            upconv = nn.ConvTranspose2d(inner_nc * 2, outer_nc,
-                                        kernel_size=4, stride=2,
-                                        padding=1, bias=use_bias)
-            down = [downrelu, downconv, downnorm]
-            up = [uprelu, upconv, upnorm]
-
-            if use_dropout:
-                model = down + [submodule] + up + [nn.Dropout(0.5)]
-            else:
-                model = down + [submodule] + up
-
-        self.model = nn.Sequential(*model)
-
-    def forward(self, ll, high_f):
-   
-        if self.outermost:
-            return self.model(ll)
-        elif self.second_outermost:   # add skip connections
-            return torch.cat([high_f, self.model(ll)], 1)
-        else:   # add skip connections
-            return torch.cat([ll, self.model(ll)], 1)
 
 class   ellen_dwt_uresnet1_1(nn.Module):
     """
@@ -900,12 +822,9 @@ class   ellen_dwt_uresnet1_1(nn.Module):
         else:
             use_bias = norm_layer == nn.InstanceNorm2d
 
-        # e1 크기는 일정, chanel 수 변환3-> 64
-        model = [nn.ReflectionPad2d(3), nn.Conv2d(input_nc, ngf, kernel_size=7, padding=0, bias=use_bias), norm_layer(ngf), nn.ReLU(True)]
-        print("----e1")
         # resnet 구조(unet안에 있는)
-        # default: 64*8 -> 64*8 반복
-        multi = 2**(num_downs) # 내려가는 만큼 채널수 : 64*2^n  
+        # default: 64*4 -> 64*4 반복
+        multi = 2**(num_downs-1) # 내려가는 만큼 채널수 : 64*2^n  
         resnet_inUnet=[]
         for i in range(n_blocks):
             resnet_inUnet += [ResnetBlock(ngf*multi, padding_type=padding_type, norm_layer=norm_layer, use_dropout= use_dropout, use_bias=use_bias )]
@@ -913,70 +832,31 @@ class   ellen_dwt_uresnet1_1(nn.Module):
 
         # unet 구조 시작(resnet을 감싸는)
         # i : 0,1,2,3,, n
-        # default: 안 64*8
+        # default: 안 64*4
         resnet_inUnets= nn.Sequential(*resnet_inUnet) # submodule
-        unetblock = ellen_UnetSkipConnectionBlock_dw(ngf*multi, ngf*multi, input_nc=None, submodule=resnet_inUnets, norm_layer=norm_layer, innermost=True) # 젤 안쪽에서 resnet과 닿아 있는 것 > 64*8 64*8
-        unetblock = ellen_UnetSkipConnectionBlock_dw(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock , norm_layer=norm_layer) # > 64*4 64*8
+        unetblock = UnetSkipConnectionBlock(ngf*multi, ngf*multi, input_nc=None, submodule=resnet_inUnets, norm_layer=norm_layer, innermost=True) # 젤 안쪽에서 resnet과 닿아 있는 것 > 64*8 64*8
+        unetblock = UnetSkipConnectionBlock(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock , norm_layer=norm_layer) # > 64*4 64*8
         print(">> in, out: ", ngf*(multi/2),", ", ngf*multi)
-        for i in range(num_downs-2):
+        for i in range(num_downs-3): #0이하면, 어짜피 for문 안들어감
             multi = int(multi/2)
-            unetblock = ellen_UnetSkipConnectionBlock_dw(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer)
+            unetblock = UnetSkipConnectionBlock(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer)
             print("-----unet", i, " 번째")
             print(">> in, out: ", ngf*(multi/2),", ", ngf*multi)
         multi = int(multi/2)    
-        unetblock = ellen_UnetSkipConnectionBlock_dw(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer, outermost=True)
+        unetblock = UnetSkipConnectionBlock(output_nc, ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer, outermost=True)
         
-        model = model + [unetblock]
+        model = [unetblock]
         print("----- e1+unet+resent+uent+")
-
-        # d1 크기는 일정, chanel 수 변환64->3
-        model +=[nn.ReflectionPad2d(3), nn.Conv2d(ngf,output_nc, kernel_size=7, padding=0), nn.Tanh()]
-        print("----- e1+unet+resent+uent+d1")
-
 
         self.model = nn.Sequential(*model)
         print(model)
 
-    def dwt_result_transform(slef, dwt_result1, dwt_result2):
-        # 설명> 아래 dwt_input_gen 부분에서 dwt이후, (1) size가 +2 된부분 [1:-1,1:-1]로 잘라주고,
-        # (2) numpy에서 torch로 변경 
-        # (3) reshape to (1,1, h, w)
-        transform_result = []
-        ll, (lh,hl, hh) = dwt_result1, dwt_result2
-        for iii  in [ll, lh, hl, hh]: 
-            a= torch.from_numpy(iii[1:-1,1:-1])
-            h,w = a.shape
-            transform_result.append(a.reshape(1,1,h,w))
-        return transform_result
-
-        
-    # def dwt_input_gen_2d(slef, input):
-    #     # 설명> input image를 dwt transform하여 'ellen_dwt_uresnet2_1'의 input 만들기과정
-    #     # bior1.3 으로 dwt하면 size가 1/2 +2 되어서 +2부분은 삭제하는 것 만들어줘야함
-
-    #     input0= input[0,:,:]
-    #     input1= input[1,:,:]
-    #     input2= input[2,:,:]
-
-    #     dwt_transform_type = 'bior1.3'  
-    #     #bior1.3 dwt한후 size: s/2 +2 가 됨 --> [1:-1,1:-1]로 해서 딱 1/2이 되도록
-    #     #haar dwt한후 size: s/2가 됨
-        
-    #     [ll0, lh0,hl0,hh0] = slef.dwt_result_transform(pywt.dwt2(input0,dwt_transform_type))
-    #     [ll1, lh1,hl1,hh1] = slef.dwt_result_transform(pywt.dwt2(input1,dwt_transform_type))
-    #     [ll2, lh2,hl2,hh2] = slef.dwt_result_transform(pywt.dwt2(input2,dwt_transform_type))
-        
-    #     low_fq = torch.cat([ll0,ll1,ll2], 1 )
-    #     h_fq = torch.cat([lh0,lh1, lh2, hl0,hl1,hl2, hh0, hh1, hh2], 1 )
-        
-    #     high_f =  nn.Conv2(9,3,kernel_size=1, padding=0)(h_fq)
-
-    #     return low_fq, high_f
+        self.channel9to3 = nn.Conv2d(9,3,kernel_size=1, padding=0)
 
     def dwt_input_gen_3d(slef, input):
         # 설명> input image를 dwt transform하여 'ellen_dwt_uresnet2_1'의 input 만들기과정
         # 1. bior1.3 으로 dwt하면 size가 1/2 +2 되어서 +2부분은 삭제하는 것 만들어줘야함 => [1:-1,1:-1]
-        # 2. low는 그대로 channel3으로, high는 9->3으로
+        
 
         dwt_transform_type = 'bior1.3'  
         #bior1.3 dwt한후 size: s/2 +2 가 됨 --> [1:-1,1:-1]로 해서 딱 1/2이 되도록
@@ -988,15 +868,17 @@ class   ellen_dwt_uresnet1_1(nn.Module):
         h_fq= np.concatenate((lh[:,1:-1, 1:-1], hl[:,1:-1, 1:-1], hh[:,1:-1, 1:-1]), 1)
         h_fq1 = torch.from_numpy(h_fq)
         
-        high_f =  nn.Conv2d(9,3,kernel_size=1, padding=0)(h_fq1)
-
-        return low_fq, high_f
+        return low_fq, h_fq1
 
     def forward(self, input):
         """Standard forward"""
         # print(type(input)) # <class 'torch.Tensor'>
         # print(input.shape) # torch.Size([1, 3, 512, 512])
-        low_fq, high_f = self.dwt_input_gen_3d(input)
+        low_fq, h_fq1 = self.dwt_input_gen_3d(input)
+        high_f = self.channel9to3(h_fq1)
+
+        low_result = self.model(low_fq)
+        total_result = self.channel9to3(torch.cat((low_result, high_f),1))
 
         return self.model(low_fq, high_f)
 
