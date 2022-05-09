@@ -155,21 +155,21 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
         net = ResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, n_blocks=6)
     elif netG == 'unet_128':
         net = UnetGenerator(input_nc, output_nc, 7, ngf, norm_layer=norm_layer, use_dropout=use_dropout)
-    elif netG == 'unet_256':
+    elif netG == 'unet_256' or netG =='unet_512':
         net = UnetGenerator(input_nc, output_nc, 8, ngf, norm_layer=norm_layer, use_dropout=use_dropout)
-    elif netG == 'unet_512': # ellen made
-        net = UnetGenerator(input_nc, output_nc, 9, ngf, norm_layer=norm_layer, use_dropout=use_dropout)
+    # elif netG == 'unet_512': # ellen made
+    #     net = UnetGenerator(input_nc, output_nc, 8, ngf, norm_layer=norm_layer, use_dropout=use_dropout)
     elif netG == 'ellen_uresent':
         # uresent
-        net = ellen_uresent(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=9)
+        net = ellen_uresent(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=2, n_blocks=9)
         print(net)
         #defalut - num_down
     elif netG == 'ellen_dwt_uresnet2_1':
         #dwgan + uresnet
-        net = ellen_dwt_uresnet2_1(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=3)
+        net = ellen_dwt_uresnet2_1(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=2, n_blocks=9)
     elif netG == 'ellen_dwt_uresnet1_1':
         #dwgan + uresnet
-        net = ellen_dwt_uresnet2_1(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=3)
+        net = ellen_dwt_uresnet1_1(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=3)
 
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % netG)
@@ -580,6 +580,8 @@ class   ellen_uresent(nn.Module):
 
         # e1 크기는 일정, chanel 수 변환3-> 64
         model = [nn.ReflectionPad2d(3), nn.Conv2d(input_nc, ngf, kernel_size=7, padding=0, bias=use_bias), norm_layer(ngf), nn.ReLU(True)]
+        print("========================================================================")
+        print("num downs = ", num_downs, " n_blocks=", n_blocks)
         print("----e1")
         # resnet 구조(unet안에 있는)
         # default: 64*8 -> 64*8 반복
@@ -790,7 +792,7 @@ class   ellen_dwt_uresnet2_1(nn.Module):
     
     def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, padding_type='reflect'):
         super(ellen_dwt_uresnet2_1, self).__init__()
-        self.uresnet = ellen_uresent(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=9)
+        self.uresnet = ellen_uresent(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks)
         self.dwt_model = dwt_Unet()
         self.fusion = nn.Sequential(nn.ReflectionPad2d(3), nn.Conv2d(6,3, kernel_size=7, padding=0), nn.Tanh())
     
@@ -880,7 +882,7 @@ class   ellen_dwt_uresnet1_1(nn.Module):
         low_result = self.model(low_fq)
         total_result = self.channel9to3(torch.cat((low_result, high_f),1))
 
-        return self.model(low_fq, high_f)
+        return total_result
 
     
 
