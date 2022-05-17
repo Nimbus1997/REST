@@ -1,3 +1,4 @@
+from email.policy import default
 from .base_options import BaseOptions
 
 
@@ -19,5 +20,8 @@ class TestOptions(BaseOptions):
         parser.set_defaults(model='test')
         # To avoid cropping, the load_size should be the same as crop_size
         parser.set_defaults(load_size=parser.get_default('crop_size'))
+        
+        #ellen_100 sample 뽑아서 보기 - 안좋은 이미지 중에서 각각의 이미지 종류 비율 학인하기 위해서 
+        parser.add_argument('--result_sample', type = int, default=0, help='set it to 1 to sample 100 images to see the ratio of each images')
         self.isTrain = False
         return parser

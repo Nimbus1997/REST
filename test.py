@@ -32,6 +32,7 @@ from data import create_dataset
 from models import create_model
 from util.visualizer import save_images
 from util import html
+import random
 
 try:
     import wandb
@@ -67,6 +68,19 @@ if __name__ == '__main__':
     # For [CycleGAN]: It should not affect CycleGAN as CycleGAN uses instancenorm without dropout.
     if opt.eval:
         model.eval()
+    
+    # ellen - 100개 sample뽑아서 볼때는 뭐를 볼지 정해야 하니까 list만들기 
+    if opt.result_sample: # 1은 true이므로
+        random.seed(10)
+        rand_num = random.randomint(0,504) # combined의 test-low quality image가 0-504이므로
+        sample_list =[]
+        for i in range(100):
+            while rand_num in sample_list:
+                rand_num= random.randomint(0,504)
+            sample_list.append(rand_num)
+        sample_list.sort()
+        
+
     for i, data in enumerate(dataset):
         if i >= opt.num_test:  # only apply our model to opt.num_test images.
             break
@@ -76,5 +90,10 @@ if __name__ == '__main__':
         img_path = model.get_image_paths()     # get image paths
         if i % 5 == 0:  # save images to an HTML file
             print('processing (%04d)-th image... %s' % (i, img_path))
-        save_images(webpage, visuals, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+
+        if opt.result_sample: #sample 할때는 100개의 randome 이미지만 저장하고, 아니면 모든 이미지 다 저장
+            if i in sample_list:
+                save_images(webpage, visuals, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+        else:
+            save_images(webpage, visuals, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
     webpage.save()  # save the HTML
