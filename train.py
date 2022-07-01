@@ -47,8 +47,7 @@ if __name__ == '__main__':
     # for loss and early stopping visualization - ellen ---------------------
     train_loss_G =[]
     val_loss_G =[]
-    stopped_epoch = 5
-    # stopped_epoch = opt.epoch_count + opt.n_epochs + opt.n_epochs_decay
+    stopped_epoch = opt.epoch_count + opt.n_epochs + opt.n_epochs_decay
 
 
     # create a model given opt.model and other options
@@ -60,8 +59,7 @@ if __name__ == '__main__':
     total_iters = 0                # the total number of training iterations
 
     # outer loop for different epochs; we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>
-    # for epoch in range(opt.epoch_count, opt.n_epochs + opt.n_epochs_decay + 1):
-    for epoch in range(1, 5):
+    for epoch in range(opt.epoch_count, opt.n_epochs + opt.n_epochs_decay + 1):
         # epoch_count: staring epoch count
         # n_epochs: number of epochs with the initial learning rate
         # n_epochs_decay: number of epochs to linearly deay learning rate to zero
@@ -147,10 +145,6 @@ if __name__ == '__main__':
               opt.n_epochs + opt.n_epochs_decay, time.time() - epoch_start_time))
 
     # for early stopping visualization - ellen ------------------------------
-    print(opt.epoch_count + opt.n_epochs + opt.n_epochs_decay)
-    print(train_loss_G)
-    print(val_loss_G)
-
     loss_fig= plt.figure(figsize=(10,8))
     plt.plot(range(1, len(train_loss_G)+1), train_loss_G, label="Training Loss")
     plt.plot(range(1,  len(val_loss_G)+1), val_loss_G, label= "Validation Loss")
