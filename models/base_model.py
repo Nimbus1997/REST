@@ -141,6 +141,11 @@ class BaseModel(ABC):
                 errors_ret[name] = float(getattr(self, 'loss_' + name))  # float(...) works for both scalar tensor and float number
         return errors_ret
 
+    def get_current_loss_G(self):
+        # ellen mande- for early stopping 
+        # will make early stopping when loss_G increases for a while
+        return float(getattr(self,'loss_G'))
+
     def save_networks(self, epoch):
         """Save all the networks to the disk.
 
@@ -179,22 +184,33 @@ class BaseModel(ABC):
         Parameters:
             epoch (int) -- current epoch; used in the file name '%s_net_%s.pth' % (epoch, name)
         """
+        # print(">>>>>>>>>slef.model_names:",self.model_names)
         for name in self.model_names:
+            # print(">>>>>>>>>model now:",name)
             if isinstance(name, str):
                 load_filename = '%s_net_%s.pth' % (epoch, name)
                 load_path = os.path.join(self.save_dir, load_filename)
                 net = getattr(self, 'net' + name)
                 if isinstance(net, torch.nn.DataParallel):
+                    # print(">>> in isintance:", net)
                     net = net.module
+                    # print(">>> in isintance:", net)
+
                 print('loading the model from %s' % load_path)
                 # if you are using PyTorch newer than 0.4 (e.g., built from
                 # GitHub source), you can remove str() on self.device
                 state_dict = torch.load(load_path, map_location=str(self.device))
+                # print(">>>> state_dict:",state_dict)
                 if hasattr(state_dict, '_metadata'):
                     del state_dict._metadata
 
+                # print(">>>> state_dict.keys():", state_dict.keys())
                 # patch InstanceNorm checkpoints prior to 0.4
                 for key in list(state_dict.keys()):  # need to copy keys here because we mutate in loop
+                    # print("in the for loop")
+                    # print("state_dict: ", state_dict, " net:", net, "key: ",key)
+                    # print(" net:", net, "key: ",key)
+
                     self.__patch_instance_norm_state_dict(state_dict, net, key.split('.'))
                 net.load_state_dict(state_dict)
 
