@@ -72,11 +72,11 @@ if __name__ == '__main__':
     # ellen - 100개 sample뽑아서 볼때는 뭐를 볼지 정해야 하니까 list만들기 
     if opt.result_sample: # 1은 true이므로
         random.seed(10)
-        rand_num = random.randomint(0,504) # combined의 test-low quality image가 0-504이므로
+        rand_num = random.randint(0,504) # combined의 test-low quality image가 0-504이므로
         sample_list =[]
         for i in range(100):
             while rand_num in sample_list:
-                rand_num= random.randomint(0,504)
+                rand_num= random.randint(0,504)
             sample_list.append(rand_num)
         sample_list.sort()
         

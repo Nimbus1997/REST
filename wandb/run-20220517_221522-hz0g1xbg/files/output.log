@@ -1,0 +1,9 @@
+creating web directory ./results/unet512_220509/test_latest
+processing (0000)-th image... ['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220221_512/testA/0001.jpg']
+processing (0005)-th image... ['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220221_512/testA/0006.jpg']
+Traceback (most recent call last):
+  File "test.py", line 87, in <module>
+    model.set_input(data)  # unpack data from data loader
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 108, in set_input
+    self.real_A = input['A' if AtoB else 'B'].to(self.device)
+KeyboardInterrupt

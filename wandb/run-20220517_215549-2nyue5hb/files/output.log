@@ -1,0 +1,6 @@
+
+creating web directory ./results/unet512_220509/test_latest
+Traceback (most recent call last):
+  File "test.py", line 75, in <module>
+    rand_num = random.randomint(0,504) # combined의 test-low quality image가 0-504이므로
+AttributeError: module 'random' has no attribute 'randomint'

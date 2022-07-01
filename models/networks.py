@@ -272,7 +272,7 @@ class GANLoss(nn.Module):
         return target_tensor.expand_as(prediction)
 
     def __call__(self, prediction, target_is_real):
-        """Calculate loss given Discriminator's output and grount truth labels.
+        """Calculate loss given Discriminator's output and ground truth labels.
 
         Parameters:
             prediction (tensor) - - tpyically the prediction output from a discriminator
@@ -854,30 +854,15 @@ class   ellen_dwt_uresnet1_1(nn.Module):
         print(model)
 
         self.channel9to3 = nn.Conv2d(9,3,kernel_size=1, padding=0)
+        self.dwt= DWT()
 
-    def dwt_input_gen_3d(slef, input):
-        # 설명> input image를 dwt transform하여 'ellen_dwt_uresnet2_1'의 input 만들기과정
-        # 1. bior1.3 으로 dwt하면 size가 1/2 +2 되어서 +2부분은 삭제하는 것 만들어줘야함 => [1:-1,1:-1]
-        
-
-        dwt_transform_type = 'bior1.3'  
-        #bior1.3 dwt한후 size: s/2 +2 가 됨 --> [1:-1,1:-1]로 해서 딱 1/2이 되도록
-        #haar dwt한후 size: s/2가 됨
-        
-        [ll, lh,hl,hh] = slef.dwt_result_transform(pywt.dwt2(input,dwt_transform_type))
-       
-        low_fq = torch.from_numpy(ll[:,1:-1, 1:-1]) #  bior1.3  +2부분은 삭제
-        h_fq= np.concatenate((lh[:,1:-1, 1:-1], hl[:,1:-1, 1:-1], hh[:,1:-1, 1:-1]), 1)
-        h_fq1 = torch.from_numpy(h_fq)
-        
-        return low_fq, h_fq1
 
     def forward(self, input):
         """Standard forward"""
         # print(type(input)) # <class 'torch.Tensor'>
         # print(input.shape) # torch.Size([1, 3, 512, 512])
-        low_fq, h_fq1 = self.dwt_input_gen_3d(input)
-        high_f = self.channel9to3(h_fq1)
+        low_fq, h_fq = self.dwt(input) 
+        high_f = self.channel9to3(h_fq)
 
         low_result = self.model(low_fq)
         total_result = self.channel9to3(torch.cat((low_result, high_f),1))
@@ -886,22 +871,22 @@ class   ellen_dwt_uresnet1_1(nn.Module):
 
     
 
-    # def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, padding_type='reflect'):
-    #     super(ellen_dwt_uresnet2_1, self).__init__()
-    #     self.uresnet = ellen_uresent(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=9)
-    #     self.dwt_model = dwt_Unet()
-    #     self.fusion = nn.Sequential(nn.ReflectionPad2d(3), nn.Conv2d(6,3, kernel_size=7, padding=0), nn.Tanh())
+#     # def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, padding_type='reflect'):
+#     #     super(ellen_dwt_uresnet2_1, self).__init__()
+#     #     self.uresnet = ellen_uresent(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=9)
+#     #     self.dwt_model = dwt_Unet()
+#     #     self.fusion = nn.Sequential(nn.ReflectionPad2d(3), nn.Conv2d(6,3, kernel_size=7, padding=0), nn.Tanh())
     
     
-    # def forward(self, input):
-    #     """Standard forward"""
-    #     # print(type(input)) # <class 'torch.Tensor'>
-    #     # print(input.shape) # torch.Size([1, 3, 512, 512])
-    #     result_uresnet= self.uresnet(input)
-    #     result_dwt = self.dwt_model(input)
-    #     x = torch.cat([result_dwt, result_uresnet],1)     
+#     # def forward(self, input):
+#     #     """Standard forward"""
+#     #     # print(type(input)) # <class 'torch.Tensor'>
+#     #     # print(input.shape) # torch.Size([1, 3, 512, 512])
+#     #     result_uresnet= self.uresnet(input)
+#     #     result_dwt = self.dwt_model(input)
+#     #     x = torch.cat([result_dwt, result_uresnet],1)     
 
-    #     return self.fusion(x)
+#     #     return self.fusion(x)
 
 
 class NLayerDiscriminator(nn.Module):
