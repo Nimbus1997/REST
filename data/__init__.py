@@ -65,7 +65,8 @@ class CustomDatasetDataLoader():
     def __init__(self, opt):
         """Initialize this class
 
-        Step 1: create a dataset instance given the name [dataset_mode]
+        Step 1: create a dataset instance given the name [dataset_mode] 
+                opt.dataset_mode: 'chooses how datasets are loaded. [unaligned | aligned | single | colorization]'
         Step 2: create a multi-threaded data loader.
         """
         self.opt = opt

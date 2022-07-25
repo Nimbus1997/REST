@@ -17,8 +17,16 @@ Example:
 See options/base_options.py and options/train_options.py for more training options.
 See training and test tips at: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/blob/master/docs/tips.md
 See frequently asked questions at: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/blob/master/docs/qa.md
+
+----------------------------------------------------------------------------------------------------------------
+Ellen modified
+2022.06.30 : early stopping using validataion generator loss
+2022.07.12 : early stopping using FID(frechet inception distance)
+            - 개념 : https://jjuon.tistory.com/33 
+            - []pytorch FID module official: https://pytorch.org/ignite/generated/ignite.metrics.FID.html , https://github.com/pytorch/ignite
+            - [v]pytorch FID module base of the official: https://github.com/mseitzer/pytorch-fid/tree/3d604a25516746c3a4a5548c8610e99010b2c819 
 """
-from cmath import inf
+from cmath import inf 
 from random import triangular
 import time
 from options.train_options import TrainOptions
