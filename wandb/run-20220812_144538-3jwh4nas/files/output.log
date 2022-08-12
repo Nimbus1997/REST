@@ -1,0 +1,26 @@
+create web directory ./checkpoints/ellen_dwt_uresnet1_1_512n1000_0812/web...
+learning rate 0.0002000 -> 0.0002000
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+Traceback (most recent call last):
+  File "train.py", line 96, in <module>
+    model.optimize_parameters()
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 183, in optimize_parameters
+    self.forward()      # compute fake images and reconstruction images.
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 114, in forward
+    self.fake_B = self.netG_A(self.real_A)  # G_A(A)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/data_parallel.py", line 166, in forward
+    return self.module(*inputs[0], **kwargs[0])
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/networks.py", line 869, in forward
+    total_result = self.channel9to3(torch.cat((low_result, high_f),1))
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/conv.py", line 446, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/conv.py", line 443, in _conv_forward
+    self.padding, self.dilation, self.groups)
+RuntimeError: Given groups=1, weight of size [3, 9, 1, 1], expected input[1, 6, 256, 256] to have 9 channels, but got 6 channels instead
