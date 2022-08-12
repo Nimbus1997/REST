@@ -1,0 +1,535 @@
+create web directory ./checkpoints/ellen_dwt_uresnet1_1_512n1000_0812_b16/web...
+learning rate 0.0002000 -> 0.0002000
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+(epoch: 1, iters: 400, time: 0.326, data: 0.453) D_A: 0.315 G_A: 0.848 cycle_A: 13.271 idt_A: 6.585 D_B: 0.197 G_B: 0.751 cycle_B: 6.586 idt_B: 3.314
+End of epoch 1 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 2, iters: 192, time: 0.289, data: 0.009) D_A: 0.148 G_A: 0.690 cycle_A: 13.344 idt_A: 6.560 D_B: 0.308 G_B: 1.109 cycle_B: 6.561 idt_B: 3.331
+(epoch: 2, iters: 592, time: 0.176, data: 0.010) D_A: 0.183 G_A: 0.768 cycle_A: 12.934 idt_A: 6.448 D_B: 0.299 G_B: 0.925 cycle_B: 6.462 idt_B: 3.224
+End of epoch 2 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 3, iters: 384, time: 0.248, data: 0.010) D_A: 0.160 G_A: 0.891 cycle_A: 12.038 idt_A: 6.482 D_B: 0.233 G_B: 0.937 cycle_B: 6.521 idt_B: 2.990
+End of epoch 3 / 400 	 Time Taken: 54 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 4, iters: 176, time: 0.216, data: 0.009) D_A: 0.203 G_A: 1.055 cycle_A: 12.363 idt_A: 6.046 D_B: 0.113 G_B: 0.875 cycle_B: 6.111 idt_B: 3.068
+(epoch: 4, iters: 576, time: 0.143, data: 0.010) D_A: 0.064 G_A: 0.761 cycle_A: 11.933 idt_A: 5.882 D_B: 0.128 G_B: 0.858 cycle_B: 5.958 idt_B: 2.978
+End of epoch 4 / 400 	 Time Taken: 54 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 5, iters: 368, time: 0.214, data: 0.009) D_A: 0.063 G_A: 0.871 cycle_A: 10.910 idt_A: 6.123 D_B: 0.080 G_B: 1.025 cycle_B: 6.197 idt_B: 2.765
+saving the model at the end of epoch 5, iters 3040
+End of epoch 5 / 400 	 Time Taken: 54 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 6, iters: 160, time: 0.209, data: 0.009) D_A: 0.035 G_A: 0.870 cycle_A: 10.602 idt_A: 5.981 D_B: 0.179 G_B: 1.046 cycle_B: 6.042 idt_B: 2.733
+(epoch: 6, iters: 560, time: 0.136, data: 0.010) D_A: 0.027 G_A: 0.902 cycle_A: 9.600 idt_A: 5.912 D_B: 3.067 G_B: 2.929 cycle_B: 5.965 idt_B: 2.554
+End of epoch 6 / 400 	 Time Taken: 53 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 7, iters: 352, time: 0.206, data: 0.009) D_A: 0.037 G_A: 0.955 cycle_A: 8.545 idt_A: 5.717 D_B: 0.089 G_B: 0.504 cycle_B: 5.724 idt_B: 2.239
+End of epoch 7 / 400 	 Time Taken: 53 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 8, iters: 144, time: 0.209, data: 0.010) D_A: 0.216 G_A: 1.180 cycle_A: 7.941 idt_A: 5.372 D_B: 0.039 G_B: 0.766 cycle_B: 5.356 idt_B: 2.121
+(epoch: 8, iters: 544, time: 0.125, data: 0.009) D_A: 0.202 G_A: 0.432 cycle_A: 5.918 idt_A: 5.035 D_B: 0.030 G_B: 0.797 cycle_B: 4.959 idt_B: 1.721
+End of epoch 8 / 400 	 Time Taken: 54 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 9, iters: 336, time: 0.214, data: 0.009) D_A: 0.049 G_A: 0.768 cycle_A: 5.467 idt_A: 4.633 D_B: 0.108 G_B: 0.580 cycle_B: 4.570 idt_B: 1.647
+End of epoch 9 / 400 	 Time Taken: 54 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 10, iters: 128, time: 0.228, data: 0.010) D_A: 0.039 G_A: 0.828 cycle_A: 4.769 idt_A: 4.226 D_B: 0.048 G_B: 0.748 cycle_B: 4.283 idt_B: 1.524
+(epoch: 10, iters: 528, time: 0.166, data: 0.009) D_A: 0.029 G_A: 0.767 cycle_A: 3.944 idt_A: 3.876 D_B: 0.144 G_B: 0.850 cycle_B: 4.010 idt_B: 1.408
+saving the model at the end of epoch 10, iters 6080
+End of epoch 10 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 11, iters: 320, time: 0.229, data: 0.010) D_A: 0.035 G_A: 0.854 cycle_A: 3.798 idt_A: 3.212 D_B: 0.074 G_B: 0.561 cycle_B: 3.296 idt_B: 1.439
+End of epoch 11 / 400 	 Time Taken: 54 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 12, iters: 112, time: 0.231, data: 0.012) D_A: 0.026 G_A: 0.869 cycle_A: 3.107 idt_A: 3.074 D_B: 0.097 G_B: 0.706 cycle_B: 3.373 idt_B: 1.328
+(epoch: 12, iters: 512, time: 0.141, data: 0.021) D_A: 0.023 G_A: 0.937 cycle_A: 3.191 idt_A: 2.559 D_B: 0.166 G_B: 0.881 cycle_B: 2.810 idt_B: 1.333
+End of epoch 12 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 13, iters: 304, time: 0.233, data: 0.010) D_A: 0.026 G_A: 0.989 cycle_A: 2.975 idt_A: 2.422 D_B: 0.088 G_B: 0.697 cycle_B: 2.574 idt_B: 1.321
+End of epoch 13 / 400 	 Time Taken: 53 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 14, iters: 96, time: 0.243, data: 0.010) D_A: 0.018 G_A: 0.866 cycle_A: 2.224 idt_A: 2.141 D_B: 0.044 G_B: 0.780 cycle_B: 2.271 idt_B: 1.051
+(epoch: 14, iters: 496, time: 0.150, data: 0.019) D_A: 0.036 G_A: 1.023 cycle_A: 1.829 idt_A: 2.045 D_B: 0.054 G_B: 1.003 cycle_B: 2.148 idt_B: 0.922
+End of epoch 14 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 15, iters: 288, time: 0.241, data: 0.010) D_A: 0.024 G_A: 0.895 cycle_A: 1.451 idt_A: 1.794 D_B: 0.040 G_B: 0.827 cycle_B: 1.897 idt_B: 0.795
+saving the model at the end of epoch 15, iters 9120
+End of epoch 15 / 400 	 Time Taken: 53 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 16, iters: 80, time: 0.245, data: 0.024) D_A: 0.030 G_A: 0.728 cycle_A: 1.695 idt_A: 1.631 D_B: 0.036 G_B: 0.974 cycle_B: 1.741 idt_B: 0.817
+(epoch: 16, iters: 480, time: 0.147, data: 0.010) D_A: 0.052 G_A: 1.170 cycle_A: 1.504 idt_A: 1.493 D_B: 0.019 G_B: 0.949 cycle_B: 1.549 idt_B: 0.703
+End of epoch 16 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 17, iters: 272, time: 0.242, data: 0.011) D_A: 0.374 G_A: 0.690 cycle_A: 1.596 idt_A: 1.474 D_B: 0.024 G_B: 0.843 cycle_B: 1.498 idt_B: 0.691
+End of epoch 17 / 400 	 Time Taken: 53 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 18, iters: 64, time: 0.251, data: 0.021) D_A: 0.040 G_A: 0.841 cycle_A: 1.674 idt_A: 1.324 D_B: 0.017 G_B: 1.012 cycle_B: 1.356 idt_B: 0.704
+(epoch: 18, iters: 464, time: 0.149, data: 0.010) D_A: 0.047 G_A: 1.131 cycle_A: 2.003 idt_A: 1.230 D_B: 0.021 G_B: 0.810 cycle_B: 1.334 idt_B: 0.744
+End of epoch 18 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 19, iters: 256, time: 0.235, data: 0.010) D_A: 0.585 G_A: 0.945 cycle_A: 1.505 idt_A: 1.196 D_B: 0.173 G_B: 0.637 cycle_B: 1.217 idt_B: 0.647
+End of epoch 19 / 400 	 Time Taken: 53 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 20, iters: 48, time: 0.242, data: 0.022) D_A: 0.030 G_A: 0.773 cycle_A: 1.363 idt_A: 1.090 D_B: 0.022 G_B: 0.787 cycle_B: 1.118 idt_B: 0.598
+(epoch: 20, iters: 448, time: 0.221, data: 0.010) D_A: 0.026 G_A: 0.775 cycle_A: 1.643 idt_A: 1.014 D_B: 0.047 G_B: 0.979 cycle_B: 1.123 idt_B: 0.607
+saving the model at the end of epoch 20, iters 12160
+End of epoch 20 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 21, iters: 240, time: 0.265, data: 0.011) D_A: 0.049 G_A: 0.759 cycle_A: 1.360 idt_A: 1.109 D_B: 0.026 G_B: 0.933 cycle_B: 1.174 idt_B: 0.491
+End of epoch 21 / 400 	 Time Taken: 54 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 22, iters: 32, time: 0.268, data: 0.022) D_A: 0.069 G_A: 1.200 cycle_A: 1.477 idt_A: 0.949 D_B: 0.024 G_B: 0.748 cycle_B: 1.048 idt_B: 0.564
+(epoch: 22, iters: 432, time: 0.162, data: 0.010) D_A: 0.171 G_A: 0.333 cycle_A: 1.055 idt_A: 0.818 D_B: 0.019 G_B: 0.834 cycle_B: 0.876 idt_B: 0.402
+End of epoch 22 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 23, iters: 224, time: 0.248, data: 0.017) D_A: 0.057 G_A: 0.829 cycle_A: 1.337 idt_A: 0.866 D_B: 0.049 G_B: 0.673 cycle_B: 0.920 idt_B: 0.457
+End of epoch 23 / 400 	 Time Taken: 54 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 24, iters: 16, time: 0.255, data: 0.017) D_A: 0.053 G_A: 0.625 cycle_A: 1.245 idt_A: 0.781 D_B: 0.039 G_B: 1.118 cycle_B: 0.952 idt_B: 0.380
+(epoch: 24, iters: 416, time: 0.154, data: 0.011) D_A: 0.024 G_A: 0.802 cycle_A: 1.572 idt_A: 0.841 D_B: 0.055 G_B: 0.601 cycle_B: 0.896 idt_B: 0.526
+End of epoch 24 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 25, iters: 208, time: 0.259, data: 0.010) D_A: 0.025 G_A: 0.897 cycle_A: 1.437 idt_A: 0.939 D_B: 0.019 G_B: 1.035 cycle_B: 1.021 idt_B: 0.388
+(epoch: 25, iters: 608, time: 0.119, data: 0.022) D_A: 0.012 G_A: 0.948 cycle_A: 1.172 idt_A: 0.766 D_B: 0.041 G_B: 0.660 cycle_B: 0.813 idt_B: 0.347
+saving the model at the end of epoch 25, iters 15200
+End of epoch 25 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 26, iters: 400, time: 0.250, data: 0.422) D_A: 0.012 G_A: 0.899 cycle_A: 1.224 idt_A: 0.708 D_B: 0.026 G_B: 0.801 cycle_B: 0.847 idt_B: 0.372
+End of epoch 26 / 400 	 Time Taken: 54 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 27, iters: 192, time: 0.252, data: 0.020) D_A: 0.032 G_A: 0.930 cycle_A: 1.602 idt_A: 0.821 D_B: 0.213 G_B: 0.273 cycle_B: 0.849 idt_B: 0.563
+(epoch: 27, iters: 592, time: 0.188, data: 0.012) D_A: 0.014 G_A: 1.063 cycle_A: 1.368 idt_A: 0.665 D_B: 0.053 G_B: 0.965 cycle_B: 0.847 idt_B: 0.423
+End of epoch 27 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 28, iters: 384, time: 0.288, data: 0.010) D_A: 0.043 G_A: 0.590 cycle_A: 1.492 idt_A: 0.704 D_B: 0.089 G_B: 0.472 cycle_B: 0.696 idt_B: 0.394
+End of epoch 28 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 29, iters: 176, time: 0.288, data: 0.020) D_A: 0.174 G_A: 0.272 cycle_A: 1.177 idt_A: 0.655 D_B: 0.188 G_B: 0.229 cycle_B: 0.828 idt_B: 0.338
+(epoch: 29, iters: 576, time: 0.197, data: 0.019) D_A: 0.051 G_A: 0.577 cycle_A: 1.745 idt_A: 0.628 D_B: 0.116 G_B: 0.490 cycle_B: 0.801 idt_B: 0.590
+End of epoch 29 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 30, iters: 368, time: 0.313, data: 0.019) D_A: 0.058 G_A: 1.141 cycle_A: 1.186 idt_A: 0.656 D_B: 0.142 G_B: 0.346 cycle_B: 0.904 idt_B: 0.346
+saving the model at the end of epoch 30, iters 18240
+End of epoch 30 / 400 	 Time Taken: 54 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 31, iters: 160, time: 0.316, data: 0.017) D_A: 0.021 G_A: 0.852 cycle_A: 1.368 idt_A: 0.928 D_B: 0.133 G_B: 0.425 cycle_B: 0.975 idt_B: 0.403
+(epoch: 31, iters: 560, time: 0.191, data: 0.022) D_A: 0.037 G_A: 0.758 cycle_A: 1.042 idt_A: 0.626 D_B: 0.063 G_B: 0.813 cycle_B: 0.649 idt_B: 0.322
+End of epoch 31 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 32, iters: 352, time: 0.334, data: 0.010) D_A: 0.090 G_A: 0.415 cycle_A: 1.227 idt_A: 0.596 D_B: 0.069 G_B: 0.492 cycle_B: 0.663 idt_B: 0.361
+End of epoch 32 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 33, iters: 144, time: 0.331, data: 0.020) D_A: 0.276 G_A: 0.764 cycle_A: 1.391 idt_A: 0.626 D_B: 0.217 G_B: 0.543 cycle_B: 0.744 idt_B: 0.429
+(epoch: 33, iters: 544, time: 0.275, data: 0.020) D_A: 0.020 G_A: 0.803 cycle_A: 1.225 idt_A: 0.652 D_B: 0.073 G_B: 1.110 cycle_B: 0.679 idt_B: 0.401
+End of epoch 33 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 34, iters: 336, time: 0.307, data: 0.020) D_A: 0.060 G_A: 0.623 cycle_A: 1.101 idt_A: 0.669 D_B: 0.038 G_B: 0.646 cycle_B: 0.700 idt_B: 0.304
+End of epoch 34 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 35, iters: 128, time: 0.328, data: 0.017) D_A: 0.083 G_A: 0.611 cycle_A: 1.388 idt_A: 0.689 D_B: 0.069 G_B: 0.554 cycle_B: 0.712 idt_B: 0.437
+(epoch: 35, iters: 528, time: 0.196, data: 0.019) D_A: 0.172 G_A: 0.264 cycle_A: 1.099 idt_A: 0.646 D_B: 0.034 G_B: 0.691 cycle_B: 0.684 idt_B: 0.294
+saving the model at the end of epoch 35, iters 21280
+End of epoch 35 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 36, iters: 320, time: 0.311, data: 0.011) D_A: 0.032 G_A: 0.736 cycle_A: 0.890 idt_A: 0.673 D_B: 0.076 G_B: 0.592 cycle_B: 0.676 idt_B: 0.238
+End of epoch 36 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 37, iters: 112, time: 0.333, data: 0.024) D_A: 0.069 G_A: 0.670 cycle_A: 1.058 idt_A: 0.739 D_B: 0.078 G_B: 0.399 cycle_B: 0.778 idt_B: 0.322
+(epoch: 37, iters: 512, time: 0.198, data: 0.017) D_A: 0.109 G_A: 0.357 cycle_A: 0.995 idt_A: 0.703 D_B: 0.168 G_B: 0.274 cycle_B: 0.686 idt_B: 0.264
+End of epoch 37 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 38, iters: 304, time: 0.338, data: 0.012) D_A: 0.554 G_A: 1.430 cycle_A: 1.228 idt_A: 0.707 D_B: 0.019 G_B: 0.899 cycle_B: 0.698 idt_B: 0.291
+End of epoch 38 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 39, iters: 96, time: 0.345, data: 0.012) D_A: 0.116 G_A: 0.593 cycle_A: 1.141 idt_A: 0.609 D_B: 0.173 G_B: 0.437 cycle_B: 0.664 idt_B: 0.330
+(epoch: 39, iters: 496, time: 0.175, data: 0.014) D_A: 0.060 G_A: 0.909 cycle_A: 1.102 idt_A: 0.740 D_B: 0.035 G_B: 1.216 cycle_B: 0.681 idt_B: 0.347
+End of epoch 39 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 40, iters: 288, time: 0.333, data: 0.010) D_A: 0.066 G_A: 0.746 cycle_A: 0.993 idt_A: 0.590 D_B: 0.019 G_B: 0.853 cycle_B: 0.598 idt_B: 0.275
+saving the model at the end of epoch 40, iters 24320
+End of epoch 40 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 41, iters: 80, time: 0.298, data: 0.023) D_A: 0.129 G_A: 0.502 cycle_A: 1.155 idt_A: 0.606 D_B: 0.076 G_B: 1.228 cycle_B: 0.701 idt_B: 0.322
+(epoch: 41, iters: 480, time: 0.191, data: 0.010) D_A: 0.067 G_A: 0.423 cycle_A: 0.969 idt_A: 0.659 D_B: 0.111 G_B: 0.946 cycle_B: 0.658 idt_B: 0.225
+End of epoch 41 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 42, iters: 272, time: 0.314, data: 0.011) D_A: 0.055 G_A: 1.151 cycle_A: 1.229 idt_A: 0.785 D_B: 0.020 G_B: 1.001 cycle_B: 0.679 idt_B: 0.351
+End of epoch 42 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 43, iters: 64, time: 0.318, data: 0.011) D_A: 0.037 G_A: 0.531 cycle_A: 0.961 idt_A: 0.633 D_B: 0.260 G_B: 0.167 cycle_B: 0.738 idt_B: 0.247
+(epoch: 43, iters: 464, time: 0.259, data: 0.014) D_A: 0.079 G_A: 1.093 cycle_A: 1.292 idt_A: 0.567 D_B: 0.023 G_B: 0.922 cycle_B: 0.589 idt_B: 0.304
+End of epoch 43 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 44, iters: 256, time: 0.306, data: 0.011) D_A: 0.011 G_A: 0.957 cycle_A: 1.292 idt_A: 0.618 D_B: 0.013 G_B: 1.065 cycle_B: 0.784 idt_B: 0.425
+End of epoch 44 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 45, iters: 48, time: 0.321, data: 0.010) D_A: 0.251 G_A: 1.356 cycle_A: 0.930 idt_A: 0.573 D_B: 0.012 G_B: 1.001 cycle_B: 0.623 idt_B: 0.209
+(epoch: 45, iters: 448, time: 0.180, data: 0.012) D_A: 0.023 G_A: 0.822 cycle_A: 1.077 idt_A: 0.610 D_B: 0.021 G_B: 0.898 cycle_B: 0.616 idt_B: 0.280
+saving the model at the end of epoch 45, iters 27360
+End of epoch 45 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 46, iters: 240, time: 0.308, data: 0.020) D_A: 0.025 G_A: 0.804 cycle_A: 0.795 idt_A: 0.616 D_B: 0.015 G_B: 0.789 cycle_B: 0.594 idt_B: 0.198
+End of epoch 46 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 47, iters: 32, time: 0.304, data: 0.011) D_A: 0.028 G_A: 0.920 cycle_A: 1.060 idt_A: 0.637 D_B: 0.025 G_B: 0.760 cycle_B: 0.637 idt_B: 0.327
+(epoch: 47, iters: 432, time: 0.187, data: 0.012) D_A: 0.242 G_A: 0.311 cycle_A: 1.022 idt_A: 0.602 D_B: 0.017 G_B: 1.087 cycle_B: 0.584 idt_B: 0.221
+End of epoch 47 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 48, iters: 224, time: 0.331, data: 0.016) D_A: 0.356 G_A: 0.654 cycle_A: 1.066 idt_A: 0.641 D_B: 0.169 G_B: 1.099 cycle_B: 0.692 idt_B: 0.254
+End of epoch 48 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 49, iters: 16, time: 0.337, data: 0.010) D_A: 0.276 G_A: 0.197 cycle_A: 1.045 idt_A: 0.637 D_B: 0.066 G_B: 0.553 cycle_B: 0.660 idt_B: 0.268
+(epoch: 49, iters: 416, time: 0.197, data: 0.013) D_A: 0.066 G_A: 0.426 cycle_A: 1.055 idt_A: 0.619 D_B: 0.030 G_B: 0.749 cycle_B: 0.610 idt_B: 0.247
+End of epoch 49 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 50, iters: 208, time: 0.331, data: 0.010) D_A: 0.024 G_A: 0.818 cycle_A: 1.119 idt_A: 0.533 D_B: 0.020 G_B: 1.013 cycle_B: 0.620 idt_B: 0.239
+(epoch: 50, iters: 608, time: 0.165, data: 0.011) D_A: 0.035 G_A: 1.047 cycle_A: 1.028 idt_A: 0.493 D_B: 0.012 G_B: 0.837 cycle_B: 0.611 idt_B: 0.215
+saving the model at the end of epoch 50, iters 30400
+End of epoch 50 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 51, iters: 400, time: 0.357, data: 0.435) D_A: 0.068 G_A: 1.068 cycle_A: 1.085 idt_A: 0.580 D_B: 0.017 G_B: 0.860 cycle_B: 0.618 idt_B: 0.353
+End of epoch 51 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 52, iters: 192, time: 0.357, data: 0.010) D_A: 0.023 G_A: 0.900 cycle_A: 0.944 idt_A: 0.600 D_B: 0.135 G_B: 0.469 cycle_B: 0.596 idt_B: 0.245
+(epoch: 52, iters: 592, time: 0.212, data: 0.010) D_A: 0.229 G_A: 1.133 cycle_A: 0.990 idt_A: 0.540 D_B: 0.069 G_B: 0.722 cycle_B: 0.599 idt_B: 0.225
+End of epoch 52 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 53, iters: 384, time: 0.332, data: 0.012) D_A: 0.028 G_A: 0.847 cycle_A: 0.968 idt_A: 0.488 D_B: 0.061 G_B: 0.612 cycle_B: 0.513 idt_B: 0.241
+End of epoch 53 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 54, iters: 176, time: 0.351, data: 0.011) D_A: 0.051 G_A: 0.518 cycle_A: 0.907 idt_A: 0.482 D_B: 0.024 G_B: 0.779 cycle_B: 0.518 idt_B: 0.231
+(epoch: 54, iters: 576, time: 0.189, data: 0.022) D_A: 0.010 G_A: 0.935 cycle_A: 1.000 idt_A: 0.553 D_B: 0.013 G_B: 1.040 cycle_B: 0.579 idt_B: 0.252
+End of epoch 54 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 55, iters: 368, time: 0.348, data: 0.011) D_A: 0.008 G_A: 0.888 cycle_A: 0.964 idt_A: 0.562 D_B: 0.016 G_B: 0.813 cycle_B: 0.611 idt_B: 0.206
+saving the model at the end of epoch 55, iters 33440
+End of epoch 55 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 56, iters: 160, time: 0.341, data: 0.015) D_A: 0.009 G_A: 0.890 cycle_A: 1.084 idt_A: 0.529 D_B: 0.015 G_B: 0.848 cycle_B: 0.549 idt_B: 0.274
+(epoch: 56, iters: 560, time: 0.303, data: 0.011) D_A: 0.061 G_A: 0.601 cycle_A: 1.121 idt_A: 0.495 D_B: 0.014 G_B: 0.818 cycle_B: 0.536 idt_B: 0.282
+End of epoch 56 / 400 	 Time Taken: 59 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 57, iters: 352, time: 0.365, data: 0.011) D_A: 0.024 G_A: 0.622 cycle_A: 0.914 idt_A: 0.582 D_B: 0.143 G_B: 1.118 cycle_B: 0.563 idt_B: 0.242
+End of epoch 57 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 58, iters: 144, time: 0.341, data: 0.011) D_A: 0.008 G_A: 0.953 cycle_A: 0.803 idt_A: 0.471 D_B: 0.013 G_B: 0.836 cycle_B: 0.507 idt_B: 0.195
+(epoch: 58, iters: 544, time: 0.197, data: 0.017) D_A: 0.386 G_A: 0.047 cycle_A: 0.974 idt_A: 0.564 D_B: 0.022 G_B: 1.021 cycle_B: 0.559 idt_B: 0.229
+End of epoch 58 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 59, iters: 336, time: 0.327, data: 0.009) D_A: 0.015 G_A: 0.886 cycle_A: 0.929 idt_A: 0.483 D_B: 0.016 G_B: 0.872 cycle_B: 0.626 idt_B: 0.288
+End of epoch 59 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 60, iters: 128, time: 0.351, data: 0.010) D_A: 0.346 G_A: 0.068 cycle_A: 0.850 idt_A: 0.510 D_B: 0.029 G_B: 0.872 cycle_B: 0.572 idt_B: 0.223
+(epoch: 60, iters: 528, time: 0.206, data: 0.009) D_A: 0.143 G_A: 0.426 cycle_A: 0.804 idt_A: 0.529 D_B: 2.608 G_B: 2.740 cycle_B: 0.619 idt_B: 0.199
+saving the model at the end of epoch 60, iters 36480
+End of epoch 60 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 61, iters: 320, time: 0.374, data: 0.010) D_A: 0.103 G_A: 0.804 cycle_A: 1.007 idt_A: 0.495 D_B: 0.148 G_B: 0.524 cycle_B: 0.554 idt_B: 0.241
+End of epoch 61 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 62, iters: 112, time: 0.353, data: 0.010) D_A: 0.033 G_A: 1.113 cycle_A: 0.963 idt_A: 0.558 D_B: 0.093 G_B: 0.473 cycle_B: 0.637 idt_B: 0.228
+(epoch: 62, iters: 512, time: 0.205, data: 0.012) D_A: 0.116 G_A: 0.736 cycle_A: 0.916 idt_A: 0.446 D_B: 0.343 G_B: 1.269 cycle_B: 0.542 idt_B: 0.228
+End of epoch 62 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 63, iters: 304, time: 0.364, data: 0.009) D_A: 0.026 G_A: 0.741 cycle_A: 0.754 idt_A: 0.419 D_B: 0.095 G_B: 0.639 cycle_B: 0.459 idt_B: 0.197
+End of epoch 63 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 64, iters: 96, time: 0.370, data: 0.010) D_A: 0.052 G_A: 0.541 cycle_A: 0.886 idt_A: 0.461 D_B: 0.026 G_B: 0.882 cycle_B: 0.533 idt_B: 0.264
+(epoch: 64, iters: 496, time: 0.216, data: 0.011) D_A: 0.180 G_A: 0.176 cycle_A: 0.953 idt_A: 0.517 D_B: 0.054 G_B: 0.909 cycle_B: 0.569 idt_B: 0.224
+End of epoch 64 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 65, iters: 288, time: 0.369, data: 0.016) D_A: 0.039 G_A: 1.235 cycle_A: 0.733 idt_A: 0.404 D_B: 0.016 G_B: 0.732 cycle_B: 0.453 idt_B: 0.166
+saving the model at the end of epoch 65, iters 39520
+End of epoch 65 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 66, iters: 80, time: 0.391, data: 0.011) D_A: 0.193 G_A: 0.349 cycle_A: 0.808 idt_A: 0.504 D_B: 0.124 G_B: 0.418 cycle_B: 0.478 idt_B: 0.193
+(epoch: 66, iters: 480, time: 0.313, data: 0.011) D_A: 0.033 G_A: 0.668 cycle_A: 0.917 idt_A: 0.462 D_B: 0.066 G_B: 0.464 cycle_B: 0.455 idt_B: 0.210
+End of epoch 66 / 400 	 Time Taken: 60 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 67, iters: 272, time: 0.384, data: 0.011) D_A: 0.027 G_A: 0.699 cycle_A: 0.794 idt_A: 0.414 D_B: 0.057 G_B: 1.255 cycle_B: 0.473 idt_B: 0.194
+End of epoch 67 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 68, iters: 64, time: 0.383, data: 0.009) D_A: 0.058 G_A: 0.495 cycle_A: 1.094 idt_A: 0.416 D_B: 0.032 G_B: 0.630 cycle_B: 0.602 idt_B: 0.340
+(epoch: 68, iters: 464, time: 0.210, data: 0.019) D_A: 0.033 G_A: 0.620 cycle_A: 0.917 idt_A: 0.425 D_B: 0.012 G_B: 0.990 cycle_B: 0.480 idt_B: 0.196
+End of epoch 68 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 69, iters: 256, time: 0.368, data: 0.012) D_A: 0.041 G_A: 1.057 cycle_A: 0.876 idt_A: 0.428 D_B: 0.061 G_B: 0.655 cycle_B: 0.544 idt_B: 0.235
+End of epoch 69 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 70, iters: 48, time: 0.370, data: 0.010) D_A: 0.018 G_A: 0.836 cycle_A: 0.746 idt_A: 0.430 D_B: 0.045 G_B: 0.763 cycle_B: 0.491 idt_B: 0.198
+(epoch: 70, iters: 448, time: 0.209, data: 0.010) D_A: 0.244 G_A: 0.122 cycle_A: 0.814 idt_A: 0.516 D_B: 0.354 G_B: 0.100 cycle_B: 0.558 idt_B: 0.192
+saving the model at the end of epoch 70, iters 42560
+End of epoch 70 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 71, iters: 240, time: 0.360, data: 0.010) D_A: 0.036 G_A: 0.723 cycle_A: 0.574 idt_A: 0.460 D_B: 0.033 G_B: 0.751 cycle_B: 0.493 idt_B: 0.143
+End of epoch 71 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 72, iters: 32, time: 0.380, data: 0.010) D_A: 0.043 G_A: 0.914 cycle_A: 0.953 idt_A: 0.410 D_B: 0.088 G_B: 0.430 cycle_B: 0.522 idt_B: 0.286
+(epoch: 72, iters: 432, time: 0.219, data: 0.011) D_A: 0.325 G_A: 1.436 cycle_A: 0.677 idt_A: 0.425 D_B: 0.304 G_B: 0.161 cycle_B: 0.493 idt_B: 0.161
+End of epoch 72 / 400 	 Time Taken: 59 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 73, iters: 224, time: 0.371, data: 0.011) D_A: 0.035 G_A: 0.648 cycle_A: 0.755 idt_A: 0.414 D_B: 0.116 G_B: 0.441 cycle_B: 0.484 idt_B: 0.203
+End of epoch 73 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 74, iters: 16, time: 0.386, data: 0.010) D_A: 0.150 G_A: 0.258 cycle_A: 0.891 idt_A: 0.416 D_B: 0.027 G_B: 0.960 cycle_B: 0.565 idt_B: 0.212
+(epoch: 74, iters: 416, time: 0.221, data: 0.009) D_A: 0.356 G_A: 1.460 cycle_A: 0.761 idt_A: 0.425 D_B: 0.036 G_B: 0.738 cycle_B: 0.555 idt_B: 0.188
+End of epoch 74 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 75, iters: 208, time: 0.378, data: 0.012) D_A: 0.143 G_A: 0.423 cycle_A: 0.810 idt_A: 0.475 D_B: 0.127 G_B: 0.798 cycle_B: 0.456 idt_B: 0.210
+(epoch: 75, iters: 608, time: 0.181, data: 0.010) D_A: 0.080 G_A: 0.508 cycle_A: 0.983 idt_A: 0.419 D_B: 0.063 G_B: 0.424 cycle_B: 0.503 idt_B: 0.255
+saving the model at the end of epoch 75, iters 45600
+End of epoch 75 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 76, iters: 400, time: 0.376, data: 0.434) D_A: 0.122 G_A: 1.247 cycle_A: 0.895 idt_A: 0.394 D_B: 0.060 G_B: 0.936 cycle_B: 0.548 idt_B: 0.227
+End of epoch 76 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 77, iters: 192, time: 0.429, data: 0.009) D_A: 0.110 G_A: 0.330 cycle_A: 1.056 idt_A: 0.432 D_B: 0.058 G_B: 0.778 cycle_B: 0.553 idt_B: 0.248
+(epoch: 77, iters: 592, time: 0.215, data: 0.011) D_A: 0.220 G_A: 0.139 cycle_A: 0.798 idt_A: 0.423 D_B: 0.040 G_B: 0.677 cycle_B: 0.500 idt_B: 0.244
+End of epoch 77 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 78, iters: 384, time: 0.379, data: 0.014) D_A: 0.063 G_A: 0.932 cycle_A: 0.721 idt_A: 0.382 D_B: 0.054 G_B: 0.434 cycle_B: 0.531 idt_B: 0.175
+End of epoch 78 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 79, iters: 176, time: 0.371, data: 0.017) D_A: 0.129 G_A: 0.565 cycle_A: 0.818 idt_A: 0.385 D_B: 0.193 G_B: 1.068 cycle_B: 0.482 idt_B: 0.220
+(epoch: 79, iters: 576, time: 0.332, data: 0.012) D_A: 0.065 G_A: 1.099 cycle_A: 0.905 idt_A: 0.392 D_B: 0.095 G_B: 0.928 cycle_B: 0.471 idt_B: 0.230
+End of epoch 79 / 400 	 Time Taken: 60 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 80, iters: 368, time: 0.378, data: 0.011) D_A: 0.125 G_A: 0.394 cycle_A: 0.775 idt_A: 0.427 D_B: 0.069 G_B: 0.464 cycle_B: 0.479 idt_B: 0.183
+saving the model at the end of epoch 80, iters 48640
+End of epoch 80 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 81, iters: 160, time: 0.386, data: 0.014) D_A: 0.081 G_A: 0.770 cycle_A: 0.800 idt_A: 0.403 D_B: 0.096 G_B: 0.629 cycle_B: 0.475 idt_B: 0.181
+(epoch: 81, iters: 560, time: 0.214, data: 0.011) D_A: 0.125 G_A: 1.047 cycle_A: 0.951 idt_A: 0.428 D_B: 0.070 G_B: 0.553 cycle_B: 0.603 idt_B: 0.274
+End of epoch 81 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 82, iters: 352, time: 0.377, data: 0.011) D_A: 0.076 G_A: 0.395 cycle_A: 0.879 idt_A: 0.412 D_B: 0.164 G_B: 0.297 cycle_B: 0.538 idt_B: 0.200
+End of epoch 82 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 83, iters: 144, time: 0.370, data: 0.022) D_A: 0.060 G_A: 0.986 cycle_A: 0.669 idt_A: 0.377 D_B: 0.139 G_B: 0.864 cycle_B: 0.464 idt_B: 0.154
+(epoch: 83, iters: 544, time: 0.210, data: 0.011) D_A: 0.040 G_A: 0.931 cycle_A: 0.704 idt_A: 0.386 D_B: 0.191 G_B: 0.895 cycle_B: 0.477 idt_B: 0.156
+End of epoch 83 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 84, iters: 336, time: 0.406, data: 0.011) D_A: 0.131 G_A: 0.892 cycle_A: 0.752 idt_A: 0.408 D_B: 0.082 G_B: 0.433 cycle_B: 0.528 idt_B: 0.173
+End of epoch 84 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 85, iters: 128, time: 0.389, data: 0.010) D_A: 0.199 G_A: 0.151 cycle_A: 0.783 idt_A: 0.444 D_B: 0.094 G_B: 0.345 cycle_B: 0.594 idt_B: 0.173
+(epoch: 85, iters: 528, time: 0.209, data: 0.022) D_A: 0.072 G_A: 1.012 cycle_A: 0.845 idt_A: 0.387 D_B: 0.131 G_B: 0.444 cycle_B: 0.556 idt_B: 0.224
+saving the model at the end of epoch 85, iters 51680
+End of epoch 85 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 86, iters: 320, time: 0.380, data: 0.010) D_A: 0.113 G_A: 1.311 cycle_A: 0.750 idt_A: 0.415 D_B: 0.101 G_B: 0.342 cycle_B: 0.467 idt_B: 0.177
+End of epoch 86 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 87, iters: 112, time: 0.385, data: 0.010) D_A: 0.058 G_A: 0.805 cycle_A: 0.743 idt_A: 0.365 D_B: 0.072 G_B: 0.852 cycle_B: 0.490 idt_B: 0.157
+(epoch: 87, iters: 512, time: 0.216, data: 0.008) D_A: 0.075 G_A: 0.721 cycle_A: 0.948 idt_A: 0.410 D_B: 0.055 G_B: 0.586 cycle_B: 0.515 idt_B: 0.225
+End of epoch 87 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 88, iters: 304, time: 0.397, data: 0.009) D_A: 0.051 G_A: 1.045 cycle_A: 0.605 idt_A: 0.369 D_B: 0.148 G_B: 0.227 cycle_B: 0.449 idt_B: 0.148
+End of epoch 88 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 89, iters: 96, time: 0.390, data: 0.010) D_A: 0.199 G_A: 0.180 cycle_A: 0.828 idt_A: 0.419 D_B: 0.102 G_B: 0.539 cycle_B: 0.532 idt_B: 0.168
+(epoch: 89, iters: 496, time: 0.331, data: 0.011) D_A: 0.025 G_A: 0.842 cycle_A: 0.806 idt_A: 0.371 D_B: 0.058 G_B: 0.800 cycle_B: 0.570 idt_B: 0.182
+End of epoch 89 / 400 	 Time Taken: 60 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 90, iters: 288, time: 0.395, data: 0.010) D_A: 0.047 G_A: 1.029 cycle_A: 0.905 idt_A: 0.505 D_B: 0.180 G_B: 1.160 cycle_B: 0.616 idt_B: 0.165
+saving the model at the end of epoch 90, iters 54720
+End of epoch 90 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 91, iters: 80, time: 0.387, data: 0.012) D_A: 0.050 G_A: 0.567 cycle_A: 0.882 idt_A: 0.473 D_B: 0.091 G_B: 0.760 cycle_B: 0.483 idt_B: 0.222
+(epoch: 91, iters: 480, time: 0.215, data: 0.009) D_A: 0.044 G_A: 0.634 cycle_A: 0.992 idt_A: 0.387 D_B: 0.108 G_B: 1.087 cycle_B: 0.504 idt_B: 0.245
+End of epoch 91 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 92, iters: 272, time: 0.387, data: 0.011) D_A: 0.031 G_A: 0.741 cycle_A: 0.725 idt_A: 0.337 D_B: 0.080 G_B: 0.426 cycle_B: 0.472 idt_B: 0.190
+End of epoch 92 / 400 	 Time Taken: 55 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 93, iters: 64, time: 0.390, data: 0.010) D_A: 0.029 G_A: 1.035 cycle_A: 0.666 idt_A: 0.444 D_B: 0.050 G_B: 0.745 cycle_B: 0.542 idt_B: 0.168
+(epoch: 93, iters: 464, time: 0.216, data: 0.013) D_A: 0.017 G_A: 0.778 cycle_A: 0.783 idt_A: 0.377 D_B: 0.046 G_B: 0.997 cycle_B: 0.533 idt_B: 0.168
+End of epoch 93 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 94, iters: 256, time: 0.387, data: 0.011) D_A: 0.028 G_A: 0.689 cycle_A: 0.906 idt_A: 0.449 D_B: 0.084 G_B: 1.156 cycle_B: 0.523 idt_B: 0.192
+End of epoch 94 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 95, iters: 48, time: 0.380, data: 0.009) D_A: 0.035 G_A: 0.755 cycle_A: 0.714 idt_A: 0.332 D_B: 0.053 G_B: 0.712 cycle_B: 0.445 idt_B: 0.179
+(epoch: 95, iters: 448, time: 0.222, data: 0.012) D_A: 0.024 G_A: 0.831 cycle_A: 0.830 idt_A: 0.389 D_B: 0.041 G_B: 0.564 cycle_B: 0.473 idt_B: 0.173
+saving the model at the end of epoch 95, iters 57760
+End of epoch 95 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 96, iters: 240, time: 0.396, data: 0.011) D_A: 0.192 G_A: 0.167 cycle_A: 0.778 idt_A: 0.336 D_B: 0.066 G_B: 1.141 cycle_B: 0.523 idt_B: 0.210
+End of epoch 96 / 400 	 Time Taken: 56 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 97, iters: 32, time: 0.407, data: 0.018) D_A: 0.025 G_A: 0.948 cycle_A: 0.766 idt_A: 0.351 D_B: 0.028 G_B: 0.907 cycle_B: 0.461 idt_B: 0.201
+(epoch: 97, iters: 432, time: 0.210, data: 0.010) D_A: 0.016 G_A: 0.975 cycle_A: 0.824 idt_A: 0.377 D_B: 0.091 G_B: 0.618 cycle_B: 0.463 idt_B: 0.192
+End of epoch 97 / 400 	 Time Taken: 58 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 98, iters: 224, time: 0.435, data: 0.015) D_A: 0.032 G_A: 0.621 cycle_A: 0.659 idt_A: 0.397 D_B: 0.026 G_B: 0.708 cycle_B: 0.491 idt_B: 0.164
+End of epoch 98 / 400 	 Time Taken: 57 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 99, iters: 16, time: 0.422, data: 0.011) D_A: 0.019 G_A: 0.780 cycle_A: 0.783 idt_A: 0.368 D_B: 0.023 G_B: 0.815 cycle_B: 0.535 idt_B: 0.199
+(epoch: 99, iters: 416, time: 0.349, data: 0.012) D_A: 0.063 G_A: 0.484 cycle_A: 0.703 idt_A: 0.384 D_B: 0.058 G_B: 0.879 cycle_B: 0.520 idt_B: 0.169
+End of epoch 99 / 400 	 Time Taken: 61 sec
+learning rate 0.0002000 -> 0.0001993
+(epoch: 100, iters: 208, time: 0.388, data: 0.012) D_A: 0.101 G_A: 0.341 cycle_A: 0.652 idt_A: 0.351 D_B: 0.049 G_B: 0.512 cycle_B: 0.481 idt_B: 0.168
+(epoch: 100, iters: 608, time: 0.203, data: 0.012) D_A: 0.016 G_A: 0.741 cycle_A: 0.729 idt_A: 0.394 D_B: 0.047 G_B: 0.582 cycle_B: 0.553 idt_B: 0.171
+saving the model at the end of epoch 100, iters 60800
+End of epoch 100 / 400 	 Time Taken: 59 sec
+learning rate 0.0001993 -> 0.0001987
+(epoch: 101, iters: 400, time: 0.408, data: 0.445) D_A: 0.059 G_A: 1.140 cycle_A: 0.659 idt_A: 0.387 D_B: 0.074 G_B: 0.535 cycle_B: 0.492 idt_B: 0.163
+End of epoch 101 / 400 	 Time Taken: 56 sec
+learning rate 0.0001987 -> 0.0001980
+(epoch: 102, iters: 192, time: 0.405, data: 0.010) D_A: 0.022 G_A: 0.813 cycle_A: 0.755 idt_A: 0.331 D_B: 0.018 G_B: 0.748 cycle_B: 0.451 idt_B: 0.173
+(epoch: 102, iters: 592, time: 0.354, data: 0.011) D_A: 0.012 G_A: 0.946 cycle_A: 0.705 idt_A: 0.358 D_B: 0.118 G_B: 0.306 cycle_B: 0.458 idt_B: 0.149
+End of epoch 102 / 400 	 Time Taken: 61 sec
+learning rate 0.0001980 -> 0.0001973
+(epoch: 103, iters: 384, time: 0.413, data: 0.012) D_A: 0.022 G_A: 0.731 cycle_A: 0.837 idt_A: 0.357 D_B: 0.055 G_B: 0.560 cycle_B: 0.456 idt_B: 0.171
+End of epoch 103 / 400 	 Time Taken: 56 sec
+learning rate 0.0001973 -> 0.0001967
+(epoch: 104, iters: 176, time: 0.408, data: 0.011) D_A: 0.043 G_A: 0.615 cycle_A: 0.814 idt_A: 0.376 D_B: 0.053 G_B: 0.625 cycle_B: 0.472 idt_B: 0.242
+(epoch: 104, iters: 576, time: 0.215, data: 0.010) D_A: 0.198 G_A: 0.973 cycle_A: 0.690 idt_A: 0.342 D_B: 0.040 G_B: 0.645 cycle_B: 0.483 idt_B: 0.186
+End of epoch 104 / 400 	 Time Taken: 59 sec
+learning rate 0.0001967 -> 0.0001960
+(epoch: 105, iters: 368, time: 0.414, data: 0.009) D_A: 0.024 G_A: 0.951 cycle_A: 0.696 idt_A: 0.333 D_B: 0.026 G_B: 0.740 cycle_B: 0.486 idt_B: 0.160
+saving the model at the end of epoch 105, iters 63840
+End of epoch 105 / 400 	 Time Taken: 56 sec
+learning rate 0.0001960 -> 0.0001953
+(epoch: 106, iters: 160, time: 0.421, data: 0.015) D_A: 0.024 G_A: 0.707 cycle_A: 0.789 idt_A: 0.338 D_B: 0.247 G_B: 0.168 cycle_B: 0.525 idt_B: 0.240
+(epoch: 106, iters: 560, time: 0.217, data: 0.010) D_A: 0.008 G_A: 0.927 cycle_A: 0.697 idt_A: 0.334 D_B: 0.023 G_B: 0.659 cycle_B: 0.477 idt_B: 0.166
+End of epoch 106 / 400 	 Time Taken: 59 sec
+learning rate 0.0001953 -> 0.0001947
+(epoch: 107, iters: 352, time: 0.426, data: 0.023) D_A: 0.215 G_A: 0.942 cycle_A: 0.879 idt_A: 0.356 D_B: 0.140 G_B: 1.125 cycle_B: 0.562 idt_B: 0.220
+End of epoch 107 / 400 	 Time Taken: 57 sec
+learning rate 0.0001947 -> 0.0001940
+(epoch: 108, iters: 144, time: 0.403, data: 0.012) D_A: 0.015 G_A: 0.814 cycle_A: 0.605 idt_A: 0.389 D_B: 0.042 G_B: 0.649 cycle_B: 0.510 idt_B: 0.167
+(epoch: 108, iters: 544, time: 0.216, data: 0.021) D_A: 0.014 G_A: 0.894 cycle_A: 0.576 idt_A: 0.357 D_B: 0.072 G_B: 0.426 cycle_B: 0.505 idt_B: 0.136
+End of epoch 108 / 400 	 Time Taken: 59 sec
+learning rate 0.0001940 -> 0.0001934
+(epoch: 109, iters: 336, time: 0.400, data: 0.010) D_A: 0.010 G_A: 0.813 cycle_A: 0.754 idt_A: 0.382 D_B: 0.106 G_B: 0.383 cycle_B: 0.542 idt_B: 0.208
+End of epoch 109 / 400 	 Time Taken: 56 sec
+learning rate 0.0001934 -> 0.0001927
+(epoch: 110, iters: 128, time: 0.408, data: 0.010) D_A: 0.014 G_A: 0.800 cycle_A: 0.753 idt_A: 0.338 D_B: 0.020 G_B: 0.749 cycle_B: 0.471 idt_B: 0.203
+(epoch: 110, iters: 528, time: 0.216, data: 0.011) D_A: 0.104 G_A: 0.935 cycle_A: 0.768 idt_A: 0.376 D_B: 0.101 G_B: 0.318 cycle_B: 0.492 idt_B: 0.169
+saving the model at the end of epoch 110, iters 66880
+End of epoch 110 / 400 	 Time Taken: 58 sec
+learning rate 0.0001927 -> 0.0001920
+(epoch: 111, iters: 320, time: 0.403, data: 0.011) D_A: 0.011 G_A: 0.823 cycle_A: 0.599 idt_A: 0.356 D_B: 0.022 G_B: 0.825 cycle_B: 0.462 idt_B: 0.192
+End of epoch 111 / 400 	 Time Taken: 57 sec
+learning rate 0.0001920 -> 0.0001914
+(epoch: 112, iters: 112, time: 0.404, data: 0.011) D_A: 0.031 G_A: 1.141 cycle_A: 0.583 idt_A: 0.345 D_B: 0.040 G_B: 0.580 cycle_B: 0.511 idt_B: 0.152
+(epoch: 112, iters: 512, time: 0.364, data: 0.008) D_A: 0.013 G_A: 0.794 cycle_A: 0.706 idt_A: 0.353 D_B: 0.041 G_B: 0.562 cycle_B: 0.461 idt_B: 0.217
+End of epoch 112 / 400 	 Time Taken: 61 sec
+learning rate 0.0001914 -> 0.0001907
+(epoch: 113, iters: 304, time: 0.425, data: 0.012) D_A: 0.152 G_A: 1.496 cycle_A: 0.740 idt_A: 0.378 D_B: 0.060 G_B: 0.592 cycle_B: 0.511 idt_B: 0.247
+End of epoch 113 / 400 	 Time Taken: 57 sec
+learning rate 0.0001907 -> 0.0001900
+(epoch: 114, iters: 96, time: 0.407, data: 0.019) D_A: 0.025 G_A: 0.912 cycle_A: 0.710 idt_A: 0.359 D_B: 0.040 G_B: 0.596 cycle_B: 0.528 idt_B: 0.167
+(epoch: 114, iters: 496, time: 0.216, data: 0.011) D_A: 0.011 G_A: 0.794 cycle_A: 0.586 idt_A: 0.352 D_B: 0.038 G_B: 1.029 cycle_B: 0.488 idt_B: 0.173
+End of epoch 114 / 400 	 Time Taken: 59 sec
+learning rate 0.0001900 -> 0.0001894
+(epoch: 115, iters: 288, time: 0.422, data: 0.011) D_A: 0.021 G_A: 0.709 cycle_A: 0.830 idt_A: 0.327 D_B: 0.019 G_B: 0.914 cycle_B: 0.516 idt_B: 0.252
+saving the model at the end of epoch 115, iters 69920
+End of epoch 115 / 400 	 Time Taken: 57 sec
+learning rate 0.0001894 -> 0.0001887
+(epoch: 116, iters: 80, time: 0.413, data: 0.011) D_A: 0.020 G_A: 1.110 cycle_A: 0.626 idt_A: 0.379 D_B: 0.020 G_B: 0.732 cycle_B: 0.535 idt_B: 0.152
+(epoch: 116, iters: 480, time: 0.214, data: 0.010) D_A: 0.013 G_A: 0.782 cycle_A: 0.807 idt_A: 0.358 D_B: 0.116 G_B: 0.628 cycle_B: 0.467 idt_B: 0.188
+End of epoch 116 / 400 	 Time Taken: 59 sec
+learning rate 0.0001887 -> 0.0001880
+(epoch: 117, iters: 272, time: 0.421, data: 0.011) D_A: 0.009 G_A: 0.820 cycle_A: 0.585 idt_A: 0.391 D_B: 0.024 G_B: 0.704 cycle_B: 0.501 idt_B: 0.153
+End of epoch 117 / 400 	 Time Taken: 57 sec
+learning rate 0.0001880 -> 0.0001874
+(epoch: 118, iters: 64, time: 0.413, data: 0.010) D_A: 0.012 G_A: 0.900 cycle_A: 0.723 idt_A: 0.353 D_B: 0.024 G_B: 0.746 cycle_B: 0.507 idt_B: 0.174
+(epoch: 118, iters: 464, time: 0.210, data: 0.015) D_A: 0.400 G_A: 1.537 cycle_A: 0.882 idt_A: 0.466 D_B: 0.096 G_B: 1.076 cycle_B: 0.521 idt_B: 0.241
+End of epoch 118 / 400 	 Time Taken: 59 sec
+learning rate 0.0001874 -> 0.0001867
+(epoch: 119, iters: 256, time: 0.410, data: 0.012) D_A: 0.014 G_A: 0.801 cycle_A: 0.639 idt_A: 0.378 D_B: 0.025 G_B: 0.633 cycle_B: 0.525 idt_B: 0.171
+End of epoch 119 / 400 	 Time Taken: 56 sec
+learning rate 0.0001867 -> 0.0001860
+(epoch: 120, iters: 48, time: 0.422, data: 0.013) D_A: 0.019 G_A: 1.090 cycle_A: 0.567 idt_A: 0.367 D_B: 0.128 G_B: 0.492 cycle_B: 0.464 idt_B: 0.145
+(epoch: 120, iters: 448, time: 0.217, data: 0.014) D_A: 0.038 G_A: 0.757 cycle_A: 0.621 idt_A: 0.336 D_B: 0.017 G_B: 0.839 cycle_B: 0.531 idt_B: 0.145
+saving the model at the end of epoch 120, iters 72960
+End of epoch 120 / 400 	 Time Taken: 58 sec
+learning rate 0.0001860 -> 0.0001854
+(epoch: 121, iters: 240, time: 0.397, data: 0.009) D_A: 0.010 G_A: 0.827 cycle_A: 0.740 idt_A: 0.351 D_B: 0.018 G_B: 0.753 cycle_B: 0.458 idt_B: 0.166
+End of epoch 121 / 400 	 Time Taken: 56 sec
+learning rate 0.0001854 -> 0.0001847
+(epoch: 122, iters: 32, time: 0.422, data: 0.009) D_A: 0.016 G_A: 0.750 cycle_A: 0.744 idt_A: 0.331 D_B: 0.015 G_B: 1.053 cycle_B: 0.483 idt_B: 0.171
+(epoch: 122, iters: 432, time: 0.362, data: 0.011) D_A: 0.093 G_A: 0.847 cycle_A: 0.712 idt_A: 0.308 D_B: 0.011 G_B: 0.973 cycle_B: 0.448 idt_B: 0.240
+End of epoch 122 / 400 	 Time Taken: 60 sec
+learning rate 0.0001847 -> 0.0001841
+(epoch: 123, iters: 224, time: 0.417, data: 0.010) D_A: 0.034 G_A: 1.234 cycle_A: 0.605 idt_A: 0.339 D_B: 0.181 G_B: 0.354 cycle_B: 0.452 idt_B: 0.177
+End of epoch 123 / 400 	 Time Taken: 57 sec
+learning rate 0.0001841 -> 0.0001834
+(epoch: 124, iters: 16, time: 0.449, data: 0.022) D_A: 0.072 G_A: 0.990 cycle_A: 0.643 idt_A: 0.398 D_B: 0.096 G_B: 0.351 cycle_B: 0.473 idt_B: 0.165
+(epoch: 124, iters: 416, time: 0.213, data: 0.012) D_A: 0.007 G_A: 0.966 cycle_A: 0.706 idt_A: 0.370 D_B: 0.047 G_B: 1.028 cycle_B: 0.527 idt_B: 0.176
+End of epoch 124 / 400 	 Time Taken: 60 sec
+learning rate 0.0001834 -> 0.0001827
+(epoch: 125, iters: 208, time: 0.423, data: 0.010) D_A: 0.029 G_A: 1.123 cycle_A: 0.745 idt_A: 0.372 D_B: 0.020 G_B: 0.917 cycle_B: 0.500 idt_B: 0.186
+(epoch: 125, iters: 608, time: 0.331, data: 0.024) D_A: 0.008 G_A: 0.878 cycle_A: 0.633 idt_A: 0.319 D_B: 0.016 G_B: 0.816 cycle_B: 0.450 idt_B: 0.135
+saving the model at the end of epoch 125, iters 76000
+End of epoch 125 / 400 	 Time Taken: 61 sec
+learning rate 0.0001827 -> 0.0001821
+(epoch: 126, iters: 400, time: 0.425, data: 0.463) D_A: 0.018 G_A: 0.729 cycle_A: 0.661 idt_A: 0.337 D_B: 0.042 G_B: 0.573 cycle_B: 0.440 idt_B: 0.161
+End of epoch 126 / 400 	 Time Taken: 56 sec
+learning rate 0.0001821 -> 0.0001814
+(epoch: 127, iters: 192, time: 0.414, data: 0.010) D_A: 0.020 G_A: 0.685 cycle_A: 0.745 idt_A: 0.328 D_B: 0.038 G_B: 1.241 cycle_B: 0.508 idt_B: 0.149
+(epoch: 127, iters: 592, time: 0.214, data: 0.012) D_A: 0.028 G_A: 1.057 cycle_A: 0.654 idt_A: 0.340 D_B: 0.014 G_B: 0.837 cycle_B: 0.451 idt_B: 0.156
+End of epoch 127 / 400 	 Time Taken: 59 sec
+learning rate 0.0001814 -> 0.0001807
+(epoch: 128, iters: 384, time: 0.425, data: 0.012) D_A: 0.020 G_A: 0.999 cycle_A: 0.691 idt_A: 0.353 D_B: 0.078 G_B: 0.353 cycle_B: 0.485 idt_B: 0.250
+End of epoch 128 / 400 	 Time Taken: 56 sec
+learning rate 0.0001807 -> 0.0001801
+(epoch: 129, iters: 176, time: 0.418, data: 0.011) D_A: 0.022 G_A: 0.724 cycle_A: 0.731 idt_A: 0.339 D_B: 0.023 G_B: 0.705 cycle_B: 0.609 idt_B: 0.167
+(epoch: 129, iters: 576, time: 0.213, data: 0.010) D_A: 0.010 G_A: 0.892 cycle_A: 0.680 idt_A: 0.318 D_B: 0.020 G_B: 0.984 cycle_B: 0.429 idt_B: 0.205
+End of epoch 129 / 400 	 Time Taken: 59 sec
+learning rate 0.0001801 -> 0.0001794
+(epoch: 130, iters: 368, time: 0.421, data: 0.011) D_A: 0.140 G_A: 0.282 cycle_A: 0.784 idt_A: 0.324 D_B: 0.020 G_B: 0.825 cycle_B: 0.567 idt_B: 0.162
+saving the model at the end of epoch 130, iters 79040
+End of epoch 130 / 400 	 Time Taken: 56 sec
+learning rate 0.0001794 -> 0.0001787
+(epoch: 131, iters: 160, time: 0.416, data: 0.013) D_A: 0.011 G_A: 0.770 cycle_A: 0.753 idt_A: 0.323 D_B: 0.023 G_B: 0.742 cycle_B: 0.437 idt_B: 0.186
+(epoch: 131, iters: 560, time: 0.213, data: 0.018) D_A: 0.069 G_A: 0.420 cycle_A: 0.715 idt_A: 0.370 D_B: 0.016 G_B: 0.919 cycle_B: 0.503 idt_B: 0.159
+End of epoch 131 / 400 	 Time Taken: 58 sec
+learning rate 0.0001787 -> 0.0001781
+(epoch: 132, iters: 352, time: 0.436, data: 0.010) D_A: 0.008 G_A: 0.936 cycle_A: 0.595 idt_A: 0.333 D_B: 0.014 G_B: 0.849 cycle_B: 0.485 idt_B: 0.149
+End of epoch 132 / 400 	 Time Taken: 57 sec
+learning rate 0.0001781 -> 0.0001774
+(epoch: 133, iters: 144, time: 0.435, data: 0.011) D_A: 0.010 G_A: 0.873 cycle_A: 0.543 idt_A: 0.321 D_B: 0.013 G_B: 0.995 cycle_B: 0.456 idt_B: 0.117
+(epoch: 133, iters: 544, time: 0.211, data: 0.009) D_A: 0.049 G_A: 0.497 cycle_A: 0.861 idt_A: 0.355 D_B: 0.262 G_B: 0.353 cycle_B: 0.542 idt_B: 0.235
+End of epoch 133 / 400 	 Time Taken: 59 sec
+learning rate 0.0001774 -> 0.0001767
+(epoch: 134, iters: 336, time: 0.412, data: 0.012) D_A: 0.016 G_A: 0.741 cycle_A: 0.691 idt_A: 0.325 D_B: 0.245 G_B: 0.279 cycle_B: 0.422 idt_B: 0.163
+End of epoch 134 / 400 	 Time Taken: 57 sec
+learning rate 0.0001767 -> 0.0001761
+(epoch: 135, iters: 128, time: 0.433, data: 0.011) D_A: 0.014 G_A: 1.022 cycle_A: 0.674 idt_A: 0.319 D_B: 0.245 G_B: 0.261 cycle_B: 0.444 idt_B: 0.151
+(epoch: 135, iters: 528, time: 0.360, data: 0.011) D_A: 0.008 G_A: 0.990 cycle_A: 0.714 idt_A: 0.321 D_B: 0.230 G_B: 0.294 cycle_B: 0.450 idt_B: 0.154
+saving the model at the end of epoch 135, iters 82080
+End of epoch 135 / 400 	 Time Taken: 61 sec
+learning rate 0.0001761 -> 0.0001754
+(epoch: 136, iters: 320, time: 0.433, data: 0.011) D_A: 0.020 G_A: 0.749 cycle_A: 0.659 idt_A: 0.334 D_B: 0.245 G_B: 0.286 cycle_B: 0.409 idt_B: 0.261
+End of epoch 136 / 400 	 Time Taken: 57 sec
+learning rate 0.0001754 -> 0.0001748
+(epoch: 137, iters: 112, time: 0.420, data: 0.012) D_A: 0.034 G_A: 0.905 cycle_A: 0.546 idt_A: 0.326 D_B: 0.243 G_B: 0.288 cycle_B: 0.383 idt_B: 0.137
+(epoch: 137, iters: 512, time: 0.215, data: 0.010) D_A: 0.011 G_A: 0.856 cycle_A: 0.675 idt_A: 0.315 D_B: 0.231 G_B: 0.268 cycle_B: 0.378 idt_B: 0.166
+End of epoch 137 / 400 	 Time Taken: 58 sec
+learning rate 0.0001748 -> 0.0001741
+(epoch: 138, iters: 304, time: 0.412, data: 0.010) D_A: 0.013 G_A: 1.014 cycle_A: 0.612 idt_A: 0.299 D_B: 0.230 G_B: 0.318 cycle_B: 0.372 idt_B: 0.145
+End of epoch 138 / 400 	 Time Taken: 56 sec
+learning rate 0.0001741 -> 0.0001734
+(epoch: 139, iters: 96, time: 0.433, data: 0.011) D_A: 0.089 G_A: 1.366 cycle_A: 0.678 idt_A: 0.310 D_B: 0.264 G_B: 0.227 cycle_B: 0.416 idt_B: 0.153
+(epoch: 139, iters: 496, time: 0.219, data: 0.010) D_A: 0.008 G_A: 1.015 cycle_A: 0.645 idt_A: 0.353 D_B: 0.255 G_B: 0.269 cycle_B: 0.374 idt_B: 0.177
+End of epoch 139 / 400 	 Time Taken: 59 sec
+learning rate 0.0001734 -> 0.0001728
+(epoch: 140, iters: 288, time: 0.425, data: 0.011) D_A: 0.014 G_A: 0.871 cycle_A: 0.699 idt_A: 0.319 D_B: 0.251 G_B: 0.230 cycle_B: 0.420 idt_B: 0.181
+saving the model at the end of epoch 140, iters 85120
+End of epoch 140 / 400 	 Time Taken: 57 sec
+learning rate 0.0001728 -> 0.0001721
+(epoch: 141, iters: 80, time: 0.433, data: 0.010) D_A: 0.274 G_A: 0.109 cycle_A: 0.693 idt_A: 0.318 D_B: 0.233 G_B: 0.225 cycle_B: 0.360 idt_B: 0.226
+(epoch: 141, iters: 480, time: 0.221, data: 0.021) D_A: 0.005 G_A: 0.947 cycle_A: 0.525 idt_A: 0.342 D_B: 0.226 G_B: 0.367 cycle_B: 0.399 idt_B: 0.120
+End of epoch 141 / 400 	 Time Taken: 58 sec
+learning rate 0.0001721 -> 0.0001714
+(epoch: 142, iters: 272, time: 0.419, data: 0.011) D_A: 0.006 G_A: 0.989 cycle_A: 0.753 idt_A: 0.351 D_B: 0.246 G_B: 0.318 cycle_B: 0.469 idt_B: 0.160
+End of epoch 142 / 400 	 Time Taken: 56 sec
+learning rate 0.0001714 -> 0.0001708
+(epoch: 143, iters: 64, time: 0.438, data: 0.011) D_A: 0.013 G_A: 0.779 cycle_A: 0.566 idt_A: 0.328 D_B: 0.216 G_B: 0.297 cycle_B: 0.377 idt_B: 0.129
+(epoch: 143, iters: 464, time: 0.216, data: 0.025) D_A: 0.013 G_A: 0.879 cycle_A: 0.607 idt_A: 0.350 D_B: 0.265 G_B: 0.316 cycle_B: 0.386 idt_B: 0.144
+--------------------------------------------------------
+Stopped because it passed patience 5 times, Latest update: 138 epoch

@@ -884,6 +884,84 @@ class ellen_dwt_uresnet1_1(nn.Module):
     modified by ellen_2022.08.12
         1. dwt-> pywt 안쓰고, DWGAN에서 사용한 dwt사용(cuda issue)
         2. size맞게 변경
+    
+    => uresnet + dwt transform
+    
+    input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
+    """
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, padding_type='reflect'):
+        super(ellen_dwt_uresnet1_1, self).__init__()
+        if type(norm_layer) == functools.partial:
+            use_bias = norm_layer.func == nn.InstanceNorm2d
+        else:
+            use_bias = norm_layer == nn.InstanceNorm2d
+
+        # resnet 구조(unet안에 있는)
+        # default: 64*4 -> 64*4 반복
+        multi = 2**(num_downs-1)  # 내려가는 만큼 채널수 : 64*2^n
+        resnet_inUnet = []
+        for i in range(n_blocks):
+            resnet_inUnet += [ResnetBlock(ngf*multi, padding_type=padding_type,
+                                          norm_layer=norm_layer, use_dropout=use_dropout, use_bias=use_bias)]
+            print("-----resnet", i, " 번째")
+
+        # unet 구조 시작(resnet을 감싸는)
+        # i : 0,1,2,3,, n
+        # default: 안 64*4
+        resnet_inUnets = nn.Sequential(*resnet_inUnet)  # submodule
+        unetblock = UnetSkipConnectionBlock(ngf*multi, ngf*multi, input_nc=None, submodule=resnet_inUnets,
+                                            norm_layer=norm_layer, innermost=True)  # 젤 안쪽에서 resnet과 닿아 있는 것 > 64*8 64*8
+        unetblock = UnetSkipConnectionBlock(int(
+            ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer)  # > 64*4 64*8
+        print(">> in, out: ", ngf*(multi/2), ", ", ngf*multi)
+        for i in range(num_downs-3):  # 0이하면, 어짜피 for문 안들어감
+            multi = int(multi/2)
+            unetblock = UnetSkipConnectionBlock(int(
+                ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer)
+            print("-----unet", i, " 번째")
+            print(">> in, out: ", ngf*(multi/2), ", ", ngf*multi)
+        multi = int(multi/2)
+        unetblock = UnetSkipConnectionBlock(
+            output_nc, ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer, outermost=True)
+
+        model = [unetblock]
+        print("----- e1+unet+resent+uent+")
+
+        self.model = nn.Sequential(*model)
+        self.model1 = nn.Sequential(*model)
+        self.model2 = nn.Sequential(*model)
+        
+
+
+
+
+        
+        print(model)
+
+        self.channel9to3 = nn.Conv2d(9, 3, kernel_size=1, padding=0)
+        self.channel6to3nsizeUp = nn.ConvTranspose2d(6, 3, kernel_size=4, stride=2, padding=1)
+        self.dwt = DWT()
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        low_fq, h_fq = self.dwt(input)  # l:[1,3,256,256], h:[1,9,256,256]
+        high_f = self.channel9to3(h_fq)  # high: [1,3,256,256]
+        low_result = self.model(low_fq)  # low_result:[1,3,256,256]
+        total_result = self.channel6to3nsizeUp(torch.cat((low_result, high_f), 1))
+        print(">>>>>>>>>>>>>")
+        print(self.model1 is self.model2)
+        print(">>>>>>>>>>>>>")
+
+
+        return total_result
+
+class ellen_dwt_uresnet1_3(nn.Module):
+    """
+    made by ellen _2022.08.12 
+    
     dwt_network + uresnet 
     
     input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
@@ -945,23 +1023,6 @@ class ellen_dwt_uresnet1_1(nn.Module):
 
         return total_result
 
-
-#     # def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, padding_type='reflect'):
-#     #     super(ellen_dwt_uresnet2_1, self).__init__()
-#     #     self.uresnet = ellen_uresent(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=3, n_blocks=9)
-#     #     self.dwt_model = dwt_Unet()
-#     #     self.fusion = nn.Sequential(nn.ReflectionPad2d(3), nn.Conv2d(6,3, kernel_size=7, padding=0), nn.Tanh())
-
-
-#     # def forward(self, input):
-#     #     """Standard forward"""
-#     #     # print(type(input)) # <class 'torch.Tensor'>
-#     #     # print(input.shape) # torch.Size([1, 3, 512, 512])
-#     #     result_uresnet= self.uresnet(input)
-#     #     result_dwt = self.dwt_model(input)
-#     #     x = torch.cat([result_dwt, result_uresnet],1)
-
-#     #     return self.fusion(x)
 
 
 class NLayerDiscriminator(nn.Module):
