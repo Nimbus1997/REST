@@ -48,7 +48,8 @@ if __name__ == '__main__':
     opt.phase = "val"
     val_dataset = create_dataset(opt)
     last_val_loss_G = inf
-    patience = 5
+    patience = opt.patience
+    print("patience:", patience)
     patience_count = 0
 
     opt.phase = "train"

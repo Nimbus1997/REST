@@ -1,0 +1,23 @@
+creating web directory ./results/ellen_dwt_uresnet1_1_512n1000_0812_b16/test_latest
+processing (0000)-th image... ['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0001.jpg']
+Traceback (most recent call last):
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/PIL/ImageFile.py", line 506, in _save
+    fh = fp.fileno()
+AttributeError: '_idat' object has no attribute 'fileno'
+During handling of the above exception, another exception occurred:
+Traceback (most recent call last):
+  File "test.py", line 98, in <module>
+    save_images(webpage, visuals, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/util/visualizer.py", line 49, in save_images
+    ims_dict[label] = wandb.Image(im)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/wandb/sdk/data_types.py", line 2086, in __init__
+    self._initialize_from_data(data_or_path, mode)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/wandb/sdk/data_types.py", line 2216, in _initialize_from_data
+    self._image.save(tmp_path, transparency=None)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/PIL/Image.py", line 2158, in save
+    save_handler(self, fp, filename)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/PIL/PngImagePlugin.py", line 1284, in _save
+    ImageFile._save(im, _idat(fp, chunk), [("zip", (0, 0) + im.size, 0, rawmode)])
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/PIL/ImageFile.py", line 520, in _save
+    l, s, d = e.encode(bufsize)
+KeyboardInterrupt

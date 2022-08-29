@@ -1,0 +1,26 @@
+create web directory ./checkpoints/ellen_dwt_uresnet1_3_512n1000_0817_b4/web...
+learning rate 0.0002000 -> 0.0002000
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+(epoch: 1, iters: 100, time: 0.149, data: 0.204) D_A: 0.627 G_A: 1.317 cycle_A: 9.103 idt_A: 3.931 D_B: 0.327 G_B: 0.722 cycle_B: 4.571 idt_B: 1.728
+(epoch: 1, iters: 200, time: 0.216, data: 0.004) D_A: 0.205 G_A: 0.487 cycle_A: 2.721 idt_A: 1.935 D_B: 0.159 G_B: 0.666 cycle_B: 1.977 idt_B: 1.025
+(epoch: 1, iters: 300, time: 0.244, data: 0.004) D_A: 0.182 G_A: 0.448 cycle_A: 2.074 idt_A: 1.486 D_B: 0.165 G_B: 0.609 cycle_B: 1.215 idt_B: 0.946
+(epoch: 1, iters: 400, time: 0.712, data: 0.005) D_A: 0.140 G_A: 0.395 cycle_A: 4.201 idt_A: 1.510 D_B: 0.162 G_B: 0.764 cycle_B: 1.974 idt_B: 0.968
+(epoch: 1, iters: 500, time: 0.247, data: 0.004) D_A: 0.113 G_A: 0.588 cycle_A: 4.971 idt_A: 1.437 D_B: 0.148 G_B: 0.612 cycle_B: 2.064 idt_B: 1.251
+(epoch: 1, iters: 600, time: 0.177, data: 0.004) D_A: 0.143 G_A: 0.596 cycle_A: 1.775 idt_A: 1.043 D_B: 0.182 G_B: 0.716 cycle_B: 1.145 idt_B: 0.614
+End of epoch 1 / 400 	 Time Taken: 118 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 2, iters: 100, time: 0.227, data: 0.206) D_A: 0.118 G_A: 0.473 cycle_A: 2.055 idt_A: 1.042 D_B: 0.101 G_B: 0.585 cycle_B: 1.136 idt_B: 0.623
+(epoch: 2, iters: 200, time: 2.634, data: 0.004) D_A: 0.071 G_A: 0.696 cycle_A: 1.971 idt_A: 0.899 D_B: 0.172 G_B: 0.929 cycle_B: 1.114 idt_B: 0.626
+(epoch: 2, iters: 300, time: 0.179, data: 0.004) D_A: 0.099 G_A: 0.574 cycle_A: 2.553 idt_A: 1.012 D_B: 0.121 G_B: 0.596 cycle_B: 1.344 idt_B: 0.674
+(epoch: 2, iters: 400, time: 0.151, data: 0.003) D_A: 0.037 G_A: 0.713 cycle_A: 2.562 idt_A: 1.208 D_B: 0.084 G_B: 0.578 cycle_B: 1.734 idt_B: 0.505
+(epoch: 2, iters: 500, time: 0.153, data: 0.004) D_A: 0.052 G_A: 0.908 cycle_A: 2.416 idt_A: 0.876 D_B: 0.083 G_B: 0.822 cycle_B: 1.341 idt_B: 0.487
+(epoch: 2, iters: 600, time: 0.459, data: 0.017) D_A: 0.079 G_A: 0.988 cycle_A: 2.705 idt_A: 0.725 D_B: 0.099 G_B: 0.341 cycle_B: 1.043 idt_B: 0.548
+End of epoch 2 / 400 	 Time Taken: 126 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 3, iters: 100, time: 0.251, data: 0.230) D_A: 0.045 G_A: 1.050 cycle_A: 1.681 idt_A: 0.794 D_B: 0.118 G_B: 0.336 cycle_B: 1.271 idt_B: 0.477
+(epoch: 3, iters: 200, time: 0.141, data: 0.004) D_A: 0.073 G_A: 0.616 cycle_A: 2.781 idt_A: 0.696 D_B: 0.094 G_B: 0.806 cycle_B: 1.152 idt_B: 0.498
+(epoch: 3, iters: 300, time: 0.150, data: 0.005) D_A: 0.107 G_A: 0.342 cycle_A: 1.696 idt_A: 0.860 D_B: 0.104 G_B: 0.847 cycle_B: 1.000 idt_B: 0.420
+(epoch: 3, iters: 400, time: 0.756, data: 0.004) D_A: 0.073 G_A: 0.478 cycle_A: 2.977 idt_A: 0.912 D_B: 0.135 G_B: 0.980 cycle_B: 1.213 idt_B: 0.528
+(epoch: 3, iters: 500, time: 0.248, data: 0.004) D_A: 0.056 G_A: 0.713 cycle_A: 2.555 idt_A: 0.729 D_B: 0.071 G_B: 0.743 cycle_B: 1.063 idt_B: 0.551
+(epoch: 3, iters: 600, time: 0.154, data: 0.004) D_A: 0.150 G_A: 0.715 cycle_A: 2.411 idt_A: 0.780 D_B: 0.077 G_B: 0.836 cycle_B: 1.034 idt_B: 0.529
