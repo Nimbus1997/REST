@@ -1,0 +1,14 @@
+/home/user/miniconda/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:129: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+create web directory ./checkpoints/ellen_dwt_uresnet1_3_eyeq512_0830/web...
+learning rate 0.0002000 -> 0.0002000
+(epoch: 1, iters: 200, time: 0.068, data: 0.198) D_A: 0.280 G_A: 0.709 cycle_A: 6.452 idt_A: 2.692 D_B: 0.304 G_B: 0.591 cycle_B: 3.243 idt_B: 1.349
+(epoch: 1, iters: 400, time: 0.342, data: 0.010) D_A: 0.240 G_A: 0.404 cycle_A: 6.592 idt_A: 2.343 D_B: 0.207 G_B: 0.627 cycle_B: 2.983 idt_B: 1.430
+(epoch: 1, iters: 600, time: 0.069, data: 0.009) D_A: 0.172 G_A: 0.452 cycle_A: 3.024 idt_A: 1.276 D_B: 0.196 G_B: 0.437 cycle_B: 1.311 idt_B: 0.737
+End of epoch 1 / 400 	 Time Taken: 47 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 2, iters: 200, time: 0.452, data: 0.245) D_A: 0.164 G_A: 0.402 cycle_A: 1.946 idt_A: 0.982 D_B: 0.158 G_B: 0.492 cycle_B: 1.101 idt_B: 0.483
+(epoch: 2, iters: 400, time: 0.069, data: 0.007) D_A: 0.437 G_A: 0.679 cycle_A: 2.184 idt_A: 0.883 D_B: 0.321 G_B: 0.848 cycle_B: 1.232 idt_B: 0.472
+(epoch: 2, iters: 600, time: 0.202, data: 0.008) D_A: 0.166 G_A: 0.460 cycle_A: 2.170 idt_A: 0.855 D_B: 0.383 G_B: 0.559 cycle_B: 1.150 idt_B: 0.464
+End of epoch 2 / 400 	 Time Taken: 48 sec
+learning rate 0.0002000 -> 0.0002000

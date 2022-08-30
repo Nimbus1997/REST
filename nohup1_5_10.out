@@ -1,14 +1,22 @@
-/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torchvision/transforms/transforms.py:288: UserWarning: Argument interpolation should be of type InterpolationMode instead of int. Please, use InterpolationMode enum.
-  "Argument interpolation should be of type InterpolationMode instead of int. "
+/home/user/miniconda/lib/python3.8/site-packages/requests/__init__.py:89: RequestsDependencyWarning: urllib3 (1.26.12) or chardet (3.0.4) doesn't match a supported version!
+  warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+/home/user/miniconda/lib/python3.8/site-packages/torchvision/transforms/transforms.py:257: UserWarning: Argument interpolation should be of type InterpolationMode instead of int. Please, use InterpolationMode enum.
+  warnings.warn(
 Setting up a new session...
-wandb: Currently logged in as: ellen (use `wandb login --relogin` to force relogin)
+wandb: Currently logged in as: ellen. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.13.2
+wandb: Run data is saved locally in /home/ellen/RetinaImage_model_MW/wandb/run-20220830_052756-3bsmg9nl
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run ellen_dwt_uresnet1_5_eyeq512_0830
+wandb: ⭐️ View project at https://wandb.ai/ellen/CycleGAN-and-pix2pix
+wandb: 🚀 View run at https://wandb.ai/ellen/CycleGAN-and-pix2pix/runs/3bsmg9nl
 ----------------- Options ---------------
-               batch_size: 1                             	[default: 2]
+               batch_size: 4                             	[default: 2]
                     beta1: 0.5                           
           checkpoints_dir: ./checkpoints                 
            continue_train: False                         
                 crop_size: 512                           	[default: 256]
-                 dataroot: /home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000	[default: None]
+                 dataroot: /home/ellen/data/input_eyeq_20220830_512_n1000	[default: None]
              dataset_mode: unaligned                     
                 direction: AtoB                          
               display_env: main                          
@@ -21,7 +29,7 @@ wandb: Currently logged in as: ellen (use `wandb login --relogin` to force relog
                     epoch: latest                        
               epoch_count: 1                             
                  gan_mode: lsgan                         
-                  gpu_ids: 2                             	[default: 0]
+                  gpu_ids: 0                             
                 init_gain: 0.02                          
                 init_type: normal                        
                  input_nc: 3                             
@@ -39,7 +47,7 @@ wandb: Currently logged in as: ellen (use `wandb login --relogin` to force relog
                  n_epochs: 100                           
            n_epochs_decay: 300                           
                n_layers_D: 3                             
-                     name: ellen_dwt_uresnet1_5_512n1000_0829	[default: experiment_name]
+                     name: ellen_dwt_uresnet1_5_eyeq512_0830	[default: experiment_name]
                       ndf: 64                            
                      netD: basic                         
                      netG: ellen_dwt_uresnet1_5          	[default: resnet_9blocks]
@@ -79,45 +87,80 @@ model [CycleGANModel] was created
 [Network D_A] Total number of parameters : 2.765 M
 [Network D_B] Total number of parameters : 2.765 M
 -----------------------------------------------
-wandb: wandb version 0.13.2 is available!  To upgrade, please run:
-wandb:  $ pip install wandb --upgrade
-wandb: Tracking run with wandb version 0.12.9
-wandb: Syncing run ellen_dwt_uresnet1_5_512n1000_0829
-wandb: ⭐️ View project at https://wandb.ai/ellen/CycleGAN-and-pix2pix
-wandb: 🚀 View run at https://wandb.ai/ellen/CycleGAN-and-pix2pix/runs/2e4nm044
-wandb: Run data is saved locally in /home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/wandb/run-20220829_144627-2e4nm044
-wandb: Run `wandb offline` to turn off syncing.
-
-create web directory ./checkpoints/ellen_dwt_uresnet1_5_512n1000_0829/web...
+create web directory ./checkpoints/ellen_dwt_uresnet1_5_eyeq512_0830/web...
 learning rate 0.0002000 -> 0.0002000
-/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
-  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
-Traceback (most recent call last):
-  File "train.py", line 97, in <module>
-    model.optimize_parameters()
-  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 183, in optimize_parameters
-    self.forward()      # compute fake images and reconstruction images.
-  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 116, in forward
-    self.fake_A = self.netG_B(self.real_B)  # G_B(B)
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/data_parallel.py", line 166, in forward
-    return self.module(*inputs[0], **kwargs[0])
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/networks.py", line 1321, in forward
-    high_dout5=self.hd4(high_dout4)
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/conv.py", line 446, in forward
-    return self._conv_forward(input, self.weight, self.bias)
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/conv.py", line 443, in _conv_forward
-    self.padding, self.dilation, self.groups)
-RuntimeError: CUDA out of memory. Tried to allocate 20.00 MiB (GPU 2; 11.91 GiB total capacity; 5.98 GiB already allocated; 22.00 MiB free; 6.03 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
-wandb: Waiting for W&B process to finish, PID 18039... (failed 1). Press ctrl-c to abort syncing.
-wandb: - 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: \ 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: | 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: / 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: - 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb:                                                                                
-wandb: Synced 6 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
-wandb: Synced ellen_dwt_uresnet1_5_512n1000_0829: https://wandb.ai/ellen/CycleGAN-and-pix2pix/runs/2e4nm044
-wandb: Find logs at: ./wandb/run-20220829_144627-2e4nm044/logs/debug.log
-wandb: 
-
+/home/user/miniconda/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:129: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+(epoch: 1, iters: 100, time: 0.161, data: 0.144) D_A: 0.310 G_A: 0.739 cycle_A: 9.213 idt_A: 4.827 D_B: 0.442 G_B: 0.726 cycle_B: 4.886 idt_B: 2.451 
+(epoch: 1, iters: 200, time: 0.161, data: 0.008) D_A: 0.164 G_A: 0.681 cycle_A: 7.034 idt_A: 5.215 D_B: 0.305 G_B: 0.592 cycle_B: 5.025 idt_B: 1.964 
+(epoch: 1, iters: 300, time: 0.162, data: 0.004) D_A: 0.232 G_A: 0.591 cycle_A: 7.113 idt_A: 3.364 D_B: 0.522 G_B: 1.020 cycle_B: 3.338 idt_B: 1.527 
+(epoch: 1, iters: 400, time: 0.867, data: 0.004) D_A: 0.133 G_A: 0.637 cycle_A: 9.186 idt_A: 3.077 D_B: 0.197 G_B: 0.576 cycle_B: 3.017 idt_B: 2.564 
+(epoch: 1, iters: 500, time: 0.162, data: 0.004) D_A: 0.144 G_A: 0.513 cycle_A: 9.070 idt_A: 4.797 D_B: 0.128 G_B: 0.540 cycle_B: 4.734 idt_B: 2.295 
+(epoch: 1, iters: 600, time: 0.162, data: 0.004) D_A: 0.080 G_A: 0.580 cycle_A: 7.071 idt_A: 4.224 D_B: 0.133 G_B: 0.609 cycle_B: 4.058 idt_B: 1.822 
+End of epoch 1 / 400 	 Time Taken: 106 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 2, iters: 100, time: 0.162, data: 0.159) D_A: 0.090 G_A: 0.529 cycle_A: 7.688 idt_A: 3.875 D_B: 0.406 G_B: 0.946 cycle_B: 3.617 idt_B: 1.935 
+(epoch: 2, iters: 200, time: 0.593, data: 0.005) D_A: 0.206 G_A: 0.269 cycle_A: 8.354 idt_A: 2.350 D_B: 0.096 G_B: 0.560 cycle_B: 2.589 idt_B: 2.283 
+(epoch: 2, iters: 300, time: 0.161, data: 0.004) D_A: 0.246 G_A: 0.706 cycle_A: 7.494 idt_A: 2.473 D_B: 0.164 G_B: 0.360 cycle_B: 2.460 idt_B: 2.009 
+(epoch: 2, iters: 400, time: 0.162, data: 0.005) D_A: 0.149 G_A: 0.436 cycle_A: 5.565 idt_A: 2.434 D_B: 0.457 G_B: 0.961 cycle_B: 2.987 idt_B: 1.498 
+(epoch: 2, iters: 500, time: 0.164, data: 0.009) D_A: 0.160 G_A: 0.600 cycle_A: 6.780 idt_A: 1.872 D_B: 0.123 G_B: 0.424 cycle_B: 2.238 idt_B: 1.803 
+(epoch: 2, iters: 600, time: 0.401, data: 0.009) D_A: 0.145 G_A: 0.354 cycle_A: 3.715 idt_A: 2.048 D_B: 0.230 G_B: 0.439 cycle_B: 2.068 idt_B: 1.101 
+End of epoch 2 / 400 	 Time Taken: 105 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 3, iters: 100, time: 0.162, data: 0.192) D_A: 0.153 G_A: 0.394 cycle_A: 3.708 idt_A: 2.823 D_B: 0.134 G_B: 0.456 cycle_B: 2.656 idt_B: 1.138 
+(epoch: 3, iters: 200, time: 0.162, data: 0.009) D_A: 0.124 G_A: 0.319 cycle_A: 7.047 idt_A: 2.392 D_B: 0.105 G_B: 0.402 cycle_B: 2.386 idt_B: 1.761 
+(epoch: 3, iters: 300, time: 0.163, data: 0.007) D_A: 0.298 G_A: 0.730 cycle_A: 4.382 idt_A: 2.499 D_B: 0.195 G_B: 0.559 cycle_B: 2.442 idt_B: 1.119 
+(epoch: 3, iters: 400, time: 0.684, data: 0.005) D_A: 0.121 G_A: 0.475 cycle_A: 4.672 idt_A: 2.158 D_B: 0.140 G_B: 0.468 cycle_B: 2.420 idt_B: 1.032 
+(epoch: 3, iters: 500, time: 0.164, data: 0.004) D_A: 0.227 G_A: 0.221 cycle_A: 3.768 idt_A: 2.749 D_B: 0.141 G_B: 0.470 cycle_B: 2.146 idt_B: 0.879 
+(epoch: 3, iters: 600, time: 0.163, data: 0.005) D_A: 0.112 G_A: 0.410 cycle_A: 3.066 idt_A: 1.745 D_B: 0.139 G_B: 0.478 cycle_B: 1.815 idt_B: 0.911 
+End of epoch 3 / 400 	 Time Taken: 105 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 4, iters: 100, time: 0.164, data: 0.189) D_A: 0.130 G_A: 0.345 cycle_A: 2.105 idt_A: 1.476 D_B: 0.138 G_B: 0.385 cycle_B: 1.592 idt_B: 1.004 
+(epoch: 4, iters: 200, time: 0.686, data: 0.004) D_A: 0.120 G_A: 0.458 cycle_A: 4.753 idt_A: 1.626 D_B: 0.181 G_B: 0.422 cycle_B: 1.656 idt_B: 1.140 
+(epoch: 4, iters: 300, time: 0.163, data: 0.004) D_A: 0.186 G_A: 0.504 cycle_A: 3.082 idt_A: 0.958 D_B: 0.274 G_B: 0.197 cycle_B: 1.142 idt_B: 1.073 
+(epoch: 4, iters: 400, time: 0.166, data: 0.004) D_A: 0.131 G_A: 0.543 cycle_A: 2.723 idt_A: 1.071 D_B: 0.278 G_B: 0.422 cycle_B: 1.164 idt_B: 1.051 
+(epoch: 4, iters: 500, time: 0.164, data: 0.004) D_A: 0.177 G_A: 0.409 cycle_A: 4.051 idt_A: 1.138 D_B: 0.181 G_B: 0.328 cycle_B: 1.593 idt_B: 0.857 
+(epoch: 4, iters: 600, time: 0.401, data: 0.004) D_A: 0.281 G_A: 0.376 cycle_A: 2.600 idt_A: 1.662 D_B: 0.188 G_B: 0.982 cycle_B: 2.437 idt_B: 0.800 
+End of epoch 4 / 400 	 Time Taken: 103 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 5, iters: 100, time: 0.162, data: 0.163) D_A: 0.255 G_A: 0.433 cycle_A: 2.299 idt_A: 1.139 D_B: 0.268 G_B: 0.168 cycle_B: 1.613 idt_B: 0.751 
+(epoch: 5, iters: 200, time: 0.163, data: 0.004) D_A: 0.156 G_A: 0.497 cycle_A: 4.176 idt_A: 1.365 D_B: 0.198 G_B: 0.441 cycle_B: 1.411 idt_B: 0.822 
+(epoch: 5, iters: 300, time: 0.164, data: 0.004) D_A: 0.151 G_A: 0.712 cycle_A: 3.461 idt_A: 1.356 D_B: 0.169 G_B: 0.978 cycle_B: 1.725 idt_B: 1.030 
+(epoch: 5, iters: 400, time: 0.607, data: 0.004) D_A: 0.217 G_A: 0.422 cycle_A: 3.238 idt_A: 1.400 D_B: 0.164 G_B: 0.185 cycle_B: 1.423 idt_B: 1.005 
+(epoch: 5, iters: 500, time: 0.164, data: 0.005) D_A: 0.166 G_A: 0.641 cycle_A: 3.316 idt_A: 1.723 D_B: 0.117 G_B: 0.559 cycle_B: 2.043 idt_B: 0.708 
+(epoch: 5, iters: 600, time: 0.164, data: 0.004) D_A: 0.430 G_A: 0.594 cycle_A: 2.058 idt_A: 0.904 D_B: 0.207 G_B: 0.170 cycle_B: 0.879 idt_B: 0.706 
+saving the model at the end of epoch 5, iters 3000
+End of epoch 5 / 400 	 Time Taken: 107 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 6, iters: 100, time: 0.163, data: 0.168) D_A: 0.249 G_A: 0.271 cycle_A: 3.187 idt_A: 1.147 D_B: 0.172 G_B: 0.184 cycle_B: 1.666 idt_B: 0.777 
+(epoch: 6, iters: 200, time: 0.680, data: 0.010) D_A: 0.229 G_A: 0.340 cycle_A: 2.180 idt_A: 1.113 D_B: 0.201 G_B: 0.373 cycle_B: 1.621 idt_B: 0.792 
+(epoch: 6, iters: 300, time: 0.164, data: 0.009) D_A: 0.113 G_A: 0.533 cycle_A: 3.188 idt_A: 1.010 D_B: 0.350 G_B: 0.237 cycle_B: 1.294 idt_B: 0.792 
+(epoch: 6, iters: 400, time: 0.162, data: 0.008) D_A: 0.226 G_A: 0.366 cycle_A: 3.723 idt_A: 1.594 D_B: 0.177 G_B: 0.537 cycle_B: 1.635 idt_B: 0.897 
+(epoch: 6, iters: 500, time: 0.162, data: 0.008) D_A: 0.160 G_A: 0.449 cycle_A: 2.182 idt_A: 0.977 D_B: 0.256 G_B: 0.270 cycle_B: 1.148 idt_B: 0.741 
+(epoch: 6, iters: 600, time: 0.362, data: 0.004) D_A: 0.084 G_A: 0.914 cycle_A: 251622834176.000 idt_A: 1118397.625 D_B: 0.470 G_B: 0.887 cycle_B: 237417234432.000 idt_B: 416807.031 
+End of epoch 6 / 400 	 Time Taken: 103 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 7, iters: 100, time: 0.162, data: 0.157) D_A: 0.065 G_A: 1.130 cycle_A: 20210462720.000 idt_A: 123297.062 D_B: 0.110 G_B: 0.889 cycle_B: 9046806528.000 idt_B: 35923.828 
+(epoch: 7, iters: 200, time: 0.162, data: 0.005) D_A: 0.043 G_A: 0.911 cycle_A: 5394934784.000 idt_A: 219351.125 D_B: 0.024 G_B: 0.876 cycle_B: 2862626560.000 idt_B: 29443.680 
+(epoch: 7, iters: 300, time: 0.165, data: 0.009) D_A: 0.007 G_A: 0.960 cycle_A: 12460205056.000 idt_A: 256939.906 D_B: 0.039 G_B: 0.961 cycle_B: 3618819584.000 idt_B: 47506.594 
+(epoch: 7, iters: 400, time: 0.591, data: 0.004) D_A: 0.010 G_A: 1.030 cycle_A: 5150164480.000 idt_A: 382051.625 D_B: 0.021 G_B: 1.020 cycle_B: 1189773056.000 idt_B: 21425.043 
+(epoch: 7, iters: 500, time: 0.164, data: 0.004) D_A: 0.006 G_A: 0.961 cycle_A: 3764024832.000 idt_A: 203405.438 D_B: 0.016 G_B: 1.004 cycle_B: 831704960.000 idt_B: 22953.037 
+(epoch: 7, iters: 600, time: 0.163, data: 0.004) D_A: 0.007 G_A: 1.005 cycle_A: 3104015104.000 idt_A: 205139.094 D_B: 0.009 G_B: 0.921 cycle_B: 425137120.000 idt_B: 32384.207 
+End of epoch 7 / 400 	 Time Taken: 105 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 8, iters: 100, time: 0.162, data: 0.176) D_A: 0.008 G_A: 1.059 cycle_A: 2380272128.000 idt_A: 366651.406 D_B: 0.009 G_B: 1.014 cycle_B: 655775232.000 idt_B: 25156.918 
+(epoch: 8, iters: 200, time: 0.597, data: 0.007) D_A: 0.008 G_A: 0.991 cycle_A: 1325535360.000 idt_A: 64532.469 D_B: 0.010 G_B: 0.976 cycle_B: 638159296.000 idt_B: 24418.812 
+(epoch: 8, iters: 300, time: 0.164, data: 0.005) D_A: 0.015 G_A: 0.979 cycle_A: 796334720.000 idt_A: 225001.859 D_B: 0.011 G_B: 0.943 cycle_B: 372298368.000 idt_B: 21444.391 
+(epoch: 8, iters: 400, time: 0.163, data: 0.005) D_A: 0.011 G_A: 0.983 cycle_A: 2737905664.000 idt_A: 255915.625 D_B: 0.020 G_B: 0.963 cycle_B: 382063424.000 idt_B: 37516.438 
+(epoch: 8, iters: 500, time: 0.162, data: 0.009) D_A: 0.020 G_A: 1.002 cycle_A: 1182127616.000 idt_A: 102261.031 D_B: 0.008 G_B: 0.979 cycle_B: 201758176.000 idt_B: 17152.715 
+(epoch: 8, iters: 600, time: 0.452, data: 0.006) D_A: 0.004 G_A: 0.981 cycle_A: 1566383872.000 idt_A: 262575.312 D_B: 0.022 G_B: 1.002 cycle_B: 347478880.000 idt_B: 32221.668 
+End of epoch 8 / 400 	 Time Taken: 106 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 9, iters: 100, time: 0.162, data: 0.170) D_A: 0.008 G_A: 0.982 cycle_A: 1236634112.000 idt_A: 200963.125 D_B: 0.006 G_B: 0.980 cycle_B: 223238400.000 idt_B: 22291.074 
+(epoch: 9, iters: 200, time: 0.163, data: 0.008) D_A: 0.016 G_A: 1.013 cycle_A: 678111936.000 idt_A: 257086.688 D_B: 0.034 G_B: 1.054 cycle_B: 180506864.000 idt_B: 9513.667 
+(epoch: 9, iters: 300, time: 0.164, data: 0.009) D_A: 0.015 G_A: 1.058 cycle_A: 1429268480.000 idt_A: 156241.734 D_B: 0.067 G_B: 1.209 cycle_B: 171929584.000 idt_B: 28069.371 
+(epoch: 9, iters: 400, time: 0.673, data: 0.010) D_A: 0.049 G_A: 1.048 cycle_A: 938401856.000 idt_A: 173408.281 D_B: 0.026 G_B: 1.023 cycle_B: 203282688.000 idt_B: 18930.926 
+(epoch: 9, iters: 500, time: 0.164, data: 0.009) D_A: 0.004 G_A: 1.022 cycle_A: 1182170240.000 idt_A: 195263.594 D_B: 0.004 G_B: 1.013 cycle_B: 98284328.000 idt_B: 26669.586 
+(epoch: 9, iters: 600, time: 0.162, data: 0.008) D_A: 0.038 G_A: 0.993 cycle_A: 913444992.000 idt_A: 130852.969 D_B: 0.020 G_B: 1.017 cycle_B: 170302704.000 idt_B: 26673.730 
+End of epoch 9 / 400 	 Time Taken: 105 sec
+learning rate 0.0002000 -> 0.0002000
