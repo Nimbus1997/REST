@@ -7,7 +7,7 @@ wandb: Currently logged in as: ellen (use `wandb login --relogin` to force relog
                     beta1: 0.5                           
           checkpoints_dir: ./checkpoints                 
            continue_train: False                         
-                crop_size: 512                           	[default: 256]
+                crop_size: 128                           	[default: 256]
                  dataroot: /home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000	[default: None]
              dataset_mode: unaligned                     
                 direction: AtoB                          
@@ -30,7 +30,7 @@ wandb: Currently logged in as: ellen (use `wandb login --relogin` to force relog
                  lambda_B: 10.0                          
           lambda_identity: 0.5                           
                 load_iter: 0                             	[default: 0]
-                load_size: 512                           	[default: 286]
+                load_size: 128                           	[default: 286]
                        lr: 0.0002                        
            lr_decay_iters: 50                            
                 lr_policy: linear                        
@@ -84,40 +84,30 @@ wandb:  $ pip install wandb --upgrade
 wandb: Tracking run with wandb version 0.12.9
 wandb: Syncing run ellen_dwt_uresnet1_5_512n1000_0829
 wandb: ⭐️ View project at https://wandb.ai/ellen/CycleGAN-and-pix2pix
-wandb: 🚀 View run at https://wandb.ai/ellen/CycleGAN-and-pix2pix/runs/2e4nm044
-wandb: Run data is saved locally in /home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/wandb/run-20220829_144627-2e4nm044
+wandb: 🚀 View run at https://wandb.ai/ellen/CycleGAN-and-pix2pix/runs/2xh8igi1
+wandb: Run data is saved locally in /home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/wandb/run-20220829_145501-2xh8igi1
 wandb: Run `wandb offline` to turn off syncing.
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
 
 create web directory ./checkpoints/ellen_dwt_uresnet1_5_512n1000_0829/web...
 learning rate 0.0002000 -> 0.0002000
-/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
-  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
 Traceback (most recent call last):
   File "train.py", line 97, in <module>
     model.optimize_parameters()
-  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 183, in optimize_parameters
-    self.forward()      # compute fake images and reconstruction images.
-  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 116, in forward
-    self.fake_A = self.netG_B(self.real_B)  # G_B(B)
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/data_parallel.py", line 166, in forward
-    return self.module(*inputs[0], **kwargs[0])
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/networks.py", line 1321, in forward
-    high_dout5=self.hd4(high_dout4)
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/conv.py", line 446, in forward
-    return self._conv_forward(input, self.weight, self.bias)
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/conv.py", line 443, in _conv_forward
-    self.padding, self.dilation, self.groups)
-RuntimeError: CUDA out of memory. Tried to allocate 20.00 MiB (GPU 2; 11.91 GiB total capacity; 5.98 GiB already allocated; 22.00 MiB free; 6.03 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
-wandb: Waiting for W&B process to finish, PID 18039... (failed 1). Press ctrl-c to abort syncing.
-wandb: - 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: \ 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: | 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: / 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: - 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb:                                                                                
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 188, in optimize_parameters
+    self.backward_G()             # calculate gradients for G_A and G_B
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 178, in backward_G
+    self.loss_G.backward()
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/_tensor.py", line 307, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph, inputs=inputs)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/autograd/__init__.py", line 156, in backward
+    allow_unreachable=True, accumulate_grad=True)  # allow_unreachable flag
+RuntimeError: CUDA out of memory. Tried to allocate 128.00 MiB (GPU 2; 11.91 GiB total capacity; 5.94 GiB already allocated; 78.00 MiB free; 5.98 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+wandb: Waiting for W&B process to finish, PID 30289... (failed 1). Press ctrl-c to abort syncing.
+wandb: - 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: \ 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: | 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: / 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb:                                                                                
 wandb: Synced 6 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
-wandb: Synced ellen_dwt_uresnet1_5_512n1000_0829: https://wandb.ai/ellen/CycleGAN-and-pix2pix/runs/2e4nm044
-wandb: Find logs at: ./wandb/run-20220829_144627-2e4nm044/logs/debug.log
+wandb: Synced ellen_dwt_uresnet1_5_512n1000_0829: https://wandb.ai/ellen/CycleGAN-and-pix2pix/runs/2xh8igi1
+wandb: Find logs at: ./wandb/run-20220829_145501-2xh8igi1/logs/debug.log
 wandb: 
 
