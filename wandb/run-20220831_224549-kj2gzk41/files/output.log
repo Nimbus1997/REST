@@ -1,0 +1,31 @@
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+create web directory ./checkpoints/ellen_dwt_uresnet1_3_512n1000_0831_b4/web...
+>>>>>>>>>>>>>>>>>[4]
+>>>>>>>>>>>>>>>>>[5]
+learning rate 0.0002000 -> 0.0002000
+>>>>>>>>>>>>>>>>>[6]
+<class 'torch.Tensor'>
+torch.Size([4, 3, 512, 512])
+input.shape torch.Size([4, 3, 512, 512])
+h_fq.shape torch.Size([4, 9, 256, 256])
+low_out4.shape torch.Size([4, 256, 32, 32])
+high_dout2.shape torch.Size([4, 64, 128, 128])
+high_rout1.shape torch.Size([4, 9, 256, 256])
+high_dout3.shape torch.Size([4, 128, 64, 64])
+high_rout2.shape torch.Size([4, 64, 128, 128])
+high_dout4.shape torch.Size([4, 256, 32, 32])
+high_rout3.shape torch.Size([4, 128, 64, 64])
+u3 input size torch.Size([4, 512, 32, 32])
+<class 'torch.Tensor'>
+torch.Size([4, 3, 518, 518])
+input.shape torch.Size([4, 3, 518, 518])
+h_fq.shape torch.Size([4, 9, 259, 259])
+low_out4.shape torch.Size([4, 256, 32, 32])
+high_dout2.shape torch.Size([4, 64, 129, 129])
+high_rout1.shape torch.Size([4, 9, 259, 259])
+high_dout3.shape torch.Size([4, 128, 64, 64])
+high_rout2.shape torch.Size([4, 64, 129, 129])
+high_dout4.shape torch.Size([4, 256, 32, 32])
+high_rout3.shape torch.Size([4, 128, 64, 64])
+u3 input size torch.Size([4, 512, 32, 32])

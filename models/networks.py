@@ -944,8 +944,7 @@ class ellen_dwt_uresnet1_1(nn.Module):
 
         self.channel9to3 = nn.Sequential(
             nn.Conv2d(9, 3, kernel_size=1, padding=0), nn.LeakyReLU(0.2))
-        self.channel6to3nsizeUp = nn.Sequential(nn.ReflectionPad2d(
-            1), nn.ConvTranspose2d(6, 3, kernel_size=4, stride=2, padding=0), nn.Tanh())
+        self.channel6to3nsizeUp = nn.Sequential(nn.ConvTranspose2d(6, 3, kernel_size=4, stride=2, padding=1), nn.Tanh())
         self.dwt = DWT()
 
     def forward(self, input):
@@ -986,19 +985,19 @@ class ellen_dwt_uresnet1_3(nn.Module):
         level3c = ngf*2
         level4c = ngf*(2**2)
         # (1) 앞뒤로 특정 역할 하는 층
-        self.channel18to3nsizeUp = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            18, output_nc, kernel_size=4, stride=2, padding=0), nn.Tanh())  # last layer -> need Tanh
+        self.channel18to3nsizeUp = nn.Sequential( nn.ConvTranspose2d(
+            18, output_nc, kernel_size=4, stride=2, padding=1), nn.Tanh())  # last layer -> need Tanh
         self.dwt = DWT()
 
         # (2) high& low frequency - down 층
         down_layer1 = nn.Sequential(nn.ReflectionPad2d(1), nn.Conv2d(
-            3, level2c, kernel_size=4, stride=2, padding=0, bias=use_bias), nn.LeakyReLU(0.2))
+            3, level2c, kernel_size=4, stride=2, padding=0, bias=use_bias), nn.LeakyReLU(0.2, True))
         hdown_layer1 = nn.Sequential(nn.ReflectionPad2d(1), nn.Conv2d(
-            9, level2c, kernel_size=4, stride=2, padding=0, bias=use_bias), nn.LeakyReLU(0.2))
+            9, level2c, kernel_size=4, stride=2, padding=0, bias=use_bias), nn.LeakyReLU(0.2, True))
         down_layer2 = nn.Sequential(nn.ReflectionPad2d(1), nn.Conv2d(
-            level2c, level3c, kernel_size=4, stride=2, padding=0, bias=use_bias), nn.LeakyReLU(0.2))
+            level2c, level3c, kernel_size=4, stride=2, padding=0, bias=use_bias), nn.LeakyReLU(0.2, True))
         down_layer3 = nn.Sequential(nn.ReflectionPad2d(1), nn.Conv2d(
-            level3c, level4c, kernel_size=4, stride=2, padding=0, bias=use_bias), nn.LeakyReLU(0.2))
+            level3c, level4c, kernel_size=4, stride=2, padding=0, bias=use_bias), nn.LeakyReLU(0.2, True))
         # for i in range(num_downs-1): #이렇게 한번에 정의 해보려 했으나, 아래서 불러오는게 안되는 것 같음
         #     globals()["down_layer{}".format(i+2)] = nn.Conv2d(ngf*(2**(i+1)), ngf*(2**(i+2)), kernel_size=4, stride=2, padding =1, bais = use_bias)
 
@@ -1022,12 +1021,12 @@ class ellen_dwt_uresnet1_3(nn.Module):
         resnet3 = nn.Sequential(*resnet33)
 
         # (4) up 층
-        up_layer3 = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            level4c*2, level3c, kernel_size=4, stride=2, padding=0), nn.ReLU())
-        up_layer2 = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            level3c*2, level2c, kernel_size=4, stride=2, padding=0), nn.ReLU())
-        up_layer1 = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            level2c*2, 9, kernel_size=4, stride=2, padding=0), nn.ReLU())
+        up_layer3 = nn.Sequential(nn.ConvTranspose2d(
+            level4c*2, level3c, kernel_size=4, stride=2, padding=1), nn.ReLU(True))
+        up_layer2 = nn.Sequential(nn.ConvTranspose2d(
+            level3c*2, level2c, kernel_size=4, stride=2, padding=1), nn.ReLU(True))
+        up_layer1 = nn.Sequential(nn.ConvTranspose2d(
+            level2c*2, 9, kernel_size=4, stride=2, padding=1), nn.ReLU(True))
 
         # 실제 통과할(forward) layer들 정의----
         lowsequence = [down_layer1, down_layer2, down_layer3]
@@ -1110,8 +1109,8 @@ class ellen_dwt_uresnet1_4(nn.Module):
         level3c = ngf*2
         level4c = ngf*(2**2)
         # (1) 앞뒤로 특정 역할 하는 층
-        self.channel18to3nsizeUp = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            18, output_nc, kernel_size=4, stride=2, padding=0), nn.Tanh())  # last layer -> need Tanh
+        self.channel18to3nsizeUp = nn.Sequential(nn.ConvTranspose2d(
+            18, output_nc, kernel_size=4, stride=2, padding=1), nn.Tanh())  # last layer -> need Tanh
         self.dwt = DWT()
 
         # (2) high& low frequency - down 층
@@ -1146,12 +1145,12 @@ class ellen_dwt_uresnet1_4(nn.Module):
         resnet3 = nn.Sequential(*resnet33)
 
         # (4) up 층
-        up_layer3 = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            level4c*2, level3c, kernel_size=4, stride=2, padding=0), nn.ReLU())
-        up_layer2 = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            level3c*2, level2c, kernel_size=4, stride=2, padding=0), nn.ReLU())
-        up_layer1 = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            level2c*2, 9, kernel_size=4, stride=2, padding=0), nn.ReLU())
+        up_layer3 = nn.Sequential(nn.ConvTranspose2d(
+            level4c*2, level3c, kernel_size=4, stride=2, padding=1), nn.ReLU())
+        up_layer2 = nn.Sequential(nn.ConvTranspose2d(
+            level3c*2, level2c, kernel_size=4, stride=2, padding=1), nn.ReLU())
+        up_layer1 = nn.Sequential(nn.ConvTranspose2d(
+            level2c*2, 9, kernel_size=4, stride=2, padding=1), nn.ReLU())
 
         # 실제 통과할(forward) layer들 정의----
         orisequence = [odown_layer0, down_layer1, down_layer2, down_layer3]
@@ -1230,8 +1229,8 @@ class ellen_dwt_uresnet1_5(nn.Module):
         level7c = ngf*(2**5)
 
         # (1) 앞뒤로 특정 역할 하는 층
-        self.channel18to3nsizeUp = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            18, output_nc, kernel_size=4, stride=2, padding=0), nn.Tanh())  # last layer -> need Tanh
+        self.channel18to3nsizeUp = nn.Sequential(nn.ConvTranspose2d(
+            18, output_nc, kernel_size=4, stride=2, padding=1), nn.Tanh())  # last layer -> need Tanh
         self.dwt = DWT()
 
         # (2) high& low frequency - down 층
@@ -1291,17 +1290,17 @@ class ellen_dwt_uresnet1_5(nn.Module):
         resnet6 = nn.Sequential(*resnet66)
 
         # (4) up 층
-        up_layer6 = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            level7c*2, level6c, kernel_size=4, stride=2, padding=0), nn.ReLU())
-        up_layer5 = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            level6c*2, level5c, kernel_size=4, stride=2, padding=0), nn.ReLU())
-        up_layer4 = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            level5c*2, level4c, kernel_size=4, stride=2, padding=0), nn.ReLU())
-        up_layer3 = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            level4c*2, level3c, kernel_size=4, stride=2, padding=0), nn.ReLU())
-        up_layer2 = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
-            level3c*2, level2c, kernel_size=4, stride=2, padding=0), nn.ReLU())
-        up_layer1 = nn.Sequential(nn.ReflectionPad2d(1), nn.ConvTranspose2d(
+        up_layer6 = nn.Sequential(nn.ConvTranspose2d(
+            level7c*2, level6c, kernel_size=4, stride=2, padding=1), nn.ReLU())
+        up_layer5 = nn.Sequential(nn.ConvTranspose2d(
+            level6c*2, level5c, kernel_size=4, stride=2, padding=1), nn.ReLU())
+        up_layer4 = nn.Sequential(nn.ConvTranspose2d(
+            level5c*2, level4c, kernel_size=4, stride=2, padding=1), nn.ReLU())
+        up_layer3 = nn.Sequential(nn.ConvTranspose2d(
+            level4c*2, level3c, kernel_size=4, stride=2, padding=1), nn.ReLU())
+        up_layer2 = nn.Sequential( nn.ConvTranspose2d(
+            level3c*2, level2c, kernel_size=4, stride=2, padding=1), nn.ReLU())
+        up_layer1 = nn.Sequential(nn.ConvTranspose2d(
             level2c*2, 9, kernel_size=4, stride=2, padding=0), nn.ReLU())
 
         # 실제 통과할(forward) layer들 정의----

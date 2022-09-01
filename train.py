@@ -60,10 +60,13 @@ if __name__ == '__main__':
 
 
     # create a model given opt.model and other options
+    # print(">>>>>>>>>>>>>>>>>[1]")
     model = create_model(opt)
     # regular setup: load and print networks; create schedulers
+    # print(">>>>>>>>>>>>>>>>>[2]")
     model.setup(opt)
     # create a visualizer that display/save images and plots
+    # print(">>>>>>>>>>>>>>>>>[3]")
     visualizer = Visualizer(opt)
     total_iters = 0                # the total number of training iterations
 
@@ -79,12 +82,15 @@ if __name__ == '__main__':
         # the number of tpraining iterations in current epoch, reset to 0 every epoch
         epoch_iter = 0
         # reset the visualizer: make sure it saves the results to HTML at least once every epoch
+        # print(">>>>>>>>>>>>>>>>>[4]")
         visualizer.reset()
         # update learning rates in the beginning of every epoch.
+        # print(">>>>>>>>>>>>>>>>>[5]")
         model.update_learning_rate()
 
         iter_current_train_loss_G =[]#ellen -  for early stopping visualization 
         for i, data in enumerate(dataset):  # inner loop within one epoch
+            # print(">>>>>>>>>>>>>>>>>[6]")
             iter_start_time = time.time()  # timer for computation per iteration
             if total_iters % opt.print_freq == 0:
                 t_data = iter_start_time - iter_data_time
@@ -92,16 +98,23 @@ if __name__ == '__main__':
             total_iters += opt.batch_size
             epoch_iter += opt.batch_size
             # unpack data from dataset and apply preprocessing
+            # print(">>>>>>>>>>>>>>>>>[7]")
             model.set_input(data)
             # calculate loss functions, get gradients, update network weights
+            # print(">>>>>>>>>>>>>>>>>[8]")
             model.optimize_parameters()
+            # print(">>>>>>>>>>>>>>>>>[8]")
+
 
             if total_iters % opt.display_freq == 0:   # display images on visdom and save images to a HTML file
                 save_result = total_iters % opt.update_html_freq == 0
+                # print(">>>>>>>>>>>>>>>>>[9]")
                 model.compute_visuals()
+                # print(">>>>>>>>>>>>>>>>>[10]")
                 visualizer.display_current_results(
                     model.get_current_visuals(), epoch, save_result)
 
+            # print(">>>>>>>>>>>>>>>>>[11]")
             if total_iters % opt.print_freq == 0:    # print training losses and save logging information to the disk
                 losses = model.get_current_losses()
                 t_comp = (time.time() - iter_start_time) / opt.batch_size
@@ -110,12 +123,13 @@ if __name__ == '__main__':
                 if opt.display_id > 0:
                     visualizer.plot_current_losses(
                         epoch, float(epoch_iter) / dataset_size, losses)
-
+            
             # if total_iters % opt.save_latest_freq == 0:   # cache our latest model every <save_latest_freq> iterations
             #     print('saving the latest model (epoch %d, total_iters %d)' %
             #           (epoch, total_iters))
             #     save_suffix = 'iter_%d' % total_iters if opt.save_by_iter else 'latest'
             #     model.save_networks(save_suffix)
+            # print(">>>>>>>>>>>>>>>>>[12]")
             iter_current_train_loss_G.append(model.get_current_loss_G()) #ellen -  for early stopping visualization
 
             iter_data_time = time.time()
