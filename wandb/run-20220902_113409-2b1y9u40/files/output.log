@@ -1,0 +1,30 @@
+create web directory ./checkpoints/resnet512_eyeq512_0902/web...
+learning rate 0.0002000 -> 0.0002000
+/home/user/miniconda/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:129: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+Traceback (most recent call last):
+  File "train.py", line 105, in <module>
+    model.optimize_parameters()
+  File "/home/ellen/RetinaImage_model_MW/models/cycle_gan_model.py", line 183, in optimize_parameters
+    self.forward()      # compute fake images and reconstruction images.
+  File "/home/ellen/RetinaImage_model_MW/models/cycle_gan_model.py", line 116, in forward
+    self.fake_A = self.netG_B(self.real_B)  # G_B(B)
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/nn/parallel/data_parallel.py", line 165, in forward
+    return self.module(*inputs[0], **kwargs[0])
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/ellen/RetinaImage_model_MW/models/networks.py", line 429, in forward
+    return self.model(input)
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/nn/modules/container.py", line 119, in forward
+    input = module(input)
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/nn/modules/instancenorm.py", line 57, in forward
+    return F.instance_norm(
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/nn/functional.py", line 2185, in instance_norm
+    return torch.instance_norm(
+RuntimeError: CUDA out of memory. Tried to allocate 512.00 MiB (GPU 0; 23.70 GiB total capacity; 21.94 GiB already allocated; 201.69 MiB free; 22.19 GiB reserved in total by PyTorch)
