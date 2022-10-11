@@ -7,6 +7,8 @@ import functools
 from torch.optim import lr_scheduler
 import pywt
 import numpy as np
+from torch.nn.functional import interpolate
+from kymatio.torch import Scattering2D #for scattering
 
 ###############################################################################
 # Helper Functions
@@ -192,10 +194,21 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
         elif not is_A:
             net = ellen_dwt_uresnet2_2B(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout)
+    
+    elif netG == 'ellen_dwt_uresnet2_3':
+        net = ellen_dwt_uresnet2_3(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=9, size=512)
+        
     elif netG == 'ellen_dwt_uresnet1_1':
         #uresnet(with dwt)
         net = ellen_dwt_uresnet1_1(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=9)
+                                   
+    elif netG == 'ellen_dwt_uresnet1_2':
+        if is_A:
+            net = ellen_dwt_uresnet1_2A(input_nc, output_nc, nf=16, norm_layer=norm_layer, use_dropout=use_dropout)
+        elif not is_A:
+            net = ellen_dwt_uresnet1_2B(input_nc, output_nc,nf=16, norm_layer=norm_layer,use_dropout=use_dropout)
 
     elif netG == 'ellen_dwt_uresnet1_3':
         #uresent(with dwt)
@@ -210,6 +223,13 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
         #uresent(with dwt)
         net = ellen_dwt_uresnet1_5(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=6)
+                                   
+    elif netG == 'ellen_dwt_uresnet1_6':
+        if is_A:
+            net = ellen_dwt_uresnet1_6A(input_nc, output_nc, nf=16, norm_layer=norm_layer, use_dropout=use_dropout)
+        elif not is_A:
+            net = ellen_dwt_uresnet1_6B(input_nc, output_nc,nf=16, norm_layer=norm_layer,use_dropout=use_dropout)
+
     else:
         raise NotImplementedError(
             'Generator model name [%s] is not recognized' % netG)
@@ -739,19 +759,23 @@ class DWT_transform(nn.Module):
         return dwt_low_frequency, dwt_high_frequency
 
 
-def blockUNet(in_c, out_c, name, transposed=False, bn=False, relu=True, dropout=False):
+def blockUNet(in_c, out_c, name, transposed=False, bn=False, relu=True, dropout=False, resize =False):
     block = nn.Sequential()
     if relu:
         block.add_module('%s_relu' % name, nn.ReLU(inplace=True))
     else:
         block.add_module('%s_leakyrelu' %
                          name, nn.LeakyReLU(0.2, inplace=True))
+
     if not transposed:
         block.add_module('%s_conv' % name, nn.Conv2d(
             in_c, out_c, 4, 2, 1, bias=False))
-    else:
+    elif transposed and not resize:
         block.add_module('%s_tconv' % name, nn.ConvTranspose2d(
             in_c, out_c, 4, 2, 1, bias=False))
+    elif transposed and resize : # for model 1_6 (same size conv)
+        block.add_module('%s_conv' %name, nn.Conv2d(in_c, out_c, 3,1,1, bias=False))
+
     if bn:
         block.add_module('%s_bn' % name, nn.BatchNorm2d(out_c))
     if dropout:
@@ -872,6 +896,133 @@ class dwt_Unet(nn.Module):
         dout1 = self.tail_conv2(tail2)
         return dout1
 
+class scatter_transform(nn.Module):
+    def __init__(self, in_channels, out_channels,size, level):
+        super(scatter_transform, self).__init__()
+        self.in_channels = in_channels
+        self.output_size = size/(2^level)
+        input_size = size/(2^(level-1))
+        J=1
+        self.Scattering = Scattering2D(J,(input_size, input_size))
+        self.conv1x1=nn.Conv2d(in_channels*9,out_channels, kernel_size=1, padding=0 )
+        
+
+    def forward(self, x):
+        scatter_ouput = self.Scattering.scattering(x)
+        scatter_ouput = scatter_ouput.view(scatter_ouput.size(0), -1, self.output_size, self.output_size)
+        scatter_ouput = self.conv1x1(scatter_ouput)
+        return scatter_ouput
+
+class scattering_Unet(nn.Module):
+    def __init__(self, size, output_nc, nf=16):
+        super(scattering_Unet, self).__init__()
+        layer_idx = 1
+        name = 'layer%d' % layer_idx
+        layer1 = nn.Sequential()
+        layer1.add_module(name, nn.Conv2d(3, nf-1, 4, 2, 1, bias=False))
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer2 = blockUNet(nf, nf*2-2, name, transposed=False,
+                           bn=True, relu=False, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer3 = blockUNet(nf*2, nf*4-4, name, transposed=False,
+                           bn=True, relu=False, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer4 = blockUNet(nf*4, nf*8-8, name, transposed=False,
+                           bn=True, relu=False, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer5 = blockUNet(nf*8, nf*8-16, name, transposed=False,
+                           bn=True, relu=False, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer6 = blockUNet(nf*8, nf*8, name, transposed=False,
+                           bn=False, relu=False, dropout=False)
+
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer6 = blockUNet(nf * 8, nf * 8, name,
+                            transposed=True, bn=True, relu=True, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer5 = blockUNet(nf * 16, nf * 8, name,
+                            transposed=True, bn=True, relu=True, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer4 = blockUNet(nf * 16, nf * 4, name,
+                            transposed=True, bn=True, relu=True, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer3 = blockUNet(nf * 8, nf * 2, name,
+                            transposed=True, bn=True, relu=True, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer2 = blockUNet(nf * 4, nf, name, transposed=True,
+                            bn=True, relu=True, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer1 = blockUNet(nf * 2, nf * 2, name,
+                            transposed=True, bn=True, relu=True, dropout=False)
+
+        self.layer1 = layer1
+        self.scattering_down_1 = scatter_transform(3, 1, size, 1)
+        self.layer2 = layer2
+        self.scattering_down_2 = scatter_transform(16, 2, size, 2)
+        self.layer3 = layer3
+        self.scattering_down_3 = scatter_transform(32, 4, size, 3)
+        self.layer4 = layer4
+        self.scattering_down_4 = scatter_transform(64, 8, size, 4)
+        self.layer5 = layer5
+        self.scattering_down_5 = scatter_transform(128, 16, size, 5)
+        self.layer6 = layer6
+        self.dlayer6 = dlayer6
+        self.dlayer5 = dlayer5
+        self.dlayer4 = dlayer4
+        self.dlayer3 = dlayer3
+        self.dlayer2 = dlayer2
+        self.dlayer1 = dlayer1
+        self.tail_conv1 = nn.Conv2d(32, 3, 3, padding=1, bias=True)
+
+    def forward(self, x):
+
+        conv_out1 = self.layer1(x)
+        scattering1= self.scattering_down_1(x)
+        out1 = torch.cat([conv_out1, scattering1], 1)
+        conv_out2 = self.layer2(out1)
+        scattering2 = self.scattering_down_2(out1)
+        out2 = torch.cat([conv_out2, scattering2], 1)
+        conv_out3 = self.layer3(out2)
+        scattering3 = self.scattering_down_3(out2)
+        out3 = torch.cat([conv_out3, scattering3], 1)
+        conv_out4 = self.layer4(out3)
+        scattering4 = self.scattering_down_4(out3)
+        out4 = torch.cat([conv_out4, scattering4], 1)
+        conv_out5 = self.layer5(out4)
+        scattering5 = self.scattering_down_5(out4)
+        out5 = torch.cat([conv_out5, scattering5], 1)
+        out6 = self.layer6(out5)
+        dout6 = self.dlayer6(out6)
+
+        Tout6_out5 = torch.cat([dout6, out5], 1)
+        Tout5 = self.dlayer5(Tout6_out5)
+
+        Tout5_out4 = torch.cat([Tout5, out4], 1)
+        Tout4 = self.dlayer4(Tout5_out4)
+
+        Tout4_out3 = torch.cat([Tout4, out3], 1)
+        Tout3 = self.dlayer3(Tout4_out3)
+
+        Tout3_out2 = torch.cat([Tout3, out2], 1)
+        Tout2 = self.dlayer2(Tout3_out2)
+
+        Tout2_out1 = torch.cat([Tout2, out1], 1)
+        Tout1 = self.dlayer1(Tout2_out1)
+
+        tail1 = self.tail_conv1(Tout1)
+        return tail1
+
 
 class ellen_dwt_uresnet2_1(nn.Module):
     """
@@ -900,6 +1051,32 @@ class ellen_dwt_uresnet2_1(nn.Module):
 
         return self.fusion(x)
 
+class ellen_dwt_uresnet2_3(nn.Module):
+    """
+    made by ellen _2022.10.11 
+    > model 2_1 based
+        dwt barnch -> scattering branch
+    
+    input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
+    """
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, size=512):
+        super(ellen_dwt_uresnet2_3, self).__init__()
+        self.uresnet = ellen_uresent(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                     use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks)
+        self.scattering_model = scattering_Unet(size, output_nc=3, nf=16)
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(
+            3), nn.Conv2d(6, 3, kernel_size=7, padding=0), nn.Tanh())
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        result_uresnet = self.uresnet(input)
+        result_scattering = self.scattering_model(input)
+        x = torch.cat([result_scattering, result_uresnet], 1)
+
+        return self.fusion(x)
 
 #------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------
@@ -1464,9 +1641,8 @@ class ellen_dwt_uresnet2_2B(nn.Module):
         x = torch.cat([result_ori_branchB, result_dwt_branchB], 1)
 
         return self.fusion(x)
+
 #------------------------------------------------------------------------------------------------------------
-
-
 class ellen_dwt_uresnet1_1(nn.Module):
     """
     made by ellen _2022.04.19 
@@ -1532,6 +1708,310 @@ class ellen_dwt_uresnet1_1(nn.Module):
             torch.cat((low_result, high_f), 1))
         return total_result
 
+#------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------
+class ellen_dwt_uresnet1_2A(nn.Module):
+    """
+    made by ellen _2022.09.13 
+    features
+        1. dwt2_2 simplify
+        2. DW_GAN -dw branch based
+
+
+    just one branch but two different generator
+    """
+    def __init__(self, input_nc, output_nc, nf=16, norm_layer=nn.BatchNorm2d, use_dropout=False):
+        super(ellen_dwt_uresnet1_2A, self).__init__()
+        layer_idx = 1
+        name = 'layer%d' % layer_idx
+        layer1 = nn.Sequential()
+        layer1.add_module('%s_conv', nn.Conv2d(3,nf-1,4,2,1))
+        layer1.add_module('%s_bn', nn.BatchNorm2d(nf-1))
+
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer2 = blockUNet(nf, nf*2-2, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer3 = blockUNet(nf*2, nf*4-4, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer4 = blockUNet(nf*4, nf*8-8, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer5 = blockUNet(nf*8, nf*8-16, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer6 = blockUNet(nf*8, nf*8, name, transposed=False,
+                           bn=False, relu=True, dropout=False)
+
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer6 = blockUNet(nf * 8, nf * 8, name,
+                            transposed=True, bn=True, relu=False, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer5 = blockUNet(nf * 8, nf * 8, name,
+                            transposed=True, bn=True, relu=False, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer4 = blockUNet(nf * 8, nf * 4, name,
+                            transposed=True, bn=True, relu=False, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer3 = blockUNet(nf * 4, nf * 2, name,
+                            transposed=True, bn=True, relu=False, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer2 = blockUNet(nf * 2*2+2, nf, name, transposed=True,
+                            bn=True, relu=False, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer1 = blockUNet(nf * 2+1, nf, name,
+                            transposed=True, bn=True, relu=False, dropout=False)
+        tail = nn.Sequential()
+        tail.add_module('tail_leacky Relu', nn.LeakyReLU(0.2, inplace=True))
+        tail.add_module('tail_Tconv', nn.ConvTranspose2d(16,3,3,1,1,bias = False))
+        tail.add_module('tail_bn', nn.BatchNorm2d(3))
+        tail.add_module('tial_tanh', nn.Tanh())
+
+
+        self.layer1 = layer1
+        self.DWT_down_0 = DWT_transform(3, 1)
+        self.layer2 = layer2
+        self.DWT_down_1 = DWT_transform(16, 2)
+        self.layer3 = layer3
+        self.DWT_down_2 = DWT_transform(32, 4)
+        self.layer4 = layer4
+        self.DWT_down_3 = DWT_transform(64, 8)
+        self.layer5 = layer5
+        self.DWT_down_4 = DWT_transform(128, 16)
+        self.layer6 = layer6
+        self.dlayer6 = dlayer6
+        self.dlayer5 = dlayer5
+        self.dlayer4 = dlayer4
+        self.dlayer3 = dlayer3
+        self.dlayer2 = dlayer2
+        self.dlayer1 = dlayer1
+        self.tail_conv = tail
+
+        # For G_A! ellen
+        norm_layer=nn.BatchNorm2d
+        padding_type = 'reflect'
+        resnet11 = []
+        for i in range(5):
+            
+            resnet11 += [ResnetBlock(17, padding_type=padding_type,
+                                     norm_layer=norm_layer, use_dropout=False, use_bias=False)]
+        resnet1 = nn.Sequential(*resnet11)
+
+        resnet22 = []
+        for i in range(3):
+            resnet22 += [ResnetBlock(34, padding_type=padding_type,
+                                     norm_layer=norm_layer, use_dropout=False, use_bias=False)]
+        resnet2 = nn.Sequential(*resnet22)
+        self.r1 = resnet1
+        self.r2 = resnet2
+
+
+
+    def forward(self, x):
+        
+        conv_out1 = self.layer1(x)
+        dwt_low_1, dwt_high_1 = self.DWT_down_0(x)
+        out1 = torch.cat([conv_out1, dwt_low_1], 1)
+        res1=torch.cat([out1,dwt_high_1],1)
+        res1_out = self.r1(res1)
+
+        conv_out2 = self.layer2(out1)
+        dwt_low_2, dwt_high_2 = self.DWT_down_1(out1)
+        out2 = torch.cat([conv_out2, dwt_low_2], 1)
+        res2 = torch.cat([out2, dwt_high_2],1)
+        res2_out = self.r2(res2)
+
+        conv_out3 = self.layer3(out2)
+        dwt_low_3, dwt_high_3 = self.DWT_down_2(out2)
+        out3 = torch.cat([conv_out3, dwt_low_3], 1)
+
+        conv_out4 = self.layer4(out3)
+        dwt_low_4, dwt_high_4 = self.DWT_down_3(out3)
+        out4 = torch.cat([conv_out4, dwt_low_4], 1)
+
+        conv_out5 = self.layer5(out4)
+        dwt_low_5, dwt_high_5 = self.DWT_down_4(out4)
+        out5 = torch.cat([conv_out5, dwt_low_5], 1)
+
+        out6 = self.layer6(out5)
+
+        dout6 = self.dlayer6(out6)
+        Tout5 = self.dlayer5(dout6)
+        Tout4 = self.dlayer4(Tout5)
+        Tout3 = self.dlayer3(Tout4)
+
+        skip2 = torch.cat([Tout3,res2_out],1)
+        Tout2 = self.dlayer2(skip2)
+
+        skip1 = torch.cat([Tout2,res1_out],1)
+        Tout1 = self.dlayer1(skip1)
+        
+        out = self.tail_conv(Tout1)
+        return out
+
+#------------------------------------------------------------------------------------------------------------
+class ellen_dwt_uresnet1_2B(nn.Module):
+    """
+    made by ellen _2022.09.13 
+    dwt2_2 simplify
+
+    just one branch but two different generator
+    """
+    def __init__(self, input_nc, output_nc, nf=16, norm_layer=nn.BatchNorm2d, use_dropout=False):
+        super(ellen_dwt_uresnet1_2B, self).__init__()
+        layer_idx = 1
+        name = 'layer%d' % layer_idx
+        layer1 = nn.Sequential()
+        layer1.add_module('%s_conv', nn.Conv2d(3,nf-1,4,2,1))
+        layer1.add_module('%s_bn', nn.BatchNorm2d(nf-1))
+        
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer2 = blockUNet(nf, nf*2-2, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer3 = blockUNet(nf*2, nf*4-4, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer4 = blockUNet(nf*4, nf*8-8, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer5 = blockUNet(nf*8, nf*8-16, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer6 = blockUNet(nf*8, nf*8, name, transposed=False,
+                           bn=False, relu=True, dropout=False)
+
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer6 = blockUNet(nf * 8, nf * 8, name,
+                            transposed=True, bn=True, relu=False, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer5 = blockUNet(nf * 8*2+16, nf * 8, name,
+                            transposed=True, bn=True, relu=False, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer4 = blockUNet(nf * 8*2+8, nf * 4, name,
+                            transposed=True, bn=True, relu=False, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer3 = blockUNet(nf * 4, nf * 2, name,
+                            transposed=True, bn=True, relu=False, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer2 = blockUNet(nf * 2, nf, name, transposed=True,
+                            bn=True, relu=False, dropout=False)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer1 = blockUNet(nf , nf, name,
+                            transposed=True, bn=True, relu=False, dropout=False)
+        tail = nn.Sequential()
+        tail.add_module('tail_leacky Relu', nn.LeakyReLU(0.2, inplace=True))
+        tail.add_module('tail_Tconv', nn.ConvTranspose2d(16,3, 3,1,1,bias = False))
+        tail.add_module('tail_bn', nn.BatchNorm2d(3))
+        tail.add_module('tial_tanh', nn.Tanh())
+
+
+        self.layer1 = layer1
+        self.DWT_down_0 = DWT_transform(3, 1)
+        self.layer2 = layer2
+        self.DWT_down_1 = DWT_transform(16, 2)
+        self.layer3 = layer3
+        self.DWT_down_2 = DWT_transform(32, 4)
+        self.layer4 = layer4
+        self.DWT_down_3 = DWT_transform(64, 8)
+        self.layer5 = layer5
+        self.DWT_down_4 = DWT_transform(128, 16)
+        self.layer6 = layer6
+        self.dlayer6 = dlayer6
+        self.dlayer5 = dlayer5
+        self.dlayer4 = dlayer4
+        self.dlayer3 = dlayer3
+        self.dlayer2 = dlayer2
+        self.dlayer1 = dlayer1
+        self.tail_conv = tail
+
+        # For G_A! ellen
+        norm_layer=nn.BatchNorm2d
+        padding_type = 'reflect'
+        resnet11 = []
+        for i in range(5):
+            
+            resnet11 += [ResnetBlock(144, padding_type=padding_type,
+                                     norm_layer=norm_layer, use_dropout=False, use_bias=False)]
+        resnet1 = nn.Sequential(*resnet11)
+
+        resnet22 = []
+        for i in range(3):
+            resnet22 += [ResnetBlock(136, padding_type=padding_type,
+                                     norm_layer=norm_layer, use_dropout=False, use_bias=False)]
+        resnet2 = nn.Sequential(*resnet22)
+        self.r1 = resnet1
+        self.r2 = resnet2
+
+
+
+    def forward(self, x):
+        
+        conv_out1 = self.layer1(x)
+        dwt_low_1, dwt_high_1 = self.DWT_down_0(x)
+        out1 = torch.cat([conv_out1, dwt_low_1], 1)
+
+        conv_out2 = self.layer2(out1)
+        dwt_low_2, dwt_high_2 = self.DWT_down_1(out1)
+        out2 = torch.cat([conv_out2, dwt_low_2], 1)
+
+        conv_out3 = self.layer3(out2)
+        dwt_low_3, dwt_high_3 = self.DWT_down_2(out2)
+        out3 = torch.cat([conv_out3, dwt_low_3], 1)
+
+        conv_out4 = self.layer4(out3)
+        dwt_low_4, dwt_high_4 = self.DWT_down_3(out3)
+        out4 = torch.cat([conv_out4, dwt_low_4], 1)
+        res4 = torch.cat([out4, dwt_high_4],1)
+        res4_out = self.r2(res4)
+
+        conv_out5 = self.layer5(out4)
+        dwt_low_5, dwt_high_5 = self.DWT_down_4(out4)
+        out5 = torch.cat([conv_out5, dwt_low_5], 1)
+        res5 = torch.cat([out5, dwt_high_5],1)
+        res5_out = self.r1(res5)
+
+        out6 = self.layer6(out5)
+
+        
+        dout6 = self.dlayer6(out6)
+
+        skip5 =torch.cat([dout6, res5_out],1)
+        Tout5 = self.dlayer5(skip5)
+
+        skip4 =torch.cat([Tout5, res4_out],1)
+        Tout4 = self.dlayer4(skip4)
+
+        Tout3 = self.dlayer3(Tout4)
+        Tout2 = self.dlayer2(Tout3)
+        Tout1 = self.dlayer1(Tout2)
+        
+        out = self.tail_conv(Tout1)
+        return out
+# -----------------------------------------------------------------------------------------------
 
 class ellen_dwt_uresnet1_3(nn.Module):
     """
@@ -2026,3 +2506,330 @@ class PixelDiscriminator(nn.Module):
     def forward(self, input):
         """Standard forward."""
         return self.net(input)
+#------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------
+class ellen_dwt_uresnet1_6A(nn.Module):
+    """
+    made by ellen _2022.09.27 
+    features
+        1. dwt1_2 based
+        2. change TransposeConv -> resize & Conv (according to https://distill.pub/2016/deconv-checkerboard/)
+
+    """
+    def __init__(self, input_nc, output_nc, nf=16, norm_layer=nn.BatchNorm2d, use_dropout=False):
+        super(ellen_dwt_uresnet1_6A, self).__init__()
+        layer_idx = 1
+        name = 'layer%d' % layer_idx
+        layer1 = nn.Sequential()
+        layer1.add_module('%s_conv', nn.Conv2d(3,nf-1,4,2,1))
+        layer1.add_module('%s_bn', nn.BatchNorm2d(nf-1))
+
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer2 = blockUNet(nf, nf*2-2, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer3 = blockUNet(nf*2, nf*4-4, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer4 = blockUNet(nf*4, nf*8-8, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer5 = blockUNet(nf*8, nf*8-16, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer6 = blockUNet(nf*8, nf*8, name, transposed=False,
+                           bn=False, relu=True, dropout=False)
+
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer6 = blockUNet(nf * 8, nf * 8, name,
+                            transposed=True, bn=True, relu=False, dropout=False, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer5 = blockUNet(nf * 8, nf * 8, name,
+                            transposed=True, bn=True, relu=False, dropout=False, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer4 = blockUNet(nf * 8, nf * 4, name,
+                            transposed=True, bn=True, relu=False, dropout=False, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer3 = blockUNet(nf * 4, nf * 2, name,
+                            transposed=True, bn=True, relu=False, dropout=False, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer2 = blockUNet(nf * 2*2+2, nf, name, transposed=True,
+                            bn=True, relu=False, dropout=False, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer1 = blockUNet(nf * 2+1, nf, name,
+                            transposed=True, bn=True, relu=False, dropout=False, resize=True)
+        tail = nn.Sequential()
+        tail.add_module('tail_leacky Relu', nn.LeakyReLU(0.2, inplace=True))
+        tail.add_module('tail_Tconv', nn.ConvTranspose2d(16,3,3,1,1,bias = False))
+        tail.add_module('tail_bn', nn.BatchNorm2d(3))
+        tail.add_module('tial_tanh', nn.Tanh())
+
+
+        self.layer1 = layer1
+        self.DWT_down_0 = DWT_transform(3, 1)
+        self.layer2 = layer2
+        self.DWT_down_1 = DWT_transform(16, 2)
+        self.layer3 = layer3
+        self.DWT_down_2 = DWT_transform(32, 4)
+        self.layer4 = layer4
+        self.DWT_down_3 = DWT_transform(64, 8)
+        self.layer5 = layer5
+        self.DWT_down_4 = DWT_transform(128, 16)
+        self.layer6 = layer6
+        self.dlayer6 = dlayer6
+        self.dlayer5 = dlayer5
+        self.dlayer4 = dlayer4
+        self.dlayer3 = dlayer3
+        self.dlayer2 = dlayer2
+        self.dlayer1 = dlayer1
+        self.tail_conv = tail
+
+        # For G_A! ellen
+        norm_layer=nn.BatchNorm2d
+        padding_type = 'reflect'
+        resnet11 = []
+        for i in range(5):
+            
+            resnet11 += [ResnetBlock(17, padding_type=padding_type,
+                                     norm_layer=norm_layer, use_dropout=False, use_bias=False)]
+        resnet1 = nn.Sequential(*resnet11)
+
+        resnet22 = []
+        for i in range(3):
+            resnet22 += [ResnetBlock(34, padding_type=padding_type,
+                                     norm_layer=norm_layer, use_dropout=False, use_bias=False)]
+        resnet2 = nn.Sequential(*resnet22)
+        self.r1 = resnet1
+        self.r2 = resnet2
+
+
+
+    def forward(self, x):
+        
+        conv_out1 = self.layer1(x)
+        dwt_low_1, dwt_high_1 = self.DWT_down_0(x)
+        out1 = torch.cat([conv_out1, dwt_low_1], 1)
+        res1=torch.cat([out1,dwt_high_1],1)
+        res1_out = self.r1(res1)
+
+        conv_out2 = self.layer2(out1)
+        dwt_low_2, dwt_high_2 = self.DWT_down_1(out1)
+        out2 = torch.cat([conv_out2, dwt_low_2], 1)
+        res2 = torch.cat([out2, dwt_high_2],1)
+        res2_out = self.r2(res2)
+
+        conv_out3 = self.layer3(out2)
+        dwt_low_3, dwt_high_3 = self.DWT_down_2(out2)
+        out3 = torch.cat([conv_out3, dwt_low_3], 1)
+
+        conv_out4 = self.layer4(out3)
+        dwt_low_4, dwt_high_4 = self.DWT_down_3(out3)
+        out4 = torch.cat([conv_out4, dwt_low_4], 1)
+
+        conv_out5 = self.layer5(out4)
+        dwt_low_5, dwt_high_5 = self.DWT_down_4(out4)
+        out5 = torch.cat([conv_out5, dwt_low_5], 1)
+
+        out6 = self.layer6(out5)
+        sizee = out6.shape[2] # (batch), channel, w, h
+        out6 = interpolate(out6, size=(sizee*2,sizee*2),mode='bilinear') #mode : default nearest
+        dout6 = self.dlayer6(out6)
+
+        sizee = dout6.shape[2] # (batch), channel, w, h
+        dout6 = interpolate(dout6, size=(sizee*2,sizee*2),mode='bilinear') #mode : default nearest
+        Tout5 = self.dlayer5(dout6)
+
+        sizee = Tout5.shape[2] # (batch), channel, w, h
+        Tout5 = interpolate(Tout5, size=(sizee*2,sizee*2),mode='bilinear') #mode : default nearest
+        Tout4 = self.dlayer4(Tout5)
+
+        sizee = Tout4.shape[2] # (batch), channel, w, h
+        Tout4 = interpolate(Tout4, size=(sizee*2,sizee*2),mode='bilinear') #mode : default nearest
+        Tout3 = self.dlayer3(Tout4)
+
+        skip2 = torch.cat([Tout3,res2_out],1)
+        sizee = skip2.shape[2] # (batch), channel, w, h
+        skip2 = interpolate(skip2, size=(sizee*2,sizee*2),mode='bilinear') #mode : default nearest
+        Tout2 = self.dlayer2(skip2)
+
+        skip1 = torch.cat([Tout2,res1_out],1)
+        sizee = skip1.shape[2] # (batch), channel, w, h
+        skip1 = interpolate(skip1, size=(sizee*2,sizee*2),mode='bilinear') #mode : default nearest
+        Tout1 = self.dlayer1(skip1)
+        
+        out = self.tail_conv(Tout1)
+        return out
+
+#------------------------------------------------------------------------------------------------------------
+class ellen_dwt_uresnet1_6B(nn.Module):
+    """
+    made by ellen _2022.09.27
+    based on 1_2
+    """
+    def __init__(self, input_nc, output_nc, nf=16, norm_layer=nn.BatchNorm2d, use_dropout=False):
+        super(ellen_dwt_uresnet1_6B, self).__init__()
+        layer_idx = 1
+        name = 'layer%d' % layer_idx
+        layer1 = nn.Sequential()
+        layer1.add_module('%s_conv', nn.Conv2d(3,nf-1,4,2,1))
+        layer1.add_module('%s_bn', nn.BatchNorm2d(nf-1))
+        
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer2 = blockUNet(nf, nf*2-2, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer3 = blockUNet(nf*2, nf*4-4, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer4 = blockUNet(nf*4, nf*8-8, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer5 = blockUNet(nf*8, nf*8-16, name, transposed=False,
+                           bn=True, relu=True, dropout=False)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer6 = blockUNet(nf*8, nf*8, name, transposed=False,
+                           bn=False, relu=True, dropout=False)
+
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer6 = blockUNet(nf * 8, nf * 8, name,
+                            transposed=True, bn=True, relu=False, dropout=False, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer5 = blockUNet(nf * 8*2+16, nf * 8, name,
+                            transposed=True, bn=True, relu=False, dropout=False, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer4 = blockUNet(nf * 8*2+8, nf * 4, name,
+                            transposed=True, bn=True, relu=False, dropout=False, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer3 = blockUNet(nf * 4, nf * 2, name,
+                            transposed=True, bn=True, relu=False, dropout=False, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer2 = blockUNet(nf * 2, nf, name, transposed=True,
+                            bn=True, relu=False, dropout=False, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer1 = blockUNet(nf , nf, name,
+                            transposed=True, bn=True, relu=False, dropout=False, resize=True)
+        tail = nn.Sequential()
+        tail.add_module('tail_leacky Relu', nn.LeakyReLU(0.2, inplace=True))
+        tail.add_module('tail_Tconv', nn.ConvTranspose2d(16,3, 3,1,1,bias = False))
+        tail.add_module('tail_bn', nn.BatchNorm2d(3))
+        tail.add_module('tial_tanh', nn.Tanh())
+
+
+        self.layer1 = layer1
+        self.DWT_down_0 = DWT_transform(3, 1)
+        self.layer2 = layer2
+        self.DWT_down_1 = DWT_transform(16, 2)
+        self.layer3 = layer3
+        self.DWT_down_2 = DWT_transform(32, 4)
+        self.layer4 = layer4
+        self.DWT_down_3 = DWT_transform(64, 8)
+        self.layer5 = layer5
+        self.DWT_down_4 = DWT_transform(128, 16)
+        self.layer6 = layer6
+        self.dlayer6 = dlayer6
+        self.dlayer5 = dlayer5
+        self.dlayer4 = dlayer4
+        self.dlayer3 = dlayer3
+        self.dlayer2 = dlayer2
+        self.dlayer1 = dlayer1
+        self.tail_conv = tail
+
+        # For G_A! ellen
+        norm_layer=nn.BatchNorm2d
+        padding_type = 'reflect'
+        resnet11 = []
+        for i in range(5):
+            
+            resnet11 += [ResnetBlock(144, padding_type=padding_type,
+                                     norm_layer=norm_layer, use_dropout=False, use_bias=False)]
+        resnet1 = nn.Sequential(*resnet11)
+
+        resnet22 = []
+        for i in range(3):
+            resnet22 += [ResnetBlock(136, padding_type=padding_type,
+                                     norm_layer=norm_layer, use_dropout=False, use_bias=False)]
+        resnet2 = nn.Sequential(*resnet22)
+        self.r1 = resnet1
+        self.r2 = resnet2
+
+
+
+    def forward(self, x):
+        
+        conv_out1 = self.layer1(x)
+        dwt_low_1, dwt_high_1 = self.DWT_down_0(x)
+        out1 = torch.cat([conv_out1, dwt_low_1], 1)
+
+        conv_out2 = self.layer2(out1)
+        dwt_low_2, dwt_high_2 = self.DWT_down_1(out1)
+        out2 = torch.cat([conv_out2, dwt_low_2], 1)
+
+        conv_out3 = self.layer3(out2)
+        dwt_low_3, dwt_high_3 = self.DWT_down_2(out2)
+        out3 = torch.cat([conv_out3, dwt_low_3], 1)
+
+        conv_out4 = self.layer4(out3)
+        dwt_low_4, dwt_high_4 = self.DWT_down_3(out3)
+        out4 = torch.cat([conv_out4, dwt_low_4], 1)
+        res4 = torch.cat([out4, dwt_high_4],1)
+        res4_out = self.r2(res4)
+
+        conv_out5 = self.layer5(out4)
+        dwt_low_5, dwt_high_5 = self.DWT_down_4(out4)
+        out5 = torch.cat([conv_out5, dwt_low_5], 1)
+        res5 = torch.cat([out5, dwt_high_5],1)
+        res5_out = self.r1(res5)
+
+        out6 = self.layer6(out5)
+
+        sizee = out6.shape[2] # (batch), channel, w, h
+        out6 = interpolate(out6, size=(sizee*2,sizee*2),mode='bilinear') #mode : default nearest
+        dout6 = self.dlayer6(out6)
+
+        skip5 =torch.cat([dout6, res5_out],1)
+        sizee = skip5.shape[2] # (batch), channel, w, h
+        skip5 = interpolate(skip5, size=(sizee*2,sizee*2),mode='bilinear') #mode : default nearest
+        Tout5 = self.dlayer5(skip5)
+
+        skip4 =torch.cat([Tout5, res4_out],1)
+        sizee = skip4.shape[2] # (batch), channel, w, h
+        skip4 = interpolate(skip4, size=(sizee*2,sizee*2),mode='bilinear') #mode : default nearest
+        Tout4 = self.dlayer4(skip4)
+
+        sizee = Tout4.shape[2] # (batch), channel, w, h
+        Tout4 = interpolate(Tout4, size=(sizee*2,sizee*2),mode='bilinear') #mode : default nearest
+        Tout3 = self.dlayer3(Tout4)
+        
+        sizee = Tout3.shape[2] # (batch), channel, w, h
+        Tout3 = interpolate(Tout3, size=(sizee*2,sizee*2),mode='bilinear') #mode : default nearest
+        Tout2 = self.dlayer2(Tout3)
+
+        sizee = Tout2.shape[2] # (batch), channel, w, h
+        Tout2 = interpolate(Tout2, size=(sizee*2,sizee*2),mode='bilinear') #mode : default nearest
+        Tout1 = self.dlayer1(Tout2)
+        
+        out = self.tail_conv(Tout1)
+        return out
+# -----------------------------------------------------------------------------------------------
