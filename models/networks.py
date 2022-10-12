@@ -767,13 +767,13 @@ def blockUNet(in_c, out_c, name, transposed=False, bn=False, relu=True, dropout=
         block.add_module('%s_leakyrelu' %
                          name, nn.LeakyReLU(0.2, inplace=True))
 
-    if not transposed:
+    if not transposed: # when going down 
         block.add_module('%s_conv' % name, nn.Conv2d(
             in_c, out_c, 4, 2, 1, bias=False))
-    elif transposed and not resize:
+    elif transposed and not resize: # original going up
         block.add_module('%s_tconv' % name, nn.ConvTranspose2d(
             in_c, out_c, 4, 2, 1, bias=False))
-    elif transposed and resize : # for model 1_6 (same size conv)
+    elif transposed and resize : # to reduce checkerboard artifact -> for model 1_6 (same size conv)
         block.add_module('%s_conv' %name, nn.Conv2d(in_c, out_c, 3,1,1, bias=False))
 
     if bn:
@@ -899,12 +899,11 @@ class dwt_Unet(nn.Module):
 class scatter_transform(nn.Module):
     def __init__(self, in_channels, out_channels,size, level):
         super(scatter_transform, self).__init__()
-        self.in_channels = in_channels
-        self.output_size = size/(2^level)
-        input_size = size/(2^(level-1))
+        self.output_size = int(size/(2**level))
+        input_size = int(size/(2**(level-1)))
         J=1
-        self.Scattering = Scattering2D(J,(input_size, input_size))
-        self.conv1x1=nn.Conv2d(in_channels*9,out_channels, kernel_size=1, padding=0 )
+        self.Scattering = Scattering2D(J,(input_size, input_size)) # backend='torch_skcuda
+        self.conv1x1=nn.Conv2d(in_channels*9, out_channels, kernel_size=1, padding=0 )
         
 
     def forward(self, x):
@@ -944,27 +943,27 @@ class scattering_Unet(nn.Module):
         layer_idx -= 1
         name = 'dlayer%d' % layer_idx
         dlayer6 = blockUNet(nf * 8, nf * 8, name,
-                            transposed=True, bn=True, relu=True, dropout=False)
+                            transposed=True, bn=True, relu=True, dropout=False, resize = True)
         layer_idx -= 1
         name = 'dlayer%d' % layer_idx
         dlayer5 = blockUNet(nf * 16, nf * 8, name,
-                            transposed=True, bn=True, relu=True, dropout=False)
+                            transposed=True, bn=True, relu=True, dropout=False, resize = True)
         layer_idx -= 1
         name = 'dlayer%d' % layer_idx
         dlayer4 = blockUNet(nf * 16, nf * 4, name,
-                            transposed=True, bn=True, relu=True, dropout=False)
+                            transposed=True, bn=True, relu=True, dropout=False, resize = True)
         layer_idx -= 1
         name = 'dlayer%d' % layer_idx
         dlayer3 = blockUNet(nf * 8, nf * 2, name,
-                            transposed=True, bn=True, relu=True, dropout=False)
+                            transposed=True, bn=True, relu=True, dropout=False, resize = True)
         layer_idx -= 1
         name = 'dlayer%d' % layer_idx
         dlayer2 = blockUNet(nf * 4, nf, name, transposed=True,
-                            bn=True, relu=True, dropout=False)
+                            bn=True, relu=True, dropout=False, resize = True)
         layer_idx -= 1
         name = 'dlayer%d' % layer_idx
         dlayer1 = blockUNet(nf * 2, nf * 2, name,
-                            transposed=True, bn=True, relu=True, dropout=False)
+                            transposed=True, bn=True, relu=True, dropout=False, resize = True)
 
         self.layer1 = layer1
         self.scattering_down_1 = scatter_transform(3, 1, size, 1)
@@ -983,7 +982,7 @@ class scattering_Unet(nn.Module):
         self.dlayer3 = dlayer3
         self.dlayer2 = dlayer2
         self.dlayer1 = dlayer1
-        self.tail_conv1 = nn.Conv2d(32, 3, 3, padding=1, bias=True)
+        self.tail_conv1 = nn.Conv2d(32, output_nc, 3, padding=1, bias=True)
 
     def forward(self, x):
 
