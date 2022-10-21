@@ -1,0 +1,29 @@
+create web directory ./checkpoints/ellen_dwt_uresnet2_4_512n1000_1016/web...
+learning rate 0.0002000 -> 0.0002000
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/functional.py:3635: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  "See the documentation of nn.Upsample for details.".format(mode)
+(epoch: 1, iters: 100, time: 0.237, data: 0.149) D_A: 0.710 G_A: 1.202 cycle_A: 5.656 idt_A: 4.655 D_B: 0.425 G_B: 0.370 cycle_B: 4.679 idt_B: 1.496
+(epoch: 1, iters: 200, time: 0.231, data: 0.003) D_A: 0.214 G_A: 0.421 cycle_A: 3.467 idt_A: 2.055 D_B: 0.231 G_B: 0.381 cycle_B: 2.145 idt_B: 0.971
+(epoch: 1, iters: 300, time: 0.239, data: 0.004) D_A: 0.252 G_A: 0.435 cycle_A: 2.926 idt_A: 1.354 D_B: 0.262 G_B: 0.365 cycle_B: 1.266 idt_B: 0.602
+Traceback (most recent call last):
+  File "train.py", line 105, in <module>
+    model.optimize_parameters()
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 184, in optimize_parameters
+    self.forward()      # compute fake images and reconstruction images.
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 115, in forward
+    self.fake_B = self.netG_A(self.real_A)  # G_A(A)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/data_parallel.py", line 168, in forward
+    outputs = self.parallel_apply(replicas, inputs, kwargs)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/data_parallel.py", line 178, in parallel_apply
+    return parallel_apply(replicas, inputs, kwargs, self.device_ids[:len(replicas)])
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/parallel_apply.py", line 78, in parallel_apply
+    thread.join()
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/threading.py", line 1044, in join
+    self._wait_for_tstate_lock()
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/threading.py", line 1060, in _wait_for_tstate_lock
+    elif lock.acquire(block, timeout):
+KeyboardInterrupt

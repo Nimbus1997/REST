@@ -1,0 +1,22 @@
+create web directory ./checkpoints/ellen_dwt_uresnet2_3_512n1000_TEST/web...
+learning rate 0.0002000 -> 0.0002000
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/loss.py:96: UserWarning: Using a target size (torch.Size([4, 3, 512, 512])) that is different to the input size (torch.Size([4, 3, 256, 256])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  return F.l1_loss(input, target, reduction=self.reduction)
+Traceback (most recent call last):
+  File "train.py", line 105, in <module>
+    model.optimize_parameters()
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 189, in optimize_parameters
+    self.backward_G()             # calculate gradients for G_A and G_B
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 161, in backward_G
+    self.loss_idt_A = self.criterionIdt(self.idt_A, self.real_B) * lambda_B * 2* lambda_idt
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/loss.py", line 96, in forward
+    return F.l1_loss(input, target, reduction=self.reduction)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/functional.py", line 3080, in l1_loss
+    expanded_input, expanded_target = torch.broadcast_tensors(input, target)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/functional.py", line 72, in broadcast_tensors
+    return _VF.broadcast_tensors(tensors)  # type: ignore[attr-defined]
+RuntimeError: The size of tensor a (256) must match the size of tensor b (512) at non-singleton dimension 3

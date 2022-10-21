@@ -1,0 +1,39 @@
+create web directory ./checkpoints/ellen_dwt_uresnet2_3_512n1000_TEST/web...
+learning rate 0.0002000 -> 0.0002000
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+(epoch: 1, iters: 100, time: 0.174, data: 0.148) D_A: 0.323 G_A: 0.663 cycle_A: 2.071 idt_A: 1.605 D_B: 0.334 G_B: 0.459 cycle_B: 1.588 idt_B: 0.528
+(epoch: 1, iters: 200, time: 0.175, data: 0.003) D_A: 0.230 G_A: 0.304 cycle_A: 3.960 idt_A: 1.141 D_B: 0.315 G_B: 0.373 cycle_B: 1.295 idt_B: 0.933
+(epoch: 1, iters: 300, time: 0.186, data: 0.003) D_A: 0.289 G_A: 0.247 cycle_A: 3.945 idt_A: 1.042 D_B: 0.240 G_B: 0.345 cycle_B: 1.042 idt_B: 1.042
+(epoch: 1, iters: 400, time: 1.145, data: 0.003) D_A: 0.240 G_A: 0.283 cycle_A: 1.470 idt_A: 1.891 D_B: 0.207 G_B: 0.387 cycle_B: 1.709 idt_B: 0.401
+(epoch: 1, iters: 500, time: 0.186, data: 0.004) D_A: 0.281 G_A: 0.407 cycle_A: 3.430 idt_A: 1.132 D_B: 0.190 G_B: 0.373 cycle_B: 1.024 idt_B: 0.922
+(epoch: 1, iters: 600, time: 0.182, data: 0.004) D_A: 0.171 G_A: 0.466 cycle_A: 1.912 idt_A: 1.152 D_B: 0.183 G_B: 0.462 cycle_B: 1.209 idt_B: 0.514
+End of epoch 1 / 400 	 Time Taken: 121 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 2, iters: 100, time: 0.182, data: 0.203) D_A: 0.413 G_A: 0.407 cycle_A: 2.139 idt_A: 1.355 D_B: 0.208 G_B: 0.352 cycle_B: 1.427 idt_B: 0.594
+(epoch: 2, iters: 200, time: 0.745, data: 0.004) D_A: 0.203 G_A: 0.267 cycle_A: 3.125 idt_A: 0.674 D_B: 0.166 G_B: 0.498 cycle_B: 0.775 idt_B: 0.828
+(epoch: 2, iters: 300, time: 0.189, data: 0.004) D_A: 0.229 G_A: 0.376 cycle_A: 2.159 idt_A: 1.098 D_B: 0.193 G_B: 0.334 cycle_B: 1.097 idt_B: 0.497
+(epoch: 2, iters: 400, time: 0.180, data: 0.004) D_A: 0.248 G_A: 0.314 cycle_A: 2.642 idt_A: 0.665 D_B: 0.260 G_B: 0.382 cycle_B: 0.796 idt_B: 0.578
+(epoch: 2, iters: 500, time: 0.185, data: 0.004) D_A: 0.214 G_A: 0.226 cycle_A: 2.146 idt_A: 0.884 D_B: 0.266 G_B: 0.297 cycle_B: 0.792 idt_B: 0.607
+(epoch: 2, iters: 600, time: 0.443, data: 0.004) D_A: 0.220 G_A: 0.415 cycle_A: 2.078 idt_A: 0.774 D_B: 0.182 G_B: 0.270 cycle_B: 0.710 idt_B: 0.378
+End of epoch 2 / 400 	 Time Taken: 118 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 3, iters: 100, time: 0.195, data: 0.253) D_A: 0.226 G_A: 0.346 cycle_A: 1.745 idt_A: 0.755 D_B: 0.285 G_B: 0.238 cycle_B: 1.030 idt_B: 0.483
+(epoch: 3, iters: 200, time: 0.193, data: 0.004) D_A: 0.192 G_A: 0.445 cycle_A: 3.055 idt_A: 1.393 D_B: 0.279 G_B: 0.489 cycle_B: 1.658 idt_B: 0.657
+(epoch: 3, iters: 300, time: 0.191, data: 0.004) D_A: 0.233 G_A: 0.430 cycle_A: 1.824 idt_A: 0.617 D_B: 0.364 G_B: 0.396 cycle_B: 0.665 idt_B: 0.493
+Traceback (most recent call last):
+  File "train.py", line 105, in <module>
+    model.optimize_parameters()
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 190, in optimize_parameters
+    self.optimizer_G.step()       # update G_A and G_B's weights
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py", line 65, in wrapper
+    return wrapped(*args, **kwargs)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/optimizer.py", line 88, in wrapper
+    return func(*args, **kwargs)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/autograd/grad_mode.py", line 28, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/adam.py", line 144, in step
+    eps=group['eps'])
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/_functional.py", line 87, in adam
+    exp_avg_sq.mul_(beta2).addcmul_(grad, grad.conj(), value=1 - beta2)
+KeyboardInterrupt

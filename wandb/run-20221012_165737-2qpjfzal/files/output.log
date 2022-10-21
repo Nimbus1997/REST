@@ -1,0 +1,11 @@
+create web directory ./checkpoints/ellen_dwt_uresnet2_3_512n1000_1012/web...
+learning rate 0.0002000 -> 0.0002000
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+(epoch: 1, iters: 100, time: 0.309, data: 0.104) D_A: 0.221 G_A: 0.254 cycle_A: 1.683 idt_A: 3.144 D_B: 0.392 G_B: 0.117 cycle_B: 3.128 idt_B: 0.391
+(epoch: 1, iters: 200, time: 0.541, data: 0.002) D_A: 0.479 G_A: 0.100 cycle_A: 7.301 idt_A: 1.559 D_B: 0.272 G_B: 0.608 cycle_B: 2.055 idt_B: 1.949
+(epoch: 1, iters: 300, time: 0.588, data: 0.001) D_A: 0.495 G_A: 0.337 cycle_A: 3.246 idt_A: 1.674 D_B: 0.151 G_B: 0.157 cycle_B: 1.766 idt_B: 0.875
+(epoch: 1, iters: 400, time: 2.158, data: 0.001) D_A: 0.262 G_A: 0.390 cycle_A: 1.492 idt_A: 1.112 D_B: 0.336 G_B: 0.465 cycle_B: 1.392 idt_B: 0.508
+(epoch: 1, iters: 500, time: 0.552, data: 0.002) D_A: 0.137 G_A: 0.487 cycle_A: 3.350 idt_A: 0.999 D_B: 0.246 G_B: 0.472 cycle_B: 1.216 idt_B: 0.723
+(epoch: 1, iters: 600, time: 0.549, data: 0.001) D_A: 0.261 G_A: 0.334 cycle_A: 4.311 idt_A: 0.803 D_B: 0.253 G_B: 0.466 cycle_B: 0.955 idt_B: 1.640
+End of epoch 1 / 400 	 Time Taken: 337 sec
