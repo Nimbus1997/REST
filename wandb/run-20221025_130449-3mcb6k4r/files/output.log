@@ -1,0 +1,20 @@
+create web directory ./checkpoints/model2_4_eyeq_256_basicblock_1025_TEST/web...
+learning rate 0.0002000 -> 0.0002000
+/home/user/miniconda/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:129: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+/home/user/miniconda/lib/python3.8/site-packages/torch/nn/functional.py:3454: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  warnings.warn(
+(epoch: 1, iters: 200, time: 0.065, data: 0.296) D_A: 0.689 G_A: 0.782 cycle_A: 4.393 idt_A: 1.310 D_B: 0.504 G_B: 0.599 cycle_B: 1.386 idt_B: 1.114
+(epoch: 1, iters: 400, time: 0.314, data: 0.003) D_A: 0.247 G_A: 0.421 cycle_A: 2.409 idt_A: 1.263 D_B: 0.230 G_B: 0.373 cycle_B: 1.398 idt_B: 0.608
+(epoch: 1, iters: 600, time: 0.131, data: 0.004) D_A: 0.265 G_A: 0.471 cycle_A: 3.102 idt_A: 1.341 D_B: 0.194 G_B: 0.392 cycle_B: 1.379 idt_B: 0.783
+End of epoch 1 / 800 	 Time Taken: 67 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 2, iters: 200, time: 0.286, data: 0.290) D_A: 0.258 G_A: 0.391 cycle_A: 2.387 idt_A: 1.241 D_B: 0.278 G_B: 0.571 cycle_B: 1.328 idt_B: 0.617
+(epoch: 2, iters: 400, time: 0.065, data: 0.004) D_A: 0.250 G_A: 0.364 cycle_A: 2.308 idt_A: 1.065 D_B: 0.274 G_B: 0.352 cycle_B: 1.102 idt_B: 0.613
+(epoch: 2, iters: 600, time: 0.185, data: 0.005) D_A: 0.179 G_A: 0.468 cycle_A: 2.016 idt_A: 1.646 D_B: 0.228 G_B: 0.283 cycle_B: 1.751 idt_B: 0.514
+End of epoch 2 / 800 	 Time Taken: 69 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 3, iters: 200, time: 0.130, data: 0.287) D_A: 0.190 G_A: 0.433 cycle_A: 1.605 idt_A: 0.894 D_B: 0.244 G_B: 0.433 cycle_B: 0.994 idt_B: 0.441
+(epoch: 3, iters: 400, time: 0.255, data: 0.005) D_A: 0.483 G_A: 0.709 cycle_A: 1.924 idt_A: 0.732 D_B: 0.265 G_B: 0.529 cycle_B: 0.898 idt_B: 0.518
+(epoch: 3, iters: 600, time: 0.114, data: 0.005) D_A: 0.169 G_A: 0.426 cycle_A: 1.692 idt_A: 1.096 D_B: 0.209 G_B: 0.388 cycle_B: 1.117 idt_B: 0.444
+End of epoch 3 / 800 	 Time Taken: 68 sec

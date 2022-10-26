@@ -1,0 +1,13 @@
+create web directory ./checkpoints/model2_4_eyeq_256_basicblock_1025/web...
+learning rate 0.0002000 -> 0.0002000
+/home/user/miniconda/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:129: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+/home/user/miniconda/lib/python3.8/site-packages/torch/nn/functional.py:3454: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  warnings.warn(
+(epoch: 1, iters: 100, time: 0.244, data: 0.183) D_A: 0.248 G_A: 0.237 cycle_A: 7.001 idt_A: 2.221 D_B: 0.367 G_B: 0.252 cycle_B: 2.183 idt_B: 1.829
+(epoch: 1, iters: 200, time: 0.245, data: 0.002) D_A: 0.184 G_A: 0.276 cycle_A: 2.925 idt_A: 2.399 D_B: 0.287 G_B: 0.463 cycle_B: 2.389 idt_B: 0.892
+(epoch: 1, iters: 300, time: 0.260, data: 0.002) D_A: 0.215 G_A: 0.266 cycle_A: 3.753 idt_A: 2.465 D_B: 0.265 G_B: 0.156 cycle_B: 2.631 idt_B: 0.988
+(epoch: 1, iters: 400, time: 1.922, data: 0.002) D_A: 0.268 G_A: 0.150 cycle_A: 4.441 idt_A: 1.509 D_B: 0.221 G_B: 0.370 cycle_B: 1.591 idt_B: 1.148
+(epoch: 1, iters: 500, time: 0.251, data: 0.003) D_A: 0.227 G_A: 1.065 cycle_A: 2.509 idt_A: 2.393 D_B: 0.157 G_B: 0.939 cycle_B: 2.470 idt_B: 0.814
+(epoch: 1, iters: 600, time: 0.228, data: 0.002) D_A: 0.138 G_A: 0.675 cycle_A: 2.596 idt_A: 1.012 D_B: 0.244 G_B: 0.635 cycle_B: 1.045 idt_B: 0.950
+End of epoch 1 / 800 	 Time Taken: 152 sec

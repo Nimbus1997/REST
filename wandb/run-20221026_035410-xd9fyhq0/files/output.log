@@ -1,0 +1,35 @@
+create web directory ./checkpoints/model2_3_eyeq_256_1026_2/web...
+learning rate 0.0002000 -> 0.0002000
+/home/user/miniconda/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:129: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+/home/user/miniconda/lib/python3.8/site-packages/torch/nn/functional.py:3454: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  warnings.warn(
+(epoch: 1, iters: 300, time: 0.057, data: 0.658) D_A: 0.588 G_A: 0.842 cycle_A: 6.046 idt_A: 2.986 D_B: 0.506 G_B: 0.687 cycle_B: 3.071 idt_B: 1.574
+(epoch: 1, iters: 600, time: 0.061, data: 0.010) D_A: 0.301 G_A: 0.384 cycle_A: 4.646 idt_A: 1.309 D_B: 2.265 G_B: 3.110 cycle_B: 1.462 idt_B: 1.198
+End of epoch 1 / 1000 	 Time Taken: 54 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 2, iters: 300, time: 0.058, data: 0.766) D_A: 0.445 G_A: 0.531 cycle_A: 2.513 idt_A: 1.100 D_B: 0.355 G_B: 0.353 cycle_B: 1.243 idt_B: 0.540
+(epoch: 2, iters: 600, time: 0.137, data: 0.014) D_A: 0.282 G_A: 0.354 cycle_A: 2.769 idt_A: 0.903 D_B: 0.328 G_B: 0.354 cycle_B: 0.998 idt_B: 0.654
+End of epoch 2 / 1000 	 Time Taken: 39 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 3, iters: 300, time: 0.058, data: 0.764) D_A: 0.263 G_A: 0.373 cycle_A: 3.035 idt_A: 1.090 D_B: 0.360 G_B: 0.430 cycle_B: 1.167 idt_B: 0.747
+(epoch: 3, iters: 600, time: 0.059, data: 0.010) D_A: 0.305 G_A: 0.387 cycle_A: 2.965 idt_A: 0.847 D_B: 0.730 G_B: 0.809 cycle_B: 0.948 idt_B: 0.767
+End of epoch 3 / 1000 	 Time Taken: 37 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 4, iters: 300, time: 0.062, data: 0.792) D_A: 0.246 G_A: 0.324 cycle_A: 2.063 idt_A: 0.953 D_B: 0.277 G_B: 0.389 cycle_B: 1.051 idt_B: 0.467
+(epoch: 4, iters: 600, time: 0.111, data: 0.014) D_A: 0.251 G_A: 0.305 cycle_A: 1.789 idt_A: 0.770 D_B: 0.306 G_B: 0.415 cycle_B: 0.817 idt_B: 0.413
+End of epoch 4 / 1000 	 Time Taken: 40 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 5, iters: 300, time: 0.057, data: 0.776) D_A: 0.237 G_A: 0.348 cycle_A: 2.246 idt_A: 0.812 D_B: 0.261 G_B: 0.338 cycle_B: 0.910 idt_B: 0.515
+(epoch: 5, iters: 600, time: 0.059, data: 0.010) D_A: 0.231 G_A: 0.362 cycle_A: 2.960 idt_A: 1.033 D_B: 0.243 G_B: 0.359 cycle_B: 1.093 idt_B: 0.694
+saving the model at the end of epoch 5, iters 3000
+End of epoch 5 / 1000 	 Time Taken: 38 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 6, iters: 300, time: 0.061, data: 0.775) D_A: 0.516 G_A: 0.731 cycle_A: 1.768 idt_A: 0.815 D_B: 0.275 G_B: 0.391 cycle_B: 0.928 idt_B: 0.386
+(epoch: 6, iters: 600, time: 0.115, data: 0.014) D_A: 0.233 G_A: 0.353 cycle_A: 3.138 idt_A: 0.780 D_B: 0.420 G_B: 0.490 cycle_B: 0.850 idt_B: 0.763
+End of epoch 6 / 1000 	 Time Taken: 38 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 7, iters: 300, time: 0.059, data: 0.791) D_A: 0.224 G_A: 0.353 cycle_A: 1.732 idt_A: 0.820 D_B: 0.257 G_B: 0.355 cycle_B: 0.940 idt_B: 0.412
+(epoch: 7, iters: 600, time: 0.058, data: 0.014) D_A: 0.271 G_A: 0.344 cycle_A: 2.223 idt_A: 0.972 D_B: 0.264 G_B: 0.367 cycle_B: 1.301 idt_B: 0.503
+End of epoch 7 / 1000 	 Time Taken: 37 sec
+learning rate 0.0002000 -> 0.0002000

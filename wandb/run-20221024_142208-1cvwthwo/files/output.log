@@ -1,0 +1,21 @@
+create web directory ./checkpoints/model2_3_eyeq_256_1024/web...
+learning rate 0.0002000 -> 0.0002000
+/home/user/miniconda/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:129: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+/home/user/miniconda/lib/python3.8/site-packages/torch/nn/functional.py:3454: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  warnings.warn(
+(epoch: 1, iters: 100, time: 0.475, data: 0.325) D_A: 0.414 G_A: 0.441 cycle_A: 6.072 idt_A: 2.208 D_B: 0.562 G_B: 0.734 cycle_B: 2.274 idt_B: 1.498
+Traceback (most recent call last):
+  File "train.py", line 105, in <module>
+    model.optimize_parameters()
+  File "/home/ellen/RetinaImage_model_MW/models/cycle_gan_model.py", line 189, in optimize_parameters
+    self.backward_G()             # calculate gradients for G_A and G_B
+  File "/home/ellen/RetinaImage_model_MW/models/cycle_gan_model.py", line 179, in backward_G
+    self.loss_G.backward()
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/tensor.py", line 245, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph, inputs=inputs)
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/autograd/__init__.py", line 145, in backward
+    Variable._execution_engine.run_backward(
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/utils/data/_utils/signal_handling.py", line 66, in handler
+    _error_if_any_worker_fails()
+RuntimeError: DataLoader worker (pid 1123016) is killed by signal: Killed.

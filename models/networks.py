@@ -204,7 +204,7 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
 
     elif netG == 'ellen_dwt_uresnet2_4':  # 2_3 based - gray scale input for scattering branch
         net = ellen_dwt_uresnet2_4(input_nc, output_nc, ngf, norm_layer=norm_layer,
-                                   use_dropout=use_dropout, num_downs=2, n_blocks=9, input_size=input_size)
+                                   use_dropout=use_dropout, num_downs=3, n_blocks=9, input_size=input_size)
 
     elif netG == 'ellen_dwt_uresnet1_1':
         #uresnet(with dwt)
@@ -852,11 +852,11 @@ class ellen_uresnet_new(nn.Module):
         resnet_inUnets = nn.Sequential(*resnet_inUnet)  # submodule
 
         # Encoder & Decoder: Unet block
-        unetblock = UnetSkipConnectionBlock_Ellen(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=resnet_inUnets,
+        unetblock = UnetSkipConnectionBlock(int(ngf*(multi/2)), ngf*multi, input_nc=None, submodule=resnet_inUnets,
                                             norm_layer=norm_layer, innermost=True)  # Incubates resnet blocks(innermost part)- same input and output size as resnet
         for i in range(num_downs-2):  # -2: innermost & outermost - total 2
             multi = int(multi/2)
-            unetblock = UnetSkipConnectionBlock_Ellen(int(
+            unetblock = UnetSkipConnectionBlock(int(
                 ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer)
             print("-----unet", i, " 번째")
         multi = int(multi/2)
