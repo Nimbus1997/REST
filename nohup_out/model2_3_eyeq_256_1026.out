@@ -1405,3 +1405,29 @@ learning rate 0.0001925 -> 0.0001920
 saving the model at the end of epoch 415, iters 252320
 End of epoch 415 / 800 	 Time Taken: 39 sec
 learning rate 0.0001920 -> 0.0001915
+(epoch: 416, iters: 480, time: 0.153, data: 0.011) D_A: 0.193 G_A: 0.393 cycle_A: 0.634 idt_A: 0.251 D_B: 0.218 G_B: 0.358 cycle_B: 0.339 idt_B: 0.167 
+End of epoch 416 / 800 	 Time Taken: 41 sec
+learning rate 0.0001915 -> 0.0001910
+End of epoch 417 / 800 	 Time Taken: 37 sec
+learning rate 0.0001910 -> 0.0001905
+(epoch: 418, iters: 64, time: 0.166, data: 0.014) D_A: 0.213 G_A: 0.504 cycle_A: 0.621 idt_A: 0.237 D_B: 0.192 G_B: 0.324 cycle_B: 0.370 idt_B: 0.128 
+End of epoch 418 / 800 	 Time Taken: 41 sec
+learning rate 0.0001905 -> 0.0001900
+(epoch: 419, iters: 256, time: 0.161, data: 0.014) D_A: 0.194 G_A: 0.419 cycle_A: 0.901 idt_A: 0.225 D_B: 0.188 G_B: 0.381 cycle_B: 0.320 idt_B: 0.136 
+End of epoch 419 / 800 	 Time Taken: 39 sec
+learning rate 0.0001900 -> 0.0001895
+(epoch: 420, iters: 448, time: 0.214, data: 0.012) D_A: 0.192 G_A: 0.548 cycle_A: 0.600 idt_A: 0.228 D_B: 0.205 G_B: 0.328 cycle_B: 0.318 idt_B: 0.132 
+saving the model at the end of epoch 420, iters 255360
+End of epoch 420 / 800 	 Time Taken: 44 sec
+learning rate 0.0001895 -> 0.0001890
+End of epoch 421 / 800 	 Time Taken: 36 sec
+learning rate 0.0001890 -> 0.0001885
+(epoch: 422, iters: 32, time: 0.162, data: 0.011) D_A: 0.189 G_A: 0.441 cycle_A: 0.666 idt_A: 0.204 D_B: 0.176 G_B: 0.381 cycle_B: 0.348 idt_B: 0.154 
+End of epoch 422 / 800 	 Time Taken: 41 sec
+learning rate 0.0001885 -> 0.0001880
+(epoch: 423, iters: 224, time: 0.164, data: 0.015) D_A: 0.184 G_A: 0.502 cycle_A: 0.767 idt_A: 0.240 D_B: 0.291 G_B: 0.345 cycle_B: 0.281 idt_B: 0.173 
+End of epoch 423 / 800 	 Time Taken: 39 sec
+learning rate 0.0001880 -> 0.0001875
+(epoch: 424, iters: 416, time: 0.153, data: 0.014) D_A: 0.215 G_A: 0.482 cycle_A: 0.713 idt_A: 0.199 D_B: 0.200 G_B: 0.370 cycle_B: 0.335 idt_B: 0.190 
+End of epoch 424 / 800 	 Time Taken: 42 sec
+learning rate 0.0001875 -> 0.0001870
