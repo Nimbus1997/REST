@@ -1,0 +1,33 @@
+create web directory ./checkpoints/model2_3_eyeq_256_1024/web...
+learning rate 0.0002000 -> 0.0002000
+/home/user/miniconda/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:129: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+/home/user/miniconda/lib/python3.8/site-packages/torch/nn/functional.py:3454: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  warnings.warn(
+(epoch: 1, iters: 100, time: 0.410, data: 0.352) D_A: 0.227 G_A: 0.228 cycle_A: 7.440 idt_A: 2.825 D_B: 0.415 G_B: 0.285 cycle_B: 2.893 idt_B: 1.880
+(epoch: 1, iters: 200, time: 0.386, data: 0.003) D_A: 0.270 G_A: 0.285 cycle_A: 6.107 idt_A: 2.345 D_B: 0.219 G_B: 0.296 cycle_B: 2.307 idt_B: 1.517
+(epoch: 1, iters: 300, time: 0.403, data: 0.016) D_A: 0.226 G_A: 0.418 cycle_A: 3.833 idt_A: 1.948 D_B: 0.182 G_B: 0.356 cycle_B: 1.965 idt_B: 0.892
+Traceback (most recent call last):
+  File "train.py", line 105, in <module>
+    model.optimize_parameters()
+  File "/home/ellen/RetinaImage_model_MW/models/cycle_gan_model.py", line 189, in optimize_parameters
+    self.backward_G()             # calculate gradients for G_A and G_B
+  File "/home/ellen/RetinaImage_model_MW/models/cycle_gan_model.py", line 163, in backward_G
+    self.idt_B = self.netG_B(self.real_A)
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/nn/parallel/data_parallel.py", line 167, in forward
+    outputs = self.parallel_apply(replicas, inputs, kwargs)
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/nn/parallel/data_parallel.py", line 177, in parallel_apply
+    return parallel_apply(replicas, inputs, kwargs, self.device_ids[:len(replicas)])
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/nn/parallel/parallel_apply.py", line 76, in parallel_apply
+    thread.start()
+  File "/home/user/miniconda/lib/python3.8/threading.py", line 857, in start
+    self._started.wait()
+  File "/home/user/miniconda/lib/python3.8/threading.py", line 558, in wait
+    signaled = self._cond.wait(timeout)
+  File "/home/user/miniconda/lib/python3.8/threading.py", line 302, in wait
+    waiter.acquire()
+  File "/home/user/miniconda/lib/python3.8/site-packages/torch/utils/data/_utils/signal_handling.py", line 66, in handler
+    _error_if_any_worker_fails()
+RuntimeError: DataLoader worker (pid 1122878) is killed by signal: Killed.
