@@ -36,6 +36,18 @@ from util.visualizer import Visualizer
 import numpy as np
 import matplotlib.pyplot as plt
 
+####### To fix the random seed -- ellen ###
+import torch
+import numpy as np
+import random 
+
+random_seed = 42
+torch.manual_seed(random_seed) #1.pytorch randomness
+torch.backends.cudnn.deteministic = True #2.cuDNN randomness - might make computaion slow
+torch.backedns.cudnn.benchmark = False
+np.random.seed(random_seed) #3.numpy randomness
+random.seed(random_seed) #4.python randomness
+##########################################
 
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options

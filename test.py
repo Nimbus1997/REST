@@ -34,6 +34,19 @@ from util.visualizer import save_images
 from util import html
 import random
 
+####### To fix the random seed -- ellen ###
+import torch
+import numpy as np
+import random 
+
+random_seed = 42
+torch.manual_seed(random_seed) #1.pytorch randomness
+torch.backends.cudnn.deteministic = True #2.cuDNN randomness - might make computaion slow
+torch.backedns.cudnn.benchmark = False
+np.random.seed(random_seed) #3.numpy randomness
+random.seed(random_seed) #4.python randomness
+##########################################
+
 try:
     import wandb
 except ImportError:
