@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "train.py", line 47, in <module>
+    torch.backedns.cudnn.benchmark = False
+AttributeError: module 'torch' has no attribute 'backedns'
