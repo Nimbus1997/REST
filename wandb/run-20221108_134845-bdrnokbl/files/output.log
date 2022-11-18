@@ -1,0 +1,6 @@
+create web directory ./checkpoints/model2_3_eyeq_256_1108_2/web...
+learning rate 0.0002000 -> 0.0002000
+/home/user/miniconda/envs/retina_ellenmodel/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:138: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+End of epoch 1 / 400 	 Time Taken: 78 sec
+learning rate 0.0002000 -> 0.0002000
