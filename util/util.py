@@ -14,6 +14,8 @@ def tensor2im(input_image, imtype=np.uint8):
         imtype (type)        --  the desired type of the converted numpy array
     """
     if not isinstance(input_image, np.ndarray):
+        # print("========================================")
+        # print("hello!!!!!!!!")
         if isinstance(input_image, torch.Tensor):  # get the data from a variable
             image_tensor = input_image.data
         else:

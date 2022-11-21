@@ -42,12 +42,14 @@ import numpy as np
 import random 
 
 random_seed = 42
-torch.manual_seed(random_seed) #1.pytorch randomness
-torch.backends.cudnn.deteministic = True #2.cuDNN randomness - might make computaion slow
+
+np.random.seed(random_seed) #1.numpy randomness
+random.seed(random_seed) #2.python randomness
+torch.manual_seed(random_seed) #3.pytorch randomness
+torch.cuda.manual_seed(random_seed) # 4. gpu randomness 
+torch.cuda.manual_seed_all(random_seed) # 4. gpu randomness - multi gpu
+torch.backends.cudnn.deteministic = True #5.cuDNN randomness - might make computaion slow
 torch.backends.cudnn.benchmark = False
-np.random.seed(random_seed) #3.numpy randomness
-random.seed(random_seed) #4.python randomness
-torch.cuda.manual_seed(random_seed) # 5. gpu randomness -> hanna 
 ##########################################
 
 if __name__ == '__main__':

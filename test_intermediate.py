@@ -10,7 +10,7 @@ import os
 from options.test_options import TestOptions
 from data import create_dataset
 from models import create_model
-# from util.visualizer import save_images # self made
+from util.visualizer import save_images # self made
 from util import html
 import random
 import torch# To fix the random seed -- ellen
@@ -31,7 +31,7 @@ else:
     VisdomExceptionBase = ConnectionError
 
 
-def save_images(webpage, visuals, image_path, aspect_ratio=1.0, width=256, use_wandb=False):
+def save_images_branch(webpage, visuals, image_path, aspect_ratio=1.0, width=256, use_wandb=False):
     """Save images to the disk.
 
     Parameters:
@@ -95,10 +95,10 @@ if __name__ == '__main__':
     model = create_model(opt)      # create a model given opt.model and other options
     model.setup(opt)               # regular setup: load and print networks; create schedulers
 
-    model=model.netG_A.module.scattering_model # ellen made
-    # model=model.netG_A.module.uresnet # ellen made
 
-    
+    model_scattering=model.netG_A.module.scattering_model # ellen made
+    model_uresnet=model.netG_A.module.uresnet # ellen made
+
 
     # initialize logger
     if opt.use_wandb:
@@ -123,10 +123,12 @@ if __name__ == '__main__':
         if i >= opt.num_test:  # only apply our model to opt.num_test images.
             break
         realA=data['A'].to(device) # ellen
-        fake_B=model(realA) #elleh - output image
+        fake_B_uresnet=model_uresnet(realA) #elleh - output image
+        fake_B_scattering=model_scattering(realA) #elleh - output image
+
         img_path = data['A_paths']
         if i % 5 == 0:  # save images to an HTML file
             print('processing (%04d)-th image... %s' % (i, img_path))
 
-        save_images(webpage, fake_B, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+        save_images_branch(webpage, fake_B_scattering, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
     webpage.save()  # save the HTML
