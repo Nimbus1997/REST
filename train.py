@@ -36,7 +36,7 @@ from util.visualizer import Visualizer
 import numpy as np
 import matplotlib.pyplot as plt
 
-####### To fix the random seed -- ellen #######################################
+####### To fix the random seed -- ellen ###
 import torch
 import numpy as np
 import random 
@@ -50,7 +50,11 @@ torch.cuda.manual_seed(random_seed) # 4. gpu randomness
 torch.cuda.manual_seed_all(random_seed) # 4. gpu randomness - multi gpu
 torch.backends.cudnn.deteministic = True #5.cuDNN randomness - might make computaion slow
 torch.backends.cudnn.benchmark = False
+<<<<<<< HEAD
 ##############################################################################
+=======
+##########################################
+>>>>>>> c744f8dde70073265c1e4f19a8c83c56eb4efc2f
 
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options

@@ -1,0 +1,349 @@
+creating web directory ./results/ellen_dwt_uresnet2_3_512n1000_1016/test_latest
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0001.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0002.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0003.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0004.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0005.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0006.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0007.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0008.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0009.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0010.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0011.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0012.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0013.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0014.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0015.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0016.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0017.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0018.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0019.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0020.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0021.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0022.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0023.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0024.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0025.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0026.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0027.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0028.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0029.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0030.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0031.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0032.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0033.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0034.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0035.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0036.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0037.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0038.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0039.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0040.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0041.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0042.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0043.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0044.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0045.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0046.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0047.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0048.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0049.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0050.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0051.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0052.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0053.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0054.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0055.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0056.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0057.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0058.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0059.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0060.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0061.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0062.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0063.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0064.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0065.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0066.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0067.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0068.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0069.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0070.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0071.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0072.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0073.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0074.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0075.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0076.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0077.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0078.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0079.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0080.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0081.jpg']
+>>>>>>>>>>>>>>>>>>>>>>
+<class 'torch.Tensor'>
+torch.Size([1, 3, 256, 256])
+['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/testA/0082.jpg']
+Traceback (most recent call last):
+  File "test_intermediate.py", line 81, in <module>
+    for i, data in enumerate(dataset):
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/data/__init__.py", line 91, in __iter__
+    for i, data in enumerate(self.dataloader):
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/utils/data/dataloader.py", line 521, in __next__
+    data = self._next_data()
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/utils/data/dataloader.py", line 561, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/utils/data/_utils/fetch.py", line 49, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/utils/data/_utils/fetch.py", line 49, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/data/unaligned_dataset.py", line 58, in __getitem__
+    A_img = Image.open(A_path).convert('RGB')
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/PIL/Image.py", line 915, in convert
+    self.load()
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/PIL/ImageFile.py", line 255, in load
+    n, err_code = decoder.decode(b)
+KeyboardInterrupt

@@ -45,6 +45,7 @@ torch.backends.cudnn.deteministic = True #2.cuDNN randomness - might make comput
 torch.backends.cudnn.benchmark = False
 np.random.seed(random_seed) #3.numpy randomness
 random.seed(random_seed) #4.python randomness
+torch.cuda.manual_seed(random_seed) # 5. gpu randomness -> hanna 
 ##########################################
 
 try:

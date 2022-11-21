@@ -201,6 +201,9 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
     elif netG == 'ellen_dwt_uresnet2_3':  # 2_1 based - scattering branch instead of dwt branch
         net = ellen_dwt_uresnet2_3(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=9, input_size=input_size)
+    
+    elif netG == 'ellen_scattering':  # 2_1 based - scattering branch instead of dwt branch
+        net = ellen_scattering(input_size=input_size)
 
     elif netG == 'ellen_dwt_uresnet2_4':  # 2_3 based - gray scale input for scattering branch
         net = ellen_dwt_uresnet2_4(input_nc, output_nc, ngf, norm_layer=norm_layer,
@@ -1153,7 +1156,8 @@ class scattering_Unet(nn.Module):
         self.dlayer3 = dlayer3
         self.dlayer2 = dlayer2
         self.dlayer1 = dlayer1
-        self.tail_conv1 = nn.Conv2d(32, output_nc, 3, padding=1, bias=True)
+        # self.tail_conv1 = nn.Conv2d(32, output_nc, 3, padding=1, bias=True)
+        self.tail_conv1 = nn.Sequential(nn.Conv2d(32, output_nc, 3, padding=1, bias=True), nn.Tanh()) # made - 2022.11.21
 
     def forward(self, x):
 
@@ -1336,6 +1340,28 @@ class ellen_dwt_uresnet2_3(nn.Module):
         return self.fusion(x)
         # return result_uresnet
 
+
+class ellen_scattering(nn.Module):
+    """
+    made by ellen _2022.11.21
+    > model 2_3 based
+        only scattering branch
+    
+    input (inputsize)  
+    """
+
+    def __init__(self, input_size=512):
+        super(ellen_scattering, self).__init__()
+        self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16)
+        self.endconv = nn.Sequential(nn.ReflectionPad2d(
+            1), nn.Conv2d(3, 3, kernel_size=3, padding=0), nn.Tanh())
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        result_scattering = self.scattering_model(input)
+        return self.endconv(result_scattering)
 
 class ellen_dwt_uresnet2_4(nn.Module):
     """
