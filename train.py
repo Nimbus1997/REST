@@ -58,7 +58,6 @@ torch.backends.cudnn.benchmark = False
 # 6. Data loader randomness in multi process fix -> in /data/__init__.py -> ellen_made
 os.environ['PYTHONHASHSEED'] = str(random_seed)  #7.python hash seed 고정
 ##########################################
-
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options
     # create a dataset given opt.dataset_mode and other options

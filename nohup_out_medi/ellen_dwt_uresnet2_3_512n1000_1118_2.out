@@ -1,0 +1,245 @@
+----------------- Options ---------------
+               batch_size: 4                             	[default: 2]
+                    beta1: 0.5                           
+          checkpoints_dir: ./checkpoints                 
+           continue_train: False                         
+                crop_size: 256                           
+                 dataroot: /home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000	[default: None]
+             dataset_mode: unaligned                     
+                direction: AtoB                          
+              display_env: main                          
+             display_freq: 400                           
+               display_id: 1                             
+            display_ncols: 4                             
+             display_port: 8097                          
+           display_server: http://localhost              
+          display_winsize: 256                           
+                    epoch: latest                        
+              epoch_count: 1                             
+                 gan_mode: lsgan                         
+                  gpu_ids: 0,1,2,3                       	[default: 0]
+                init_gain: 0.02                          
+                init_type: normal                        
+                 input_nc: 3                             
+                  isTrain: True                          	[default: None]
+                 lambda_A: 10.0                          
+                 lambda_B: 10.0                          
+          lambda_identity: 0.5                           
+                load_iter: 0                             	[default: 0]
+                load_size: 256                           	[default: 286]
+                       lr: 0.0002                        
+           lr_decay_iters: 50                            
+                lr_policy: linear                        
+         max_dataset_size: inf                           
+                    model: cycle_gan                     
+                 n_epochs: 100                           
+           n_epochs_decay: 300                           
+               n_layers_D: 3                             
+                     name: ellen_dwt_uresnet2_3_512n1000_1118_2	[default: experiment_name]
+                      ndf: 64                            
+                     netD: basic                         
+                     netG: ellen_dwt_uresnet2_3          	[default: resnet_9blocks]
+                      ngf: 64                            
+               no_dropout: True                          
+                  no_flip: True                          	[default: False]
+                  no_html: False                         
+                     norm: instance                      
+              num_threads: 2                             
+                output_nc: 3                             
+                 patience: 10                            	[default: 5]
+                    phase: train                         
+                pool_size: 50                            
+               preprocess: resize_and_crop               
+               print_freq: 100                           
+             save_by_iter: False                         
+          save_epoch_freq: 5                             
+         save_latest_freq: 5000                          
+           serial_batches: False                         
+                   suffix:                               
+         update_html_freq: 1000                          
+                use_wandb: True                          	[default: False]
+                  verbose: False                         
+----------------- End -------------------
+dataset [UnalignedDataset] was created
+The number of training images = 600
+dataset [UnalignedDataset] was created
+patience: 10
+========================================================================
+num downs =  2  n_blocks= 9
+----e1
+-----resnet 0  번째
+-----resnet 1  번째
+-----resnet 2  번째
+-----resnet 3  번째
+-----resnet 4  번째
+-----resnet 5  번째
+-----resnet 6  번째
+-----resnet 7  번째
+-----resnet 8  번째
+>> in, out:  128.0 ,  256
+----- e1+unet+resent+uent+
+----- e1+unet+resent+uent+d1
+[ReflectionPad2d((3, 3, 3, 3)), Conv2d(3, 64, kernel_size=(7, 7), stride=(1, 1)), InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False), ReLU(inplace=True), UnetSkipConnectionBlock(
+  (model): Sequential(
+    (0): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (1): UnetSkipConnectionBlock(
+      (model): Sequential(
+        (0): LeakyReLU(negative_slope=0.2, inplace=True)
+        (1): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+        (2): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+        (3): UnetSkipConnectionBlock(
+          (model): Sequential(
+            (0): LeakyReLU(negative_slope=0.2, inplace=True)
+            (1): Conv2d(256, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+            (2): ReLU(inplace=True)
+            (3): ConvTranspose2d(256, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+            (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+          )
+        )
+        (4): ReLU(inplace=True)
+        (5): ConvTranspose2d(512, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+        (6): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      )
+    )
+    (2): ReLU(inplace=True)
+    (3): ConvTranspose2d(256, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (4): Tanh()
+  )
+), ReflectionPad2d((3, 3, 3, 3)), Conv2d(64, 3, kernel_size=(7, 7), stride=(1, 1)), Tanh()]
+initialize network with normal
+========================================================================
+num downs =  2  n_blocks= 9
+----e1
+-----resnet 0  번째
+-----resnet 1  번째
+-----resnet 2  번째
+-----resnet 3  번째
+-----resnet 4  번째
+-----resnet 5  번째
+-----resnet 6  번째
+-----resnet 7  번째
+-----resnet 8  번째
+>> in, out:  128.0 ,  256
+----- e1+unet+resent+uent+
+----- e1+unet+resent+uent+d1
+[ReflectionPad2d((3, 3, 3, 3)), Conv2d(3, 64, kernel_size=(7, 7), stride=(1, 1)), InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False), ReLU(inplace=True), UnetSkipConnectionBlock(
+  (model): Sequential(
+    (0): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (1): UnetSkipConnectionBlock(
+      (model): Sequential(
+        (0): LeakyReLU(negative_slope=0.2, inplace=True)
+        (1): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+        (2): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+        (3): UnetSkipConnectionBlock(
+          (model): Sequential(
+            (0): LeakyReLU(negative_slope=0.2, inplace=True)
+            (1): Conv2d(256, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+            (2): ReLU(inplace=True)
+            (3): ConvTranspose2d(256, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+            (4): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+          )
+        )
+        (4): ReLU(inplace=True)
+        (5): ConvTranspose2d(512, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+        (6): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+      )
+    )
+    (2): ReLU(inplace=True)
+    (3): ConvTranspose2d(256, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (4): Tanh()
+  )
+), ReflectionPad2d((3, 3, 3, 3)), Conv2d(64, 3, kernel_size=(7, 7), stride=(1, 1)), Tanh()]
+initialize network with normal
+initialize network with normal
+initialize network with normal
+model [CycleGANModel] was created
+---------- Networks initialized -------------
+[Network G_A] Total number of parameters : 5.410 M
+[Network G_B] Total number of parameters : 5.410 M
+[Network D_A] Total number of parameters : 2.765 M
+[Network D_B] Total number of parameters : 2.765 M
+-----------------------------------------------/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torchvision/transforms/transforms.py:288: UserWarning: Argument interpolation should be of type InterpolationMode instead of int. Please, use InterpolationMode enum.
+  "Argument interpolation should be of type InterpolationMode instead of int. "
+Setting up a new session...
+wandb: Currently logged in as: z-eun (use `wandb login --relogin` to force relogin)
+
+wandb: wandb version 0.13.5 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.12.9
+wandb: Syncing run ellen_dwt_uresnet2_3_512n1000_1118_2
+wandb: ⭐️ View project at https://wandb.ai/z-eun/CycleGAN-and-pix2pix
+wandb: 🚀 View run at https://wandb.ai/z-eun/CycleGAN-and-pix2pix/runs/3ikwx8v6
+wandb: Run data is saved locally in /home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/wandb/run-20221118_194613-3ikwx8v6
+wandb: Run `wandb offline` to turn off syncing.
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+
+create web directory ./checkpoints/ellen_dwt_uresnet2_3_512n1000_1118_2/web...
+learning rate 0.0002000 -> 0.0002000
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/functional.py:3635: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  "See the documentation of nn.Upsample for details.".format(mode)
+(epoch: 1, iters: 100, time: 0.375, data: 0.129) D_A: 0.629 G_A: 0.991 cycle_A: 7.655 idt_A: 1.641 D_B: 0.368 G_B: 0.251 cycle_B: 1.660 idt_B: 1.959 
+(epoch: 1, iters: 200, time: 0.364, data: 0.002) D_A: 0.254 G_A: 0.434 cycle_A: 3.616 idt_A: 1.248 D_B: 0.191 G_B: 0.480 cycle_B: 1.275 idt_B: 0.900 
+(epoch: 1, iters: 300, time: 0.336, data: 0.002) D_A: 0.252 G_A: 0.231 cycle_A: 2.702 idt_A: 1.444 D_B: 0.211 G_B: 0.440 cycle_B: 1.695 idt_B: 0.675 
+(epoch: 1, iters: 400, time: 0.801, data: 0.003) D_A: 0.174 G_A: 0.417 cycle_A: 5.009 idt_A: 0.973 D_B: 0.203 G_B: 0.440 cycle_B: 0.921 idt_B: 1.222 
+(epoch: 1, iters: 500, time: 0.370, data: 0.002) D_A: 0.230 G_A: 0.447 cycle_A: 3.439 idt_A: 1.158 D_B: 0.269 G_B: 0.379 cycle_B: 1.205 idt_B: 0.633 
+(epoch: 1, iters: 600, time: 0.369, data: 0.002) D_A: 0.206 G_A: 0.370 cycle_A: 2.625 idt_A: 1.154 D_B: 0.192 G_B: 0.325 cycle_B: 1.155 idt_B: 0.595 
+End of epoch 1 / 400 	 Time Taken: 229 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 2, iters: 100, time: 0.335, data: 0.184) D_A: 0.179 G_A: 0.383 cycle_A: 2.795 idt_A: 0.923 D_B: 0.212 G_B: 0.244 cycle_B: 1.007 idt_B: 0.635 
+(epoch: 2, iters: 200, time: 0.740, data: 0.002) D_A: 0.180 G_A: 0.604 cycle_A: 3.268 idt_A: 1.461 D_B: 0.203 G_B: 0.287 cycle_B: 1.322 idt_B: 0.796 
+(epoch: 2, iters: 300, time: 0.359, data: 0.002) D_A: 0.238 G_A: 0.505 cycle_A: 1.941 idt_A: 0.724 D_B: 0.219 G_B: 0.420 cycle_B: 1.118 idt_B: 0.348 
+(epoch: 2, iters: 400, time: 0.354, data: 0.003) D_A: 0.223 G_A: 0.480 cycle_A: 3.254 idt_A: 0.738 D_B: 0.234 G_B: 0.180 cycle_B: 1.272 idt_B: 0.849 
+(epoch: 2, iters: 500, time: 0.344, data: 0.002) D_A: 0.171 G_A: 0.548 cycle_A: 1.910 idt_A: 1.118 D_B: 0.138 G_B: 0.499 cycle_B: 1.460 idt_B: 0.421 
+(epoch: 2, iters: 600, time: 0.529, data: 0.003) D_A: 0.215 G_A: 0.404 cycle_A: 1.554 idt_A: 1.151 D_B: 0.207 G_B: 0.406 cycle_B: 1.246 idt_B: 0.342 
+End of epoch 2 / 400 	 Time Taken: 212 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 3, iters: 100, time: 0.398, data: 0.178) D_A: 0.254 G_A: 0.535 cycle_A: 1.438 idt_A: 0.473 D_B: 0.285 G_B: 0.428 cycle_B: 0.638 idt_B: 0.322 
+(epoch: 3, iters: 200, time: 0.386, data: 0.002) D_A: 0.301 G_A: 0.475 cycle_A: 2.978 idt_A: 0.739 D_B: 0.179 G_B: 0.265 cycle_B: 1.075 idt_B: 0.753 
+(epoch: 3, iters: 300, time: 0.354, data: 0.002) D_A: 0.203 G_A: 0.415 cycle_A: 2.142 idt_A: 0.740 D_B: 0.198 G_B: 0.303 cycle_B: 0.945 idt_B: 0.433 
+(epoch: 3, iters: 400, time: 0.790, data: 0.002) D_A: 0.204 G_A: 0.316 cycle_A: 1.979 idt_A: 0.786 D_B: 0.179 G_B: 0.577 cycle_B: 0.914 idt_B: 0.310 
+(epoch: 3, iters: 500, time: 0.343, data: 0.002) D_A: 0.239 G_A: 0.301 cycle_A: 3.835 idt_A: 0.929 D_B: 0.180 G_B: 0.465 cycle_B: 1.197 idt_B: 1.077 
+(epoch: 3, iters: 600, time: 0.338, data: 0.003) D_A: 0.212 G_A: 0.537 cycle_A: 1.825 idt_A: 0.767 D_B: 0.154 G_B: 0.448 cycle_B: 1.053 idt_B: 0.390 
+End of epoch 3 / 400 	 Time Taken: 226 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 4, iters: 100, time: 0.354, data: 0.167) D_A: 0.262 G_A: 0.650 cycle_A: 1.476 idt_A: 0.849 D_B: 0.175 G_B: 0.331 cycle_B: 1.008 idt_B: 0.358 
+(epoch: 4, iters: 200, time: 0.784, data: 0.002) D_A: 0.165 G_A: 0.309 cycle_A: 2.313 idt_A: 0.524 D_B: 0.226 G_B: 0.274 cycle_B: 0.830 idt_B: 0.489 
+(epoch: 4, iters: 300, time: 0.376, data: 0.002) D_A: 0.203 G_A: 0.577 cycle_A: 2.028 idt_A: 0.592 D_B: 0.149 G_B: 0.541 cycle_B: 0.862 idt_B: 0.300 
+(epoch: 4, iters: 400, time: 0.378, data: 0.002) D_A: 0.221 G_A: 0.341 cycle_A: 3.178 idt_A: 0.553 D_B: 0.189 G_B: 0.513 cycle_B: 0.686 idt_B: 0.665 
+(epoch: 4, iters: 500, time: 0.330, data: 0.002) D_A: 0.146 G_A: 0.434 cycle_A: 1.211 idt_A: 0.630 D_B: 0.182 G_B: 0.375 cycle_B: 1.021 idt_B: 0.261 
+(epoch: 4, iters: 600, time: 0.545, data: 0.003) D_A: 0.159 G_A: 0.387 cycle_A: 1.083 idt_A: 0.717 D_B: 0.227 G_B: 0.452 cycle_B: 0.929 idt_B: 0.262 
+End of epoch 4 / 400 	 Time Taken: 227 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 5, iters: 100, time: 0.381, data: 0.177) D_A: 0.240 G_A: 0.287 cycle_A: 3.305 idt_A: 0.680 D_B: 0.311 G_B: 0.729 cycle_B: 1.623 idt_B: 0.546 
+(epoch: 5, iters: 200, time: 0.388, data: 0.002) D_A: 0.251 G_A: 0.283 cycle_A: 1.799 idt_A: 0.496 D_B: 0.312 G_B: 0.302 cycle_B: 0.791 idt_B: 0.276 
+(epoch: 5, iters: 300, time: 0.337, data: 0.002) D_A: 0.320 G_A: 0.980 cycle_A: 1.949 idt_A: 0.782 D_B: 0.150 G_B: 0.353 cycle_B: 0.881 idt_B: 0.352 
+(epoch: 5, iters: 400, time: 0.770, data: 0.002) D_A: 0.220 G_A: 0.187 cycle_A: 1.590 idt_A: 0.689 D_B: 0.193 G_B: 0.403 cycle_B: 0.915 idt_B: 0.314 
+(epoch: 5, iters: 500, time: 0.389, data: 0.002) D_A: 0.241 G_A: 0.481 cycle_A: 2.267 idt_A: 0.462 D_B: 0.158 G_B: 0.422 cycle_B: 0.737 idt_B: 0.468 
+(epoch: 5, iters: 600, time: 0.373, data: 0.001) D_A: 0.168 G_A: 0.425 cycle_A: 2.039 idt_A: 0.646 D_B: 0.205 G_B: 0.644 cycle_B: 1.309 idt_B: 0.362 
+saving the model at the end of epoch 5, iters 3000
+End of epoch 5 / 400 	 Time Taken: 223 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 6, iters: 100, time: 0.378, data: 0.181) D_A: 0.402 G_A: 0.718 cycle_A: 1.490 idt_A: 0.625 D_B: 0.169 G_B: 0.428 cycle_B: 0.663 idt_B: 0.327 
+(epoch: 6, iters: 200, time: 0.811, data: 0.002) D_A: 0.150 G_A: 0.532 cycle_A: 1.743 idt_A: 0.694 D_B: 0.238 G_B: 0.635 cycle_B: 0.909 idt_B: 0.359 
+(epoch: 6, iters: 300, time: 0.377, data: 0.002) D_A: 0.264 G_A: 0.428 cycle_A: 2.842 idt_A: 0.566 D_B: 0.258 G_B: 0.716 cycle_B: 1.100 idt_B: 0.400 
+(epoch: 6, iters: 400, time: 0.380, data: 0.002) D_A: 0.219 G_A: 0.460 cycle_A: 1.533 idt_A: 0.522 D_B: 0.288 G_B: 0.717 cycle_B: 0.759 idt_B: 0.297 
+(epoch: 6, iters: 500, time: 0.355, data: 0.002) D_A: 0.165 G_A: 0.578 cycle_A: 1.271 idt_A: 0.874 D_B: 0.194 G_B: 0.296 cycle_B: 1.027 idt_B: 0.278 
+(epoch: 6, iters: 600, time: 0.545, data: 0.002) D_A: 0.241 G_A: 0.449 cycle_A: 1.581 idt_A: 0.465 D_B: 0.157 G_B: 0.393 cycle_B: 0.902 idt_B: 0.286 
+End of epoch 6 / 400 	 Time Taken: 228 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 7, iters: 100, time: 0.372, data: 0.181) D_A: 0.197 G_A: 0.343 cycle_A: 1.210 idt_A: 0.497 D_B: 0.218 G_B: 0.375 cycle_B: 0.681 idt_B: 0.241 
+(epoch: 7, iters: 200, time: 0.391, data: 0.002) D_A: 0.236 G_A: 0.747 cycle_A: 1.177 idt_A: 0.441 D_B: 0.243 G_B: 0.654 cycle_B: 0.608 idt_B: 0.198 
+(epoch: 7, iters: 300, time: 0.364, data: 0.002) D_A: 0.157 G_A: 0.381 cycle_A: 2.412 idt_A: 0.655 D_B: 0.248 G_B: 0.722 cycle_B: 1.059 idt_B: 0.363 
+(epoch: 7, iters: 400, time: 0.793, data: 0.002) D_A: 0.209 G_A: 0.363 cycle_A: 1.433 idt_A: 0.605 D_B: 0.223 G_B: 0.654 cycle_B: 0.912 idt_B: 0.247 
+(epoch: 7, iters: 500, time: 0.357, data: 0.002) D_A: 0.194 G_A: 0.367 cycle_A: 2.602 idt_A: 0.561 D_B: 0.255 G_B: 0.276 cycle_B: 0.951 idt_B: 0.366 
+(epoch: 7, iters: 600, time: 0.349, data: 0.003) D_A: 0.168 G_A: 0.251 cycle_A: 2.095 idt_A: 1.216 D_B: 0.189 G_B: 0.638 cycle_B: 1.238 idt_B: 0.388 
+End of epoch 7 / 400 	 Time Taken: 226 sec
+learning rate 0.0002000 -> 0.0002000
+(epoch: 8, iters: 100, time: 0.350, data: 0.190) D_A: 0.175 G_A: 0.463 cycle_A: 1.537 idt_A: 0.482 D_B: 0.176 G_B: 0.415 cycle_B: 0.802 idt_B: 0.389 
+(epoch: 8, iters: 200, time: 0.793, data: 0.002) D_A: 0.200 G_A: 0.581 cycle_A: 2.313 idt_A: 0.715 D_B: 0.176 G_B: 0.437 cycle_B: 1.353 idt_B: 0.461 
+(epoch: 8, iters: 300, time: 0.393, data: 0.002) D_A: 0.258 G_A: 0.267 cycle_A: 1.307 idt_A: 0.448 D_B: 0.199 G_B: 0.497 cycle_B: 0.684 idt_B: 0.307 
+(epoch: 8, iters: 400, time: 0.392, data: 0.002) D_A: 0.235 G_A: 0.727 cycle_A: 0.972 idt_A: 0.477 D_B: 0.258 G_B: 0.261 cycle_B: 0.594 idt_B: 0.216 
+(epoch: 8, iters: 500, time: 0.359, data: 0.002) D_A: 0.180 G_A: 0.444 cycle_A: 2.073 idt_A: 0.544 D_B: 0.154 G_B: 0.405 cycle_B: 0.668 idt_B: 0.407 
+(epoch: 8, iters: 600, time: 0.527, data: 0.002) D_A: 0.141 G_A: 0.527 cycle_A: 2.423 idt_A: 0.798 D_B: 0.229 G_B: 0.309 cycle_B: 1.188 idt_B: 0.404 
+End of epoch 8 / 400 	 Time Taken: 227 sec
+learning rate 0.0002000 -> 0.0002000
