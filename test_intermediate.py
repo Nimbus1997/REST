@@ -1,8 +1,10 @@
 """ellen made
 date: 2022.11.18
 
-to see the image made by intermediate model like unet and scattering branch.
-both model outputs 3*H*W images so it can be save as images.
+1. To see the image made by intermediate model like unet and scattering branch.
+2. both model outputs 3*H*W images so it can be save as images.
+
+for model 2_3
 
 
 """
@@ -66,18 +68,6 @@ def save_images_branch(webpage, visuals, image_path, aspect_ratio=1.0, width=256
     if use_wandb:
         wandb.log(ims_dict)
 
-####################################END for makeing save_image _ellen
-
-# Randomness fix
-random_seed = 42
-torch.manual_seed(random_seed) #1.pytorch randomness
-torch.backends.cudnn.deteministic = True #2.cuDNN randomness - might make computaion slow
-torch.backends.cudnn.benchmark = False
-np.random.seed(random_seed) #3.numpy randomness
-random.seed(random_seed) #4.python randomness
-torch.cuda.manual_seed(random_seed) # 5. gpu randomness -> hanna 
-
-
 try:
     import wandb
 except ImportError:
@@ -102,8 +92,8 @@ if __name__ == '__main__':
 
     # initialize logger
     if opt.use_wandb:
-        wandb_run = wandb.init(project='CycleGAN-and-pix2pix', name=opt.name, config=opt) if not wandb.run else wandb.run
-        wandb_run._label(repo='CycleGAN-and-pix2pix')
+        wandb_run = wandb.init(project='CycleGAN_test_intermidiate', name=opt.name, config=opt) if not wandb.run else wandb.run
+        wandb_run._label(repo='CycleGAN_test_intermidiate')
 
     # create a website
     web_dir = os.path.join(opt.results_dir, opt.name, '{}_{}'.format(opt.phase, opt.epoch))  # define the website directory

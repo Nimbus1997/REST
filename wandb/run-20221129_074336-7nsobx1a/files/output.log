@@ -1,0 +1,159 @@
+create web directory ./checkpoints/ellen_dwt_uresnet2_3_1128/web...
+learning rate 0.0002000 -> 0.0002000
+/opt/conda/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:129: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
+/opt/conda/lib/python3.8/site-packages/torch/nn/functional.py:3454: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  warnings.warn(
+(epoch: 1, iters: 6, time: 2.447, data: 0.260) D_A: 1.701 G_A: 2.340 cycle_A: 9.369 idt_A: 5.251 D_B: 3.675 G_B: 5.162 cycle_B: 5.281 idt_B: 2.366
+(epoch: 1, iters: 12, time: 0.190, data: 0.260) D_A: 5.965 G_A: 2.425 cycle_A: 8.575 idt_A: 3.805 D_B: 6.116 G_B: 4.792 cycle_B: 3.872 idt_B: 2.233
+(epoch: 1, iters: 18, time: 0.204, data: 0.260) D_A: 3.839 G_A: 2.720 cycle_A: 7.623 idt_A: 4.363 D_B: 5.201 G_B: 3.158 cycle_B: 4.326 idt_B: 1.976
+(epoch: 1, iters: 24, time: 0.197, data: 0.260) D_A: 3.592 G_A: 3.735 cycle_A: 8.931 idt_A: 4.998 D_B: 2.723 G_B: 2.941 cycle_B: 4.850 idt_B: 2.272
+(epoch: 1, iters: 30, time: 0.203, data: 0.260) D_A: 2.938 G_A: 3.824 cycle_A: 8.522 idt_A: 3.456 D_B: 4.774 G_B: 5.837 cycle_B: 3.274 idt_B: 2.159
+(epoch: 1, iters: 36, time: 0.216, data: 0.260) D_A: 1.114 G_A: 1.578 cycle_A: 8.130 idt_A: 3.720 D_B: 2.661 G_B: 4.355 cycle_B: 3.454 idt_B: 2.076
+(epoch: 1, iters: 42, time: 0.206, data: 0.260) D_A: 0.607 G_A: 0.787 cycle_A: 5.817 idt_A: 3.864 D_B: 0.753 G_B: 1.193 cycle_B: 3.542 idt_B: 1.516
+(epoch: 1, iters: 48, time: 0.210, data: 0.260) D_A: 0.534 G_A: 0.751 cycle_A: 7.536 idt_A: 4.361 D_B: 0.552 G_B: 0.742 cycle_B: 4.065 idt_B: 1.946
+(epoch: 1, iters: 54, time: 0.196, data: 0.260) D_A: 0.550 G_A: 0.775 cycle_A: 8.217 idt_A: 3.980 D_B: 0.554 G_B: 0.815 cycle_B: 3.669 idt_B: 2.183
+(epoch: 1, iters: 60, time: 0.206, data: 0.260) D_A: 0.391 G_A: 0.630 cycle_A: 5.607 idt_A: 4.105 D_B: 0.404 G_B: 0.690 cycle_B: 3.755 idt_B: 1.539
+(epoch: 1, iters: 66, time: 0.209, data: 0.260) D_A: 0.430 G_A: 0.552 cycle_A: 9.160 idt_A: 3.864 D_B: 0.443 G_B: 0.691 cycle_B: 3.734 idt_B: 2.407
+(epoch: 1, iters: 72, time: 0.202, data: 0.260) D_A: 0.403 G_A: 0.457 cycle_A: 9.895 idt_A: 3.922 D_B: 0.373 G_B: 0.637 cycle_B: 3.892 idt_B: 2.559
+(epoch: 1, iters: 78, time: 0.204, data: 0.260) D_A: 0.392 G_A: 0.472 cycle_A: 9.674 idt_A: 3.747 D_B: 0.406 G_B: 0.589 cycle_B: 3.596 idt_B: 2.532
+(epoch: 1, iters: 84, time: 0.210, data: 0.260) D_A: 0.368 G_A: 0.546 cycle_A: 8.573 idt_A: 2.703 D_B: 0.395 G_B: 0.635 cycle_B: 2.675 idt_B: 2.246
+(epoch: 1, iters: 90, time: 0.204, data: 0.260) D_A: 0.575 G_A: 0.564 cycle_A: 5.466 idt_A: 3.939 D_B: 0.401 G_B: 0.564 cycle_B: 4.001 idt_B: 1.453
+(epoch: 1, iters: 96, time: 0.214, data: 0.260) D_A: 0.378 G_A: 0.482 cycle_A: 5.092 idt_A: 3.454 D_B: 0.408 G_B: 0.488 cycle_B: 3.387 idt_B: 1.365
+(epoch: 1, iters: 102, time: 0.199, data: 0.260) D_A: 0.333 G_A: 0.562 cycle_A: 5.723 idt_A: 3.018 D_B: 0.400 G_B: 0.477 cycle_B: 2.953 idt_B: 1.498
+(epoch: 1, iters: 108, time: 0.196, data: 0.260) D_A: 0.387 G_A: 0.491 cycle_A: 5.643 idt_A: 3.751 D_B: 0.443 G_B: 0.548 cycle_B: 3.710 idt_B: 1.491
+(epoch: 1, iters: 114, time: 0.204, data: 0.260) D_A: 0.414 G_A: 0.424 cycle_A: 6.216 idt_A: 3.881 D_B: 0.493 G_B: 0.567 cycle_B: 3.938 idt_B: 1.584
+(epoch: 1, iters: 120, time: 0.204, data: 0.260) D_A: 0.465 G_A: 0.582 cycle_A: 6.553 idt_A: 2.571 D_B: 0.529 G_B: 0.730 cycle_B: 2.502 idt_B: 1.694
+(epoch: 1, iters: 126, time: 0.203, data: 0.260) D_A: 0.438 G_A: 0.527 cycle_A: 7.042 idt_A: 3.316 D_B: 0.581 G_B: 0.552 cycle_B: 3.372 idt_B: 1.790
+(epoch: 1, iters: 132, time: 0.217, data: 0.260) D_A: 0.590 G_A: 0.762 cycle_A: 6.512 idt_A: 2.812 D_B: 0.619 G_B: 0.800 cycle_B: 2.814 idt_B: 1.688
+(epoch: 1, iters: 138, time: 0.203, data: 0.260) D_A: 1.166 G_A: 1.417 cycle_A: 7.355 idt_A: 2.535 D_B: 0.782 G_B: 1.124 cycle_B: 2.592 idt_B: 1.790
+(epoch: 1, iters: 144, time: 0.202, data: 0.260) D_A: 1.715 G_A: 1.881 cycle_A: 6.852 idt_A: 2.821 D_B: 0.669 G_B: 1.091 cycle_B: 2.850 idt_B: 1.789
+(epoch: 1, iters: 150, time: 0.203, data: 0.260) D_A: 1.341 G_A: 1.669 cycle_A: 6.305 idt_A: 2.591 D_B: 0.454 G_B: 0.306 cycle_B: 2.610 idt_B: 1.553
+(epoch: 1, iters: 156, time: 0.195, data: 0.260) D_A: 0.920 G_A: 1.275 cycle_A: 6.526 idt_A: 2.820 D_B: 0.349 G_B: 0.215 cycle_B: 2.822 idt_B: 1.656
+(epoch: 1, iters: 162, time: 0.201, data: 0.260) D_A: 0.417 G_A: 0.624 cycle_A: 4.634 idt_A: 2.939 D_B: 0.535 G_B: 0.508 cycle_B: 2.970 idt_B: 1.178
+(epoch: 1, iters: 168, time: 0.213, data: 0.260) D_A: 0.396 G_A: 0.547 cycle_A: 5.218 idt_A: 2.727 D_B: 0.584 G_B: 0.831 cycle_B: 2.742 idt_B: 1.274
+(epoch: 1, iters: 174, time: 0.204, data: 0.260) D_A: 0.313 G_A: 0.329 cycle_A: 5.820 idt_A: 2.391 D_B: 0.503 G_B: 0.696 cycle_B: 2.467 idt_B: 1.424
+(epoch: 1, iters: 180, time: 0.204, data: 0.260) D_A: 0.300 G_A: 0.265 cycle_A: 7.894 idt_A: 2.243 D_B: 0.394 G_B: 0.349 cycle_B: 2.325 idt_B: 1.991
+(epoch: 1, iters: 186, time: 0.198, data: 0.260) D_A: 0.291 G_A: 0.267 cycle_A: 5.842 idt_A: 2.530 D_B: 0.322 G_B: 0.353 cycle_B: 2.630 idt_B: 1.487
+(epoch: 1, iters: 192, time: 0.203, data: 0.260) D_A: 0.278 G_A: 0.306 cycle_A: 6.887 idt_A: 1.703 D_B: 0.292 G_B: 0.254 cycle_B: 1.873 idt_B: 1.639
+(epoch: 1, iters: 198, time: 0.212, data: 0.260) D_A: 0.262 G_A: 0.320 cycle_A: 7.054 idt_A: 2.391 D_B: 0.336 G_B: 0.221 cycle_B: 2.505 idt_B: 1.761
+(epoch: 1, iters: 204, time: 0.207, data: 0.260) D_A: 0.299 G_A: 0.353 cycle_A: 5.939 idt_A: 2.800 D_B: 0.324 G_B: 0.302 cycle_B: 2.958 idt_B: 1.438
+(epoch: 1, iters: 210, time: 0.213, data: 0.260) D_A: 0.259 G_A: 0.397 cycle_A: 5.591 idt_A: 2.180 D_B: 0.352 G_B: 0.503 cycle_B: 2.307 idt_B: 1.377
+(epoch: 1, iters: 216, time: 0.208, data: 0.260) D_A: 0.247 G_A: 0.265 cycle_A: 5.472 idt_A: 2.118 D_B: 0.385 G_B: 0.516 cycle_B: 2.208 idt_B: 1.412
+(epoch: 1, iters: 222, time: 0.205, data: 0.260) D_A: 0.240 G_A: 0.294 cycle_A: 7.001 idt_A: 2.055 D_B: 0.443 G_B: 0.622 cycle_B: 2.202 idt_B: 1.796
+(epoch: 1, iters: 228, time: 0.211, data: 0.260) D_A: 0.276 G_A: 0.366 cycle_A: 5.682 idt_A: 2.471 D_B: 0.536 G_B: 0.532 cycle_B: 2.738 idt_B: 1.359
+(epoch: 1, iters: 234, time: 0.204, data: 0.260) D_A: 0.258 G_A: 0.364 cycle_A: 5.756 idt_A: 2.289 D_B: 0.733 G_B: 1.252 cycle_B: 2.530 idt_B: 1.523
+(epoch: 1, iters: 240, time: 0.215, data: 0.260) D_A: 0.244 G_A: 0.356 cycle_A: 4.894 idt_A: 1.998 D_B: 0.841 G_B: 0.904 cycle_B: 2.195 idt_B: 1.297
+(epoch: 1, iters: 246, time: 0.204, data: 0.260) D_A: 0.293 G_A: 0.331 cycle_A: 6.343 idt_A: 2.903 D_B: 0.855 G_B: 1.026 cycle_B: 3.027 idt_B: 1.621
+(epoch: 1, iters: 252, time: 0.209, data: 0.260) D_A: 0.277 G_A: 0.334 cycle_A: 4.205 idt_A: 2.527 D_B: 1.003 G_B: 1.238 cycle_B: 2.864 idt_B: 1.019
+(epoch: 1, iters: 258, time: 0.195, data: 0.260) D_A: 0.240 G_A: 0.358 cycle_A: 5.406 idt_A: 2.191 D_B: 1.146 G_B: 1.701 cycle_B: 2.486 idt_B: 1.195
+(epoch: 1, iters: 264, time: 0.209, data: 0.260) D_A: 0.278 G_A: 0.447 cycle_A: 4.434 idt_A: 1.882 D_B: 0.709 G_B: 0.879 cycle_B: 2.279 idt_B: 1.070
+(epoch: 1, iters: 270, time: 0.197, data: 0.260) D_A: 0.233 G_A: 0.332 cycle_A: 4.198 idt_A: 1.787 D_B: 0.446 G_B: 0.724 cycle_B: 1.934 idt_B: 1.052
+(epoch: 1, iters: 276, time: 0.208, data: 0.260) D_A: 0.284 G_A: 0.303 cycle_A: 4.997 idt_A: 2.896 D_B: 0.305 G_B: 0.433 cycle_B: 3.067 idt_B: 1.219
+(epoch: 1, iters: 282, time: 0.205, data: 0.260) D_A: 0.277 G_A: 0.472 cycle_A: 5.002 idt_A: 2.238 D_B: 0.332 G_B: 0.524 cycle_B: 2.641 idt_B: 1.196
+(epoch: 1, iters: 288, time: 0.203, data: 0.260) D_A: 0.380 G_A: 0.541 cycle_A: 5.124 idt_A: 1.907 D_B: 0.333 G_B: 0.496 cycle_B: 2.136 idt_B: 1.337
+(epoch: 1, iters: 294, time: 0.213, data: 0.260) D_A: 0.607 G_A: 0.851 cycle_A: 4.536 idt_A: 2.116 D_B: 0.272 G_B: 0.384 cycle_B: 2.386 idt_B: 1.162
+(epoch: 1, iters: 300, time: 0.205, data: 0.260) D_A: 0.677 G_A: 0.799 cycle_A: 5.424 idt_A: 1.827 D_B: 0.283 G_B: 0.377 cycle_B: 1.922 idt_B: 1.421
+(epoch: 1, iters: 300, time: 0.205, data: 0.260) D_A: 0.677 G_A: 0.799 cycle_A: 5.424 idt_A: 1.827 D_B: 0.283 G_B: 0.377 cycle_B: 1.922 idt_B: 1.421
+(epoch: 1, iters: 306, time: 0.209, data: 0.008) D_A: 0.676 G_A: 0.930 cycle_A: 6.260 idt_A: 1.859 D_B: 0.231 G_B: 0.368 cycle_B: 2.112 idt_B: 1.621
+(epoch: 1, iters: 312, time: 0.204, data: 0.008) D_A: 0.470 G_A: 0.832 cycle_A: 3.541 idt_A: 2.054 D_B: 0.296 G_B: 0.388 cycle_B: 2.239 idt_B: 0.795
+(epoch: 1, iters: 318, time: 0.205, data: 0.008) D_A: 0.281 G_A: 0.370 cycle_A: 6.194 idt_A: 2.447 D_B: 0.274 G_B: 0.472 cycle_B: 2.655 idt_B: 1.560
+(epoch: 1, iters: 324, time: 0.207, data: 0.008) D_A: 0.235 G_A: 0.425 cycle_A: 4.460 idt_A: 1.864 D_B: 0.221 G_B: 0.438 cycle_B: 2.016 idt_B: 1.130
+(epoch: 1, iters: 330, time: 0.199, data: 0.008) D_A: 0.239 G_A: 0.445 cycle_A: 3.775 idt_A: 1.771 D_B: 0.233 G_B: 0.427 cycle_B: 1.995 idt_B: 0.917
+(epoch: 1, iters: 336, time: 0.214, data: 0.008) D_A: 0.210 G_A: 0.344 cycle_A: 5.995 idt_A: 1.915 D_B: 0.246 G_B: 0.504 cycle_B: 2.053 idt_B: 1.609
+(epoch: 1, iters: 342, time: 0.202, data: 0.008) D_A: 0.251 G_A: 0.407 cycle_A: 6.766 idt_A: 1.836 D_B: 0.199 G_B: 0.439 cycle_B: 2.218 idt_B: 1.728
+(epoch: 1, iters: 348, time: 0.204, data: 0.008) D_A: 0.250 G_A: 0.400 cycle_A: 5.638 idt_A: 1.953 D_B: 0.245 G_B: 0.550 cycle_B: 2.084 idt_B: 1.240
+(epoch: 1, iters: 354, time: 0.212, data: 0.008) D_A: 0.249 G_A: 0.404 cycle_A: 5.339 idt_A: 1.476 D_B: 0.243 G_B: 0.481 cycle_B: 1.694 idt_B: 1.417
+(epoch: 1, iters: 360, time: 0.200, data: 0.008) D_A: 0.200 G_A: 0.415 cycle_A: 3.934 idt_A: 2.169 D_B: 0.271 G_B: 0.362 cycle_B: 2.299 idt_B: 0.976
+(epoch: 1, iters: 366, time: 0.214, data: 0.008) D_A: 0.229 G_A: 0.320 cycle_A: 3.859 idt_A: 1.703 D_B: 0.271 G_B: 0.368 cycle_B: 1.820 idt_B: 0.895
+(epoch: 1, iters: 372, time: 0.220, data: 0.008) D_A: 0.200 G_A: 0.379 cycle_A: 3.687 idt_A: 1.800 D_B: 0.256 G_B: 0.284 cycle_B: 1.995 idt_B: 0.899
+(epoch: 1, iters: 378, time: 0.212, data: 0.008) D_A: 0.197 G_A: 0.382 cycle_A: 4.063 idt_A: 2.443 D_B: 0.222 G_B: 0.301 cycle_B: 2.485 idt_B: 1.036
+(epoch: 1, iters: 384, time: 0.204, data: 0.008) D_A: 0.253 G_A: 0.411 cycle_A: 3.417 idt_A: 2.062 D_B: 0.190 G_B: 0.394 cycle_B: 2.309 idt_B: 0.872
+(epoch: 1, iters: 390, time: 0.218, data: 0.008) D_A: 0.233 G_A: 0.450 cycle_A: 3.103 idt_A: 1.757 D_B: 0.221 G_B: 0.470 cycle_B: 1.853 idt_B: 0.840
+(epoch: 1, iters: 396, time: 0.214, data: 0.008) D_A: 0.256 G_A: 0.424 cycle_A: 6.073 idt_A: 1.371 D_B: 0.192 G_B: 0.386 cycle_B: 1.562 idt_B: 1.598
+(epoch: 1, iters: 402, time: 0.219, data: 0.008) D_A: 0.224 G_A: 0.330 cycle_A: 5.502 idt_A: 1.403 D_B: 0.256 G_B: 0.398 cycle_B: 1.677 idt_B: 1.348
+(epoch: 1, iters: 408, time: 0.213, data: 0.008) D_A: 0.227 G_A: 0.373 cycle_A: 4.711 idt_A: 1.973 D_B: 0.192 G_B: 0.318 cycle_B: 2.349 idt_B: 1.144
+(epoch: 1, iters: 414, time: 0.231, data: 0.008) D_A: 0.215 G_A: 0.396 cycle_A: 4.648 idt_A: 2.225 D_B: 0.236 G_B: 0.305 cycle_B: 2.336 idt_B: 1.111
+(epoch: 1, iters: 420, time: 0.215, data: 0.008) D_A: 0.216 G_A: 0.460 cycle_A: 4.821 idt_A: 1.462 D_B: 0.250 G_B: 0.528 cycle_B: 1.555 idt_B: 1.050
+(epoch: 1, iters: 426, time: 0.214, data: 0.008) D_A: 0.202 G_A: 0.497 cycle_A: 4.740 idt_A: 1.935 D_B: 0.233 G_B: 0.600 cycle_B: 2.042 idt_B: 1.239
+(epoch: 1, iters: 432, time: 0.219, data: 0.008) D_A: 0.198 G_A: 0.395 cycle_A: 5.466 idt_A: 1.559 D_B: 0.244 G_B: 0.597 cycle_B: 1.654 idt_B: 1.523
+(epoch: 1, iters: 438, time: 0.208, data: 0.008) D_A: 0.204 G_A: 0.404 cycle_A: 3.987 idt_A: 2.135 D_B: 0.277 G_B: 0.368 cycle_B: 2.330 idt_B: 1.002
+(epoch: 1, iters: 444, time: 0.228, data: 0.008) D_A: 0.188 G_A: 0.429 cycle_A: 4.304 idt_A: 1.839 D_B: 0.243 G_B: 0.431 cycle_B: 1.998 idt_B: 1.057
+(epoch: 1, iters: 450, time: 0.225, data: 0.008) D_A: 0.221 G_A: 0.401 cycle_A: 5.065 idt_A: 1.747 D_B: 0.203 G_B: 0.497 cycle_B: 2.075 idt_B: 1.325
+(epoch: 1, iters: 456, time: 0.206, data: 0.008) D_A: 0.212 G_A: 0.347 cycle_A: 4.455 idt_A: 1.561 D_B: 0.263 G_B: 0.542 cycle_B: 1.957 idt_B: 1.096
+(epoch: 1, iters: 462, time: 0.214, data: 0.008) D_A: 0.268 G_A: 0.360 cycle_A: 3.907 idt_A: 1.748 D_B: 0.326 G_B: 0.298 cycle_B: 1.910 idt_B: 0.781
+(epoch: 1, iters: 468, time: 0.215, data: 0.008) D_A: 0.197 G_A: 0.483 cycle_A: 4.188 idt_A: 2.502 D_B: 0.231 G_B: 0.315 cycle_B: 2.465 idt_B: 0.951
+(epoch: 1, iters: 474, time: 0.227, data: 0.008) D_A: 0.235 G_A: 0.365 cycle_A: 4.909 idt_A: 1.606 D_B: 0.192 G_B: 0.543 cycle_B: 1.832 idt_B: 1.192
+(epoch: 1, iters: 480, time: 0.228, data: 0.008) D_A: 0.243 G_A: 0.441 cycle_A: 4.861 idt_A: 2.050 D_B: 0.223 G_B: 0.345 cycle_B: 2.186 idt_B: 1.182
+(epoch: 1, iters: 486, time: 0.223, data: 0.008) D_A: 0.220 G_A: 0.386 cycle_A: 4.029 idt_A: 1.805 D_B: 0.253 G_B: 0.417 cycle_B: 1.938 idt_B: 1.120
+(epoch: 1, iters: 492, time: 0.210, data: 0.008) D_A: 0.275 G_A: 0.343 cycle_A: 3.442 idt_A: 2.069 D_B: 0.284 G_B: 0.454 cycle_B: 2.054 idt_B: 0.903
+(epoch: 1, iters: 498, time: 0.225, data: 0.008) D_A: 0.269 G_A: 0.531 cycle_A: 3.807 idt_A: 1.773 D_B: 0.268 G_B: 0.265 cycle_B: 2.060 idt_B: 1.000
+(epoch: 1, iters: 504, time: 0.233, data: 0.008) D_A: 0.299 G_A: 0.559 cycle_A: 4.728 idt_A: 1.794 D_B: 0.204 G_B: 0.402 cycle_B: 2.324 idt_B: 1.212
+(epoch: 1, iters: 510, time: 0.213, data: 0.008) D_A: 0.271 G_A: 0.505 cycle_A: 4.870 idt_A: 2.616 D_B: 0.315 G_B: 0.519 cycle_B: 2.810 idt_B: 1.100
+(epoch: 1, iters: 516, time: 0.216, data: 0.008) D_A: 0.375 G_A: 0.651 cycle_A: 3.556 idt_A: 1.576 D_B: 0.385 G_B: 0.590 cycle_B: 1.730 idt_B: 0.993
+(epoch: 1, iters: 522, time: 0.214, data: 0.008) D_A: 0.522 G_A: 0.728 cycle_A: 3.788 idt_A: 1.784 D_B: 0.427 G_B: 0.532 cycle_B: 2.004 idt_B: 1.196
+(epoch: 1, iters: 528, time: 0.206, data: 0.008) D_A: 0.486 G_A: 0.694 cycle_A: 3.742 idt_A: 2.935 D_B: 0.489 G_B: 0.658 cycle_B: 2.900 idt_B: 1.148
+(epoch: 1, iters: 534, time: 0.217, data: 0.008) D_A: 0.357 G_A: 0.626 cycle_A: 3.231 idt_A: 1.806 D_B: 0.491 G_B: 0.653 cycle_B: 1.994 idt_B: 0.850
+(epoch: 1, iters: 540, time: 0.223, data: 0.008) D_A: 0.300 G_A: 0.528 cycle_A: 5.040 idt_A: 1.640 D_B: 0.355 G_B: 0.543 cycle_B: 1.638 idt_B: 1.383
+(epoch: 1, iters: 546, time: 0.219, data: 0.008) D_A: 0.344 G_A: 0.505 cycle_A: 3.007 idt_A: 1.896 D_B: 0.292 G_B: 0.561 cycle_B: 1.905 idt_B: 0.855
+(epoch: 1, iters: 552, time: 0.211, data: 0.008) D_A: 0.266 G_A: 0.441 cycle_A: 3.173 idt_A: 1.771 D_B: 0.306 G_B: 0.403 cycle_B: 1.985 idt_B: 0.669
+(epoch: 1, iters: 558, time: 0.216, data: 0.008) D_A: 0.253 G_A: 0.404 cycle_A: 4.472 idt_A: 1.739 D_B: 0.266 G_B: 0.434 cycle_B: 2.433 idt_B: 0.848
+(epoch: 1, iters: 564, time: 0.224, data: 0.008) D_A: 0.255 G_A: 0.372 cycle_A: 3.759 idt_A: 1.836 D_B: 0.223 G_B: 0.324 cycle_B: 2.228 idt_B: 1.042
+(epoch: 1, iters: 570, time: 0.220, data: 0.008) D_A: 0.218 G_A: 0.359 cycle_A: 4.029 idt_A: 1.508 D_B: 0.208 G_B: 0.385 cycle_B: 1.640 idt_B: 1.088
+(epoch: 1, iters: 576, time: 0.229, data: 0.008) D_A: 0.222 G_A: 0.431 cycle_A: 3.271 idt_A: 1.763 D_B: 0.293 G_B: 0.397 cycle_B: 2.325 idt_B: 0.736
+(epoch: 1, iters: 582, time: 0.217, data: 0.008) D_A: 0.243 G_A: 0.387 cycle_A: 5.771 idt_A: 2.002 D_B: 0.228 G_B: 0.454 cycle_B: 2.203 idt_B: 1.160
+(epoch: 1, iters: 588, time: 0.218, data: 0.008) D_A: 0.244 G_A: 0.423 cycle_A: 3.465 idt_A: 1.584 D_B: 0.233 G_B: 0.455 cycle_B: 1.813 idt_B: 0.925
+(epoch: 1, iters: 594, time: 0.217, data: 0.008) D_A: 0.230 G_A: 0.448 cycle_A: 3.766 idt_A: 1.352 D_B: 0.218 G_B: 0.394 cycle_B: 1.491 idt_B: 0.960
+(epoch: 1, iters: 600, time: 0.216, data: 0.008) D_A: 0.235 G_A: 0.358 cycle_A: 3.462 idt_A: 1.781 D_B: 0.231 G_B: 0.352 cycle_B: 1.834 idt_B: 0.789
+(epoch: 1, iters: 600, time: 0.216, data: 0.008) D_A: 0.235 G_A: 0.358 cycle_A: 3.462 idt_A: 1.781 D_B: 0.231 G_B: 0.352 cycle_B: 1.834 idt_B: 0.789
+[val] (epoch: 1 , iter:  0 )
+> /root/jieunoh/ellen_code/RetinaImage_model_MW/train.py(164)<module>()
+-> iter_current_val_loss_G.append(model.forward_val_get_loss())# val loss가져오기
+*** NameError: name 'a' is not defined
+*** NameError: name 'a' is not defined
+8.57614803314209
+*** NameError: name 'a' is not defined
+8.57614803314209
+<class 'float'>
+*** NameError: name 'iter_current_train_lossG' is not defined
+*** NameError: name 'iter_current_train_lossG' is not defined
+*** NameError: name 'iter_currniter_current_val_loss_G' is not defined
+*** NameError: name 'iter_currniter_current_val_loss_G' is not defined
+*** NameError: name 'iter_currniter_current_val_loss_G' is not defined
+*** NameError: name 'iter_currniter_current_val_loss_G' is not defined
+[]
+[tensor(10.9302, device='cuda:0')]
+tensor(10.9302, device='cuda:0')
+*** NameError: name 'a' is not defined
+<class 'torch.Tensor'>
+--Call--
+> /root/jieunoh/ellen_code/RetinaImage_model_MW/models/cycle_gan_model.py(122)forward_val_get_loss()
+-> def forward_val_get_loss(self):
+self = <models.cycle_gan_model.CycleGANModel object at 0x7f1e152f40a0>
+*** NameError: name 'model' is not defined
+*** NameError: name 'model' is not defined
+*** NameError: name 'iter_current_val_loss_G' is not defined
+*** NameError: name 'model' is not defined
+*** NameError: name 'model' is not defined
+--KeyboardInterrupt--
+--KeyboardInterrupt--
+*** NameError: name 'odel' is not defined
+*** NameError: name 'model' is not defined
+*** NameError: name 'model' is not defined
+*** NameError: name 'model' is not defined
+*** NameError: name 'model' is not defined
+*** NameError: name 'model' is not defined
+*** NameError: name 'model' is not defined
+*** NameError: name 'model' is not defined
+*** NameError: name 'model' is not defined
+Traceback (most recent call last):
+  File "train.py", line 164, in <module>
+    iter_current_val_loss_G.append(model.forward_val_get_loss())# val loss가져오기
+  File "/root/jieunoh/ellen_code/RetinaImage_model_MW/models/cycle_gan_model.py", line 122, in forward_val_get_loss
+    def forward_val_get_loss(self):
+  File "/opt/conda/lib/python3.8/bdb.py", line 90, in trace_dispatch
+    return self.dispatch_call(frame, arg)
+  File "/opt/conda/lib/python3.8/bdb.py", line 135, in dispatch_call
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+--KeyboardInterrupt--

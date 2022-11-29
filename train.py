@@ -36,14 +36,15 @@ from util.visualizer import Visualizer
 import numpy as np
 import matplotlib.pyplot as plt
 
-####### To fix the random seed & fiqa -- ellen ###
+####### To fix the random seed & fiqa -- ellen ###########
 import torch
 import numpy as np
 import random 
 import pdb
 import os
 import sys # fiqa
-sys.path.append("/home/guest1/ellen_code/eyeQ_ellen/MCF_Net") #fiqa
+# sys.path.append("/root/jieunoh/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -medi change!!
+sys.path.append("/root/jieunoh/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -miv2 
 from Main_EyeQuality_train_func import FIQA_during_training
 
 
@@ -57,7 +58,7 @@ torch.backends.cudnn.deteministic = True #5.cuDNN randomness - might make comput
 torch.backends.cudnn.benchmark = False
 # 6. Data loader randomness in multi process fix -> in /data/__init__.py -> ellen_made
 os.environ['PYTHONHASHSEED'] = str(random_seed)  #7.python hash seed 고정
-##########################################
+##################################################
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options
     # create a dataset given opt.dataset_mode and other options
@@ -157,16 +158,19 @@ if __name__ == '__main__':
         iter_current_val_loss_G = []
         for i, data in enumerate(val_dataset):
             print("[val] (epoch:", epoch, ", iter: ", i,")")
-            model.set_input(data)
-            
-            iter_current_val_loss_G.append(model.forward_val_get_loss())# val loss가져오기
+            with torch.no_grad(): # 이렇게 해야지 gpu 사용량 안늘면서 돌아감 train아닐때
+                model.set_input(data)                
+                iter_current_val_loss_G.append(float(model.forward_val_get_loss()))# val loss가져오기
+                if epoch%10==0:
+                    model.save_fake_B() # image 저장
             torch.cuda.empty_cache()
         # pdb.set_trace()
         if epoch%10 ==0:
-            model.save_fake_B() # image 저장
-            fiqa=FIQA_during_training(opt.name, os.path.join("/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/checkpoints", opt.name, "temp") )
+            # fiqa=FIQA_during_training(opt.name, os.path.join("/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/checkpoints", opt.name, "temp") ) # medi - change !!
+            fiqa=FIQA_during_training(opt.name, os.path.join("/root/jieunoh/ellen_code/RetinaImage_model_MW/checkpoints", opt.name, "temp") ) # mvi2 
+
             # fiqa path change 필요
-            print("FIQA of validation:", fiqa)
+            # print("FIQA of validation:", fiqa)
             fiqa_list.append(fiqa)
         # if epoch 몇 -> 저장한 val FIQA
         # 위에 impot Main_eyeQuality_trian_func
@@ -200,24 +204,34 @@ if __name__ == '__main__':
               opt.n_epochs + opt.n_epochs_decay, time.time() - epoch_start_time))
 
     # for early stopping visualization - ellen --------------------------------------------------
-    loss_fig= plt.figure(figsize=(10,8))
+    # loss_fig= plt.figure(figsize=(10,8))
     fig, ax1 = plt.subplots()
     ax1.set_xlabel('epochs')
     ax1.set_ylabel('loss')
-    ax1.plot(range(1, len(train_loss_G)+1), train_loss_G, label="Training Loss")
-    ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, label= "Validation Loss")
+    ax1.plot(range(1, len(train_loss_G)+1), train_loss_G, color='mediumseagreen', label="Training Loss")
+    ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, color='dodgerblue', label= "Validation Loss")
 
     ax2=ax1.twinx()
     ax2.set_ylabel("FIQA")
-    ax2.plot(range(1,  len(val_loss_G)+1, 10), fiqa_list, label= "FIQA")
-    plt.title(opt.name)
-    plt.ylim(0,5)
+    # ax2.plot(range(1,  len(val_loss_G)+1),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
+    ax2.plot(range(1, len(val_loss_G)+1, 10),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
+    ax2.legend(loc='upper right')
+    ax2.set_ylim([0,1])
+    ax2.set_yticks(np.arange(0,1,0.05))
+    
+    ax1.legend(loc='upper left')
+
+    plt.axvline(stopped_epoch, linestyle='--', color='r', label="Early Stopping CheckPoint: "+str(stopped_epoch))
+    
+    plt.title(opt.name)    
     plt.xlim(0,len(train_loss_G)+1)
+    plt.xticks(range(0,len(train_loss_G)+1))
     plt.grid(True)
-    plt.legend()
     plt.tight_layout()
-    plt.show()
-    loss_fig.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
+    # plt.show()
+    # loss_fig.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
+    plt.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
+
 
     # plt.plot(range(1, len(train_loss_G)+1), train_loss_G, label="Training Loss")
     # plt.plot(range(1,  len(val_loss_G)+1), val_loss_G, label= "Validation Loss")
