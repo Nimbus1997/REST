@@ -36,13 +36,18 @@ from util.visualizer import Visualizer
 import numpy as np
 import matplotlib.pyplot as plt
 
-####### To fix the random seed -- ellen ###
+####### To fix the random seed & fiqa -- ellen ###
 import torch
 import numpy as np
 import random 
+import pdb
+import os
+import sys # fiqa
+sys.path.append("/home/guest1/ellen_code/eyeQ_ellen/MCF_Net") #fiqa
+from Main_EyeQuality_train_func import FIQA_during_training
+
 
 random_seed = 42
-
 np.random.seed(random_seed) #1.numpy randomness
 random.seed(random_seed) #2.python randomness
 torch.manual_seed(random_seed) #3.pytorch randomness
@@ -50,6 +55,8 @@ torch.cuda.manual_seed(random_seed) # 4. gpu randomness
 torch.cuda.manual_seed_all(random_seed) # 4. gpu randomness - multi gpu
 torch.backends.cudnn.deteministic = True #5.cuDNN randomness - might make computaion slow
 torch.backends.cudnn.benchmark = False
+# 6. Data loader randomness in multi process fix -> in /data/__init__.py -> ellen_made
+os.environ['PYTHONHASHSEED'] = str(random_seed)  #7.python hash seed 고정
 ##########################################
 
 if __name__ == '__main__':
@@ -68,22 +75,23 @@ if __name__ == '__main__':
     patience_count = 0
 
     opt.phase = "train"
-    # for loss and early stopping visualization - ellen ---------------------
+    # for loss and early stopping visualization & FIQA - ellen ---------------------
     train_loss_G =[]
     val_loss_G =[]
     stopped_epoch = opt.epoch_count + opt.n_epochs + opt.n_epochs_decay
 
-
+    if not os.path.exists(os.path.join(opt.checkpoints_dir, opt.name, "temp")):
+        os.makedirs(os.path.join(opt.checkpoints_dir, opt.name, "temp"))
+    fiqa_list=[]
     # create a model given opt.model and other options
-    # print(">>>>>>>>>>>>>>>>>[1]")
     model = create_model(opt)
+    
     # regular setup: load and print networks; create schedulers
-    # print(">>>>>>>>>>>>>>>>>[2]")
     model.setup(opt)
+   
     # create a visualizer that display/save images and plots
-    # print(">>>>>>>>>>>>>>>>>[3]")
     visualizer = Visualizer(opt)
-    total_iters = 0                # the total number of training iterations
+    total_iters = 0  # the total number of training iterations
 
     # outer loop for different epochs; we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>
     for epoch in range(opt.epoch_count, opt.n_epochs + opt.n_epochs_decay + 1):
@@ -97,15 +105,12 @@ if __name__ == '__main__':
         # the number of tpraining iterations in current epoch, reset to 0 every epoch
         epoch_iter = 0
         # reset the visualizer: make sure it saves the results to HTML at least once every epoch
-        # print(">>>>>>>>>>>>>>>>>[4]")
         visualizer.reset()
         # update learning rates in the beginning of every epoch.
-        # print(">>>>>>>>>>>>>>>>>[5]")
         model.update_learning_rate()
 
         iter_current_train_loss_G =[]#ellen -  for early stopping visualization 
         for i, data in enumerate(dataset):  # inner loop within one epoch
-            # print(">>>>>>>>>>>>>>>>>[6]")
             iter_start_time = time.time()  # timer for computation per iteration
             if total_iters % opt.print_freq == 0:
                 t_data = iter_start_time - iter_data_time
@@ -113,23 +118,21 @@ if __name__ == '__main__':
             total_iters += opt.batch_size
             epoch_iter += opt.batch_size
             # unpack data from dataset and apply preprocessing
-            # print(">>>>>>>>>>>>>>>>>[7]")
             model.set_input(data)
+            
             # calculate loss functions, get gradients, update network weights
-            # print(">>>>>>>>>>>>>>>>>[8]")
             model.optimize_parameters()
-            # print(">>>>>>>>>>>>>>>>>[8]")
 
 
             if total_iters % opt.display_freq == 0:   # display images on visdom and save images to a HTML file
                 save_result = total_iters % opt.update_html_freq == 0
-                # print(">>>>>>>>>>>>>>>>>[9]")
                 model.compute_visuals()
-                # print(">>>>>>>>>>>>>>>>>[10]")
                 visualizer.display_current_results(
                     model.get_current_visuals(), epoch, save_result)
-
-            # print(">>>>>>>>>>>>>>>>>[11]")
+            losses = model.get_current_losses()
+            t_comp = (time.time() - iter_start_time) / opt.batch_size
+            visualizer.print_current_losses(
+                    epoch, epoch_iter, losses, t_comp, t_data)
             if total_iters % opt.print_freq == 0:    # print training losses and save logging information to the disk
                 losses = model.get_current_losses()
                 t_comp = (time.time() - iter_start_time) / opt.batch_size
@@ -137,24 +140,38 @@ if __name__ == '__main__':
                     epoch, epoch_iter, losses, t_comp, t_data)
                 if opt.display_id > 0:
                     visualizer.plot_current_losses(
-                        epoch, float(epoch_iter) / dataset_size, losses)
+                    epoch, float(epoch_iter) / dataset_size, losses)
             
-            # if total_iters % opt.save_latest_freq == 0:   # cache our latest model every <save_latest_freq> iterations
-            #     print('saving the latest model (epoch %d, total_iters %d)' %
-            #           (epoch, total_iters))
-            #     save_suffix = 'iter_%d' % total_iters if opt.save_by_iter else 'latest'
-            #     model.save_networks(save_suffix)
-            # print(">>>>>>>>>>>>>>>>>[12]")
+            if total_iters % opt.save_latest_freq == 0:   # cache our latest model every <save_latest_freq> iterations
+                print('saving the latest model (epoch %d, total_iters %d)' %
+                      (epoch, total_iters))
+                save_suffix = 'iter_%d' % total_iters if opt.save_by_iter else 'latest'
+                model.save_networks(save_suffix)
             iter_current_train_loss_G.append(model.get_current_loss_G()) #ellen -  for early stopping visualization
 
             iter_data_time = time.time()
         current_train_loss_G = np.average(iter_current_train_loss_G)
         train_loss_G.append(current_train_loss_G)
-        # validation for early stopping - ellen ------------------------------
+        torch.cuda.empty_cache()
+
+        # validation for early stopping - ellen ----------------------------------------------------------------------
         iter_current_val_loss_G = []
-        for i, data, in enumerate(val_dataset):
+        for i, data in enumerate(val_dataset):
+            print("[val] (epoch:", epoch, ", iter: ", i,")")
             model.set_input(data)
-            iter_current_val_loss_G.append(model.get_current_loss_G())
+            
+            iter_current_val_loss_G.append(model.forward_val_get_loss())# val loss가져오기
+            torch.cuda.empty_cache()
+        # pdb.set_trace()
+        if epoch%10 ==0:
+            model.save_fake_B() # image 저장
+            fiqa=FIQA_during_training(opt.name, os.path.join("/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/checkpoints", opt.name, "temp") )
+            # fiqa path change 필요
+            print("FIQA of validation:", fiqa)
+            fiqa_list.append(fiqa)
+        # if epoch 몇 -> 저장한 val FIQA
+        # 위에 impot Main_eyeQuality_trian_func
+        # loss그래프에 같이 그리기 
 
         current_val_loss_G = np.average(iter_current_val_loss_G)
         val_loss_G.append(current_val_loss_G) # for visualization 
@@ -170,7 +187,7 @@ if __name__ == '__main__':
             model.save_networks('latest')
             patience_count =0
         last_val_loss_G = current_val_loss_G
-        # --------------------------------------------------------
+        # ------------------------------------------------------------------------------------------------
 
         # cache our model every <save_epoch_freq> epochs
         if epoch % opt.save_epoch_freq == 0:             
@@ -179,16 +196,21 @@ if __name__ == '__main__':
             # model.save_networks('latest')
             model.save_networks(epoch)
 
+
         print('End of epoch %d / %d \t Time Taken: %d sec' % (epoch,
               opt.n_epochs + opt.n_epochs_decay, time.time() - epoch_start_time))
 
-    # for early stopping visualization - ellen ------------------------------
+    # for early stopping visualization - ellen --------------------------------------------------
     loss_fig= plt.figure(figsize=(10,8))
-    plt.plot(range(1, len(train_loss_G)+1), train_loss_G, label="Training Loss")
-    plt.plot(range(1,  len(val_loss_G)+1), val_loss_G, label= "Validation Loss")
-    plt.axvline(stopped_epoch, linestyle='--', color='r', label="Early Stopping CheckPoint: "+str(stopped_epoch))
-    plt.xlabel("epochs")
-    plt.ylabel("loss")
+    fig, ax1 = plt.subplots()
+    ax1.set_xlabel('epochs')
+    ax1.set_ylabel('loss')
+    ax1.plot(range(1, len(train_loss_G)+1), train_loss_G, label="Training Loss")
+    ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, label= "Validation Loss")
+
+    ax2=ax1.twinx()
+    ax2.set_ylabel("FIQA")
+    ax2.plot(range(1,  len(val_loss_G)+1, 10), fiqa_list, label= "FIQA")
     plt.title(opt.name)
     plt.ylim(0,5)
     plt.xlim(0,len(train_loss_G)+1)
@@ -196,5 +218,20 @@ if __name__ == '__main__':
     plt.legend()
     plt.tight_layout()
     plt.show()
-    loss_fig.savefig(opt.checkpoints_dir+"/"+opt.name+"/loss_plot.png", bbox_inches='tight')
+    loss_fig.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
+
+    # plt.plot(range(1, len(train_loss_G)+1), train_loss_G, label="Training Loss")
+    # plt.plot(range(1,  len(val_loss_G)+1), val_loss_G, label= "Validation Loss")
+    # plt.plot(range(1,  len(val_loss_G)+1, 10), fiqa_list, label= "FIQA")
+    # plt.axvline(stopped_epoch, linestyle='--', color='r', label="Early Stopping CheckPoint: "+str(stopped_epoch))
+    # plt.xlabel("epochs")
+    # plt.ylabel("loss")
+    # plt.title(opt.name)
+    # plt.ylim(0,5)
+    # plt.xlim(0,len(train_loss_G)+1)
+    # plt.grid(True)
+    # plt.legend()
+    # plt.tight_layout()
+    # plt.show()
+    # loss_fig.savefig(opt.checkpoints_dir+"/"+opt.name+"/loss_plot.png", bbox_inches='tight')
     

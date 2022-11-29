@@ -212,7 +212,7 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
     elif netG == 'ellen_dwt_uresnet1_1':
         #uresnet(with dwt)
         net = ellen_dwt_uresnet1_1(input_nc, output_nc, ngf, norm_layer=norm_layer,
-                                   use_dropout=use_dropout, num_downs=2, n_blocks=9)
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=2)
 
     elif netG == 'ellen_dwt_uresnet1_2':
         if is_A:
@@ -936,7 +936,7 @@ def blockUNet(in_c, out_c, name, transposed=False, bn=False, relu=True, dropout=
 
     if not transposed:  # when going down
         block.add_module('%s_conv' % name, nn.Conv2d(
-            in_c, out_c, 4, 2, 1, bias=False))
+            in_c, out_c, 4, 2, 1, bias=False)) # SIZE 1/2 - K, S, P
     elif transposed and not resize:  # original going up
         block.add_module('%s_tconv' % name, nn.ConvTranspose2d(
             in_c, out_c, 4, 2, 1, bias=False))
@@ -1092,7 +1092,7 @@ class scattering_Unet(nn.Module):
         layer_idx = 1
         name = 'layer%d' % layer_idx
         layer1 = nn.Sequential()
-        layer1.add_module(name, nn.Conv2d(3, nf-1, 4, 2, 1, bias=False))
+        layer1.add_module(name, nn.Conv2d(3, nf-1, 4, 2, 1, bias=False)) # SIZE 1/2 동일
         layer_idx += 1
         name = 'layer%d' % layer_idx
         layer2 = blockUNet(nf, nf*2-2, name, transposed=False,

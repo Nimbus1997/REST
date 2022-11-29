@@ -13,6 +13,8 @@ See our template dataset class 'template_dataset.py' for more details.
 import importlib
 import torch.utils.data
 from data.base_dataset import BaseDataset
+import numpy as np 
+import random
 
 
 def find_dataset_using_name(dataset_name):
@@ -58,6 +60,11 @@ def create_dataset(opt):
     dataset = data_loader.load_data()
     return dataset
 
+def seed_worker(worker_id): #ellen made for randomness fix 6
+    worker_seed = torch.initial_seed() % 2**32
+    np.random.seed(worker_seed)
+    random.seed(worker_seed)
+
 
 class CustomDatasetDataLoader():
     """Wrapper class of Dataset class that performs multi-threaded data loading"""
@@ -73,11 +80,18 @@ class CustomDatasetDataLoader():
         dataset_class = find_dataset_using_name(opt.dataset_mode)
         self.dataset = dataset_class(opt)
         print("dataset [%s] was created" % type(self.dataset).__name__)
+        
+        g =torch.Generator() # ellen made for randomness fix 6
+        g.manual_seed(torch.initial_seed())# ellen made for randomness fix 6
+
         self.dataloader = torch.utils.data.DataLoader(
             self.dataset,
             batch_size=opt.batch_size,
             shuffle=not opt.serial_batches,
-            num_workers=int(opt.num_threads))
+            num_workers=int(opt.num_threads),
+            worker_init_fn=seed_worker, # ellen
+            generator=g #ellen
+            )
 
     def load_data(self):
         return self

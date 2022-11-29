@@ -1,0 +1,19 @@
+create web directory ./checkpoints/ellen_dwt_uresnet1_1_test0/web...
+learning rate 0.0002000 -> 0.0002000
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+(epoch: 1, iters: 100, time: 0.116, data: 0.113) D_A: 0.173 G_A: 0.754 cycle_A: 12.749 idt_A: 6.448 D_B: 0.545 G_B: 1.078 cycle_B: 6.472 idt_B: 3.185
+Traceback (most recent call last):
+  File "train.py", line 126, in <module>
+    model.optimize_parameters()
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 194, in optimize_parameters
+    self.backward_D_A()      # calculate gradients for D_A
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 145, in backward_D_A
+    self.loss_D_A = self.backward_D_basic(self.netD_A, self.real_B, fake_B)
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 139, in backward_D_basic
+    loss_D.backward()
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/_tensor.py", line 307, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph, inputs=inputs)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/autograd/__init__.py", line 156, in backward
+    allow_unreachable=True, accumulate_grad=True)  # allow_unreachable flag
+KeyboardInterrupt

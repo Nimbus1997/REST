@@ -1,0 +1,32 @@
+create web directory ./checkpoints/ellen_scatteing_test/web...
+learning rate 0.0002000 -> 0.0002000
+[ellen]------------------------
+[ 0 ], data_A_paths :  ['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0335.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0353.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0474.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0499.jpg']
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+Traceback (most recent call last):
+  File "train.py", line 121, in <module>
+    model.optimize_parameters()
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 184, in optimize_parameters
+    self.forward()      # compute fake images and reconstruction images.
+  File "/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/models/cycle_gan_model.py", line 115, in forward
+    self.fake_B = self.netG_A(self.real_A)  # G_A(A)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/data_parallel.py", line 158, in forward
+    inputs, kwargs = self.scatter(inputs, kwargs, self.device_ids)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/data_parallel.py", line 175, in scatter
+    return scatter_kwargs(inputs, kwargs, device_ids, dim=self.dim)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/scatter_gather.py", line 44, in scatter_kwargs
+    inputs = scatter(inputs, target_gpus, dim) if inputs else []
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/scatter_gather.py", line 36, in scatter
+    res = scatter_map(inputs)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/scatter_gather.py", line 23, in scatter_map
+    return list(zip(*map(scatter_map, obj)))
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/scatter_gather.py", line 19, in scatter_map
+    return Scatter.apply(target_gpus, None, dim, obj)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/_functions.py", line 96, in forward
+    outputs = comm.scatter(input, target_gpus, chunk_sizes, ctx.dim, streams)
+  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/parallel/comm.py", line 189, in scatter
+    return tuple(torch._C._scatter(tensor, devices, chunk_sizes, dim, streams))
+KeyboardInterrupt

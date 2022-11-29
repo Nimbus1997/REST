@@ -1,0 +1,15 @@
+create web directory ./checkpoints/ellen_scatteing_test1/web...
+learning rate 0.0002000 -> 0.0002000
+[ellen]------------------------
+[ 0 ], data_A_paths :  ['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0001.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0002.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0003.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0004.jpg']
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/optim/lr_scheduler.py:134: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/functional.py:3635: UserWarning: Default upsampling behavior when mode=bilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  "See the documentation of nn.Upsample for details.".format(mode)
+[ellen]------------------------
+[ 1 ], data_A_paths :  ['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0005.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0006.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0007.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0008.jpg']
+[ellen]------------------------
+[ 2 ], data_A_paths :  ['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0009.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0010.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0011.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0012.jpg']
+[ellen]------------------------
+[ 3 ], data_A_paths :  ['/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0013.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0014.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0015.jpg', '/home/guest1/ellen_data/UKB_quality_data2_combined/input_20220623_512_n1000/trainA/0016.jpg']
+[ellen]------------------------
