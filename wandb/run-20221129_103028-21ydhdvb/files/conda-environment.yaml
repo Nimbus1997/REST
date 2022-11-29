@@ -1,4 +1,0 @@
-name: ellen_model
-channels:
-  - defaults
-prefix: /opt/conda/envs/ellen_model

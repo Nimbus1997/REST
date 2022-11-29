@@ -1,3 +1,5 @@
+nohup_out/
+wandb/
 .DS_Store
 debug*
 datasets/
