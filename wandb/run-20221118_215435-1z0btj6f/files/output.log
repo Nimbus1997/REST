@@ -1,8 +1,0 @@
-
-creating web directory ./results/ellen_dwt_uresnet2_3_512n1000_1016/test_latest
-Traceback (most recent call last):
-  File "test.py", line 111, in <module>
-    model.set_input(data)  # unpack data from data loader
-  File "/home/guest1/.conda/envs/ellen/lib/python3.7/site-packages/torch/nn/modules/module.py", line 1178, in __getattr__
-    type(self).__name__, name))
-AttributeError: 'DataParallel' object has no attribute 'set_input'

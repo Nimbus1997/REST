@@ -204,35 +204,32 @@ if __name__ == '__main__':
               opt.n_epochs + opt.n_epochs_decay, time.time() - epoch_start_time))
 
     # for early stopping visualization - ellen --------------------------------------------------
-    # loss_fig= plt.figure(figsize=(10,8))
+    # LOSS
     fig, ax1 = plt.subplots()
     ax1.set_xlabel('epochs')
     ax1.set_ylabel('loss')
     ax1.plot(range(1, len(train_loss_G)+1), train_loss_G, color='mediumseagreen', label="Training Loss")
     ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, color='dodgerblue', label= "Validation Loss")
-
+    ax1.legend(loc='upper left')
+    ax1.set_ylim([0,10])
+    #FIQA
     ax2=ax1.twinx()
     ax2.set_ylabel("FIQA")
-    # ax2.plot(range(1,  len(val_loss_G)+1),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
     ax2.plot(range(1, len(val_loss_G)+1, 10),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
     ax2.legend(loc='upper right')
     ax2.set_ylim([0,1])
     ax2.set_yticks(np.arange(0,1,0.05))
-    
-    ax1.legend(loc='upper left')
-
+    #EARLY STOPPING
     plt.axvline(stopped_epoch, linestyle='--', color='r', label="Early Stopping CheckPoint: "+str(stopped_epoch))
     
     plt.title(opt.name)    
     plt.xlim(0,len(train_loss_G)+1)
-    plt.xticks(range(0,len(train_loss_G)+1))
+    plt.xticks(range(0,len(train_loss_G)+1, 20))
     plt.grid(True)
     plt.tight_layout()
-    # plt.show()
-    # loss_fig.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
     plt.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
 
-
+    # loss_fig= plt.figure(figsize=(10,8))
     # plt.plot(range(1, len(train_loss_G)+1), train_loss_G, label="Training Loss")
     # plt.plot(range(1,  len(val_loss_G)+1), val_loss_G, label= "Validation Loss")
     # plt.plot(range(1,  len(val_loss_G)+1, 10), fiqa_list, label= "FIQA")

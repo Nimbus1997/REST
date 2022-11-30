@@ -1,4 +1,0 @@
-
-create web directory ./checkpoints/model2_3_eyeq_256_1024/web...
-train.py:179: UserWarning: Attempting to set identical left == right == 401 results in singular transformations; automatically expanding.
-  plt.xlim(opt.epoch_count,opt.epoch_count+len(train_loss_G))
