@@ -269,4 +269,3 @@ if __name__ == '__main__':
     # plt.tight_layout()
     # plt.show()
     # loss_fig.savefig(opt.checkpoints_dir+"/"+opt.name+"/loss_plot.png", bbox_inches='tight')
-    
