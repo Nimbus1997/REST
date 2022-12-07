@@ -43,10 +43,9 @@ import random
 import pdb
 import os
 import sys # fiqa
-sys.path.append("/home/guest1/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -medi change!!
-# sys.path.append("/root/jieunoh/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -miv2 
+# sys.path.append("/home/guest1/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -medi change!!
+sys.path.append("/root/jieunoh/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -miv2 
 from Main_EyeQuality_train_func import FIQA_during_training
-
 
 random_seed = 42
 np.random.seed(random_seed) #1.numpy randomness
@@ -61,6 +60,8 @@ os.environ['PYTHONHASHSEED'] = str(random_seed)  #7.python hash seed 고정
 ##################################################
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options
+    # pathh = os.path.join("/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/checkpoints", opt.name, "temp")#fiqa -medi change!!
+    pathh = os.path.join("/root/jieunoh/ellen_code/RetinaImage_model_MW/checkpoints", opt.name, "temp")#fiqa -miv2 change!! # eyeQ path change 필요
     # create a dataset given opt.dataset_mode and other options
     dataset = create_dataset(opt)
     dataset_size = len(dataset)    # get the number of images in the dataset.
@@ -166,16 +167,39 @@ if __name__ == '__main__':
             torch.cuda.empty_cache()
         # pdb.set_trace()
         if epoch%10 ==0:
-            fiqa=FIQA_during_training(opt.name, os.path.join("/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/checkpoints", opt.name, "temp") ) # medi - change !!
-            # fiqa=FIQA_during_training(opt.name, os.path.join("/root/jieunoh/ellen_code/RetinaImage_model_MW/checkpoints", opt.name, "temp") ) # mvi2 
-
-            # fiqa path change 필요
-            # print("FIQA of validation:", fiqa)
+            fiqa=FIQA_during_training(opt.name, pathh)
             fiqa_list.append(fiqa)
+
+            # LOSS
+            fig, ax1 = plt.subplots()
+            ax1.set_xlabel('epochs')
+            ax1.set_ylabel('loss')
+            ax1.plot(range(1, len(train_loss_G)+1), train_loss_G, color='mediumseagreen', label="Training Loss")
+            ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, color='dodgerblue', label= "Validation Loss")
+            ax1.legend(loc='upper left')
+            ax1.set_ylim([0,10])
+            #FIQA
+            ax2=ax1.twinx()
+            ax2.set_ylabel("FIQA")
+            ax2.plot(range(1, len(val_loss_G)+1, 10),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
+            ax2.legend(loc='upper right')
+            ax2.set_ylim([0,1])
+            ax2.set_yticks(np.arange(0,1,0.05))
+            #EARLY STOPPING
+            plt.axvline(stopped_epoch, linestyle='--', color='r', label="Early Stopping CheckPoint: "+str(stopped_epoch))
+            
+            plt.title(opt.name)    
+            plt.xlim(0,len(train_loss_G)+1)
+            plt.xticks(range(0,len(train_loss_G)+1, 50))
+            plt.grid(True)
+            plt.tight_layout()
+            plt.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
         # if epoch 몇 -> 저장한 val FIQA
         # 위에 impot Main_eyeQuality_trian_func
         # loss그래프에 같이 그리기 
 
+
+        # for early stopping visualization - ellen --------------------------------------------------
         current_val_loss_G = np.average(iter_current_val_loss_G)
         val_loss_G.append(current_val_loss_G) # for visualization 
 
@@ -198,6 +222,7 @@ if __name__ == '__main__':
                   (epoch, total_iters))
             # model.save_networks('latest')
             model.save_networks(epoch)
+
 
 
         print('End of epoch %d / %d \t Time Taken: %d sec' % (epoch,
@@ -224,7 +249,7 @@ if __name__ == '__main__':
     
     plt.title(opt.name)    
     plt.xlim(0,len(train_loss_G)+1)
-    plt.xticks(range(0,len(train_loss_G)+1, 20))
+    plt.xticks(range(0,len(train_loss_G)+1, 50))
     plt.grid(True)
     plt.tight_layout()
     plt.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
