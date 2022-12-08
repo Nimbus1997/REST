@@ -203,6 +203,10 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
         net = ellen_dwt_uresnet2_3(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
     
+    elif netG == 'ellen_dwt_uresnet2_3_2':  # 2_3 based - Unet: Tconv->resize&conv
+        net = ellen_dwt_uresnet2_3_2(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
+    
     elif netG == 'ellen_scattering':  # 2_1 based - scattering branch instead of dwt branch
         net = ellen_scattering(input_size=input_size)
 
@@ -655,6 +659,89 @@ class UnetSkipConnectionBlock(nn.Module):
         else:   # add skip connections
             return torch.cat([x, self.model(x)], 1)
 
+class UnetSkipConnectionBlock_2(nn.Module):
+    """
+    2022.12.07 Ellen Made
+    
+    
+    Defines the Unet submodule with skip connection.
+        X -------------------identity----------------------
+        |-- downsampling -- |submodule| -- upsampling --|
+    """
+
+    def __init__(self, outer_nc, inner_nc, input_nc=None,
+                 submodule=None, outermost=False, innermost=False, norm_layer=nn.BatchNorm2d, use_dropout=False):
+        """Construct a Unet submodule with skip connections.
+
+        Parameters:
+            outer_nc (int) -- the number of filters in the outer conv layer
+            inner_nc (int) -- the number of filters in the inner conv layer
+            input_nc (int) -- the number of channels in input images/features
+            submodule (UnetSkipConnectionBlock) -- previously defined submodules -전에 define한 모듈
+            outermost (bool)    -- if this module is the outermost module
+            innermost (bool)    -- if this module is the innermost module
+            norm_layer          -- normalization layer
+            use_dropout (bool)  -- if use dropout layers.
+        """
+        super(UnetSkipConnectionBlock_2, self).__init__()
+
+        # 정의
+        self.outermost = outermost
+        if type(norm_layer) == functools.partial:
+            use_bias = norm_layer.func == nn.InstanceNorm2d
+        else:
+            use_bias = norm_layer == nn.InstanceNorm2d
+        if input_nc is None:
+            input_nc = outer_nc
+        downconv = nn.Conv2d(input_nc, inner_nc, kernel_size=4,
+                             stride=2, padding=1, bias=use_bias)  # outer -> inner
+        # inplace를 하면, input으로 들어온 것 자체를 수정. memory usage가 좀 좋아짐. 하지만, input을 없앰
+        downrelu = nn.LeakyReLU(0.2, True)
+        # inner_nc:the # of filters in the inner conv layer
+        downnorm = norm_layer(inner_nc)
+        # uprelu = nn.LeakyReLU(0.2, True) # ellen 10.12 ReLU -> LeakyReLU로 변경
+        uprelu = nn.ReLU(True)
+
+        upnorm = norm_layer(outer_nc)
+
+        #실질적 모델 구성 - becuase it has a word "model" in it & upconv가 keep changing
+        if outermost:  # 제일 마지막 module
+            # upconv = nn.ConvTranspose2d(inner_nc * 2, outer_nc,
+            #                             kernel_size=4, stride=2,
+            #                             padding=1)
+            upconv = transpose_resize_conv(inner_nc*2, outer_nc) # 2022.12.07
+            down = [downconv]
+            up = [uprelu, upconv, nn.Tanh()]
+            model = down + [submodule] + up
+        elif innermost:  # 제일 처음 module
+            # upconv = nn.ConvTranspose2d(inner_nc, outer_nc,
+            #                             kernel_size=4, stride=2,
+            #                             padding=1, bias=use_bias)
+            upconv = transpose_resize_conv(inner_nc, outer_nc)
+            down = [downrelu, downconv]
+            up = [uprelu, upconv, upnorm]
+            model = down + up
+        else:  # 그 중간 module
+            # upconv = nn.ConvTranspose2d(inner_nc * 2, outer_nc,
+            #                             kernel_size=4, stride=2,
+            #                             padding=1, bias=use_bias)
+            upconv = transpose_resize_conv(inner_nc*2, outer_nc)
+            down = [downrelu, downconv, downnorm]
+            up = [uprelu, upconv, upnorm]
+
+            if use_dropout:
+                model = down + [submodule] + up + [nn.Dropout(0.5)]
+            else:
+                model = down + [submodule] + up
+
+        self.model = nn.Sequential(*model)
+
+    def forward(self, x):
+        if self.outermost:
+            return self.model(x)
+        else:   # add skip connections
+            return torch.cat([x, self.model(x)], 1)
+
 class UnetSkipConnectionBlock_Ellen(nn.Module):
     """
     ellen modified
@@ -844,6 +931,72 @@ class ellen_uresnet(nn.Module):
 
         return self.model(input)
 
+class ellen_uresnet_2(nn.Module):
+    """
+    for model 2_3_2
+    Tconv-> resize& Conv 
+    nothing changed except "UnetSkipConnectionBlock" -> UnetSkipConnectionBlock_2 거기서 Tconv-> resize& Conv 
+    """
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, padding_type='reflect'):
+        super(ellen_uresnet_2, self).__init__()
+        if type(norm_layer) == functools.partial:
+            use_bias = norm_layer.func == nn.InstanceNorm2d
+        else:
+            use_bias = norm_layer == nn.InstanceNorm2d
+
+        # e1 크기는 일정, chanel 수 변환3-> 64
+        model = [nn.ReflectionPad2d(3), nn.Conv2d(
+            input_nc, ngf, kernel_size=7, padding=0, bias=use_bias), norm_layer(ngf), nn.ReLU(True)]
+        print("========================================================================")
+        print("num downs = ", num_downs, " n_blocks=", n_blocks)
+        print("----e1")
+        # resnet 구조(unet안에 있는)
+        # default: 64*8 -> 64*8 반복
+        multi = 2**(num_downs)  # 내려가는 만큼 채널수 : 64*2^n
+        resnet_inUnet = []
+        for i in range(n_blocks):
+            resnet_inUnet += [ResnetBlock(ngf*multi, padding_type=padding_type,
+                                          norm_layer=norm_layer, use_dropout=use_dropout, use_bias=use_bias)]
+            print("-----resnet", i, " 번째")
+
+        # unet 구조 시작(resnet을 감싸는)
+        # i : 0,1,2,3,, n
+        # default: 안 64*8
+        resnet_inUnets = nn.Sequential(*resnet_inUnet)  # submodule
+        unetblock = UnetSkipConnectionBlock_2(ngf*multi, ngf*multi, input_nc=None, submodule=resnet_inUnets,
+                                            norm_layer=norm_layer, innermost=True)  # 젤 안쪽에서 resnet과 닿아 있는 것 > 64*8 64*8
+        unetblock = UnetSkipConnectionBlock_2(int(
+            ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer)  # > 64*4 64*8
+        print(">> in, out: ", ngf*(multi/2), ", ", ngf*multi)
+        for i in range(num_downs-2):
+            multi = int(multi/2)
+            unetblock = UnetSkipConnectionBlock_2(int(
+                ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer)
+            print("-----unet", i, " 번째")
+            print(">> in, out: ", ngf*(multi/2), ", ", ngf*multi)
+        multi = int(multi/2)
+        unetblock = UnetSkipConnectionBlock_2(int(
+            ngf*(multi/2)), ngf*multi, input_nc=None, submodule=unetblock, norm_layer=norm_layer, outermost=True)
+
+        model = model + [unetblock]
+        print("----- e1+unet+resent+uent+")
+
+
+        # d1 크기는 일정, chanel 수 변환64->3
+        model += [nn.ReflectionPad2d(3), nn.Conv2d(ngf,
+                                                   output_nc, kernel_size=7, padding=0), nn.Tanh()]
+        print("----- e1+unet+resent+uent+d1")
+
+        self.model = nn.Sequential(*model)
+        print(model)
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+
+        return self.model(input)
 
 class ellen_uresnet_new(nn.Module):
     """
@@ -1370,6 +1523,34 @@ class ellen_dwt_uresnet2_3(nn.Module):
         return self.fusion(x)
         # return result_uresnet
 
+class ellen_dwt_uresnet2_3_2(nn.Module):
+    """
+    made by ellen _2022.12.07
+    > ellen_dwt_uresnet2_3 based
+        [Unet branch] Tconv -> resize & conv
+        
+    
+    input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
+    """
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
+        super(ellen_dwt_uresnet2_3_2, self).__init__()
+        self.uresnet = ellen_uresnet_2(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                     use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks)
+        self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16)
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(
+            3), nn.Conv2d(6, 3, kernel_size=7, padding=0), nn.Tanh())
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        result_uresnet = self.uresnet(input)
+        result_scattering = self.scattering_model(input)
+        x = torch.cat([result_scattering, result_uresnet], 1)
+
+        return self.fusion(x)
+        # return result_uresnet
 
 class ellen_scattering(nn.Module):
     """

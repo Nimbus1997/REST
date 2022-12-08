@@ -12,7 +12,7 @@ import os
 from options.test_options import TestOptions
 from data import create_dataset
 from models import create_model
-from util.visualizer import save_images # self made
+# from util.visualizer import save_images # self made
 from util import html
 import random
 import torch# To fix the random seed -- ellen
@@ -25,6 +25,8 @@ import os
 import sys
 import ntpath
 import time
+import pdb
+from collections import OrderedDict
 from util import util, html # ellen changed
 from subprocess import Popen, PIPE
 if sys.version_info[0] == 2:
@@ -32,13 +34,21 @@ if sys.version_info[0] == 2:
 else:
     VisdomExceptionBase = ConnectionError
 
+def channel_spilt(tensorimage, ret)
+    im = util.tensor2im(tensorimage)
+    for i in range(3):
+        imm = im1[:,:,i]
 
-def save_images_branch(webpage, visuals, image_path, aspect_ratio=1.0, width=256, use_wandb=False):
+
+    return
+
+def save_images_branch(webpage, visuals, typee,image_path, aspect_ratio=1.0, width=256, use_wandb=False):
     """Save images to the disk.
 
     Parameters:
         webpage (the HTML class) -- the HTML webpage class that stores these imaegs (see html.py for more details)
         visuals (tensor)    -- ellen change -> just an tensor
+        type(string)          --ellen made -> name of the model
         image_path (str)         -- the string is used to create image paths
         aspect_ratio (float)     -- the aspect ratio of saved images
         width (int)              -- the images will be resized to width x width
@@ -48,22 +58,28 @@ def save_images_branch(webpage, visuals, image_path, aspect_ratio=1.0, width=256
     image_dir = webpage.get_image_dir()
     short_path = ntpath.basename(image_path[0])
     name = os.path.splitext(short_path)[0]
-
+    typee = typee
     webpage.add_header(name)
     ims, txts, links = [], [], []
     ims_dict = {}
     
-    label="B"
+    label="fakeB"
     im_data=visuals
     im = util.tensor2im(im_data)
-    image_name = '%s_%s.png' % (name, label)
-    save_path = os.path.join(image_dir, image_name)
-    util.save_image(im, save_path, aspect_ratio=aspect_ratio)
-    ims.append(image_name)
-    txts.append(label)
-    links.append(image_name)
-    if use_wandb:
-        ims_dict[label] = wandb.Image(im)
+    # pdb.set_trace()
+    for i in range(3):
+        image_name = '%s_%s_%s%s.png' % (name, label, typee,str(i))
+        save_path = os.path.join(image_dir, image_name)
+        imm = im[:,:,i]
+        h = imm.shape[0]
+        # pdb.set_trace()
+        # imm =imm.reshape((h,h,1))
+        util.save_image_(imm, save_path, aspect_ratio=aspect_ratio)
+        ims.append(image_name)
+        txts.append(label)
+        links.append(image_name)
+        if use_wandb:
+            ims_dict[label] = wandb.Image(imm)
     webpage.add_images(ims, txts, links, width=width)
     if use_wandb:
         wandb.log(ims_dict)
@@ -85,9 +101,10 @@ if __name__ == '__main__':
     model = create_model(opt)      # create a model given opt.model and other options
     model.setup(opt)               # regular setup: load and print networks; create schedulers
 
-
-    model_scattering=model.netG_A.module.scattering_model # ellen made
-    model_uresnet=model.netG_A.module.uresnet # ellen made
+    
+    model_uresnet=model.netG_A.module.uresnet # ellen made change this
+    model_scattering=model.netG_A.module.scattering_model # ellen made change this
+    model_totalG = model.netG_A # ellen made
 
 
     # initialize logger
@@ -107,18 +124,32 @@ if __name__ == '__main__':
     if opt.eval: #false
         model.eval()
     
-        
+    label_c3 = ["realA", "fakeB"," fakeB_scatter","fakeB_unet"]
+    lable_c1 =["fakeB_unet1", "fakeB_unet2", "fakeB_unet3", "fakeB_scatter1","fakeB_scatter2","fakeB_scatter3"]
+
+
     device = torch.device('cuda:{}'.format(opt.gpu_ids[0])) if opt.gpu_ids else torch.device('cpu')
     for i, data in enumerate(dataset):
         if i >= opt.num_test:  # only apply our model to opt.num_test images.
             break
-        realA=data['A'].to(device) # ellen
-        fake_B_uresnet=model_uresnet(realA) #elleh - output image
-        fake_B_scattering=model_scattering(realA) #elleh - output image
+        visual_retc3 = OrderedDict()
+        visual_ret1 = OrderedDict()
+        realA=data['A'].to(device) # ellen type:torch.Tensor
+        visual_retc3[label_c3[0]] =realA
+        fakeB = model_totalG(realA)
+        visual_retc3[label_c3[1]] =fakeB
+        fakeB_uresnet=model_uresnet(realA) #elleh - output image type:torch.Tensor
+        visual_retc3[label_c3[2]] =fakeB
+        fakeB_scattering=model_scattering(realA) #elleh - output image
+        visual_retc3[label_c3[3]] =fakeB
 
         img_path = data['A_paths']
         if i % 5 == 0:  # save images to an HTML file
             print('processing (%04d)-th image... %s' % (i, img_path))
+        
 
-        save_images_branch(webpage, fake_B_scattering, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+        save_images_branch(webpage, fake_B_uresnet,"unet", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+        save_images_branch(webpage, fake_B_scattering, "scttering", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+        save_images_branch(webpage, fake_b_G, "Generator", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+
     webpage.save()  # save the HTML
