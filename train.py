@@ -215,7 +215,7 @@ if __name__ == '__main__':
     #FIQA
     ax2=ax1.twinx()
     ax2.set_ylabel("FIQA")
-    ax2.plot(range(1, len(val_loss_G)+1, 10),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
+    ax2.plot(range(1, len(val_loss_G)+1, 50),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
     ax2.legend(loc='upper right')
     ax2.set_ylim([0,1])
     ax2.set_yticks(np.arange(0,1,0.05))
