@@ -26,6 +26,7 @@ import sys
 import ntpath
 import time
 import pdb
+from collections import OrderedDict
 from util import util, html # ellen changed
 from subprocess import Popen, PIPE
 if sys.version_info[0] == 2:
@@ -33,6 +34,13 @@ if sys.version_info[0] == 2:
 else:
     VisdomExceptionBase = ConnectionError
 
+def channel_spilt(tensorimage, ret)
+    im = util.tensor2im(tensorimage)
+    for i in range(3):
+        imm = im1[:,:,i]
+
+
+    return
 
 def save_images_branch(webpage, visuals, typee,image_path, aspect_ratio=1.0, width=256, use_wandb=False):
     """Save images to the disk.
@@ -93,9 +101,9 @@ if __name__ == '__main__':
     model = create_model(opt)      # create a model given opt.model and other options
     model.setup(opt)               # regular setup: load and print networks; create schedulers
 
-
-    model_scattering=model.netG_A.module.scattering_model # ellen made
-    model_uresnet=model.netG_A.module.uresnet # ellen made
+    
+    model_uresnet=model.netG_A.module.uresnet # ellen made change this
+    model_scattering=model.netG_A.module.scattering_model # ellen made change this
     model_totalG = model.netG_A # ellen made
 
 
@@ -116,19 +124,29 @@ if __name__ == '__main__':
     if opt.eval: #false
         model.eval()
     
-        
+    label_c3 = ["realA", "fakeB"," fakeB_scatter","fakeB_unet"]
+    lable_c1 =["fakeB_unet1", "fakeB_unet2", "fakeB_unet3", "fakeB_scatter1","fakeB_scatter2","fakeB_scatter3"]
+
+
     device = torch.device('cuda:{}'.format(opt.gpu_ids[0])) if opt.gpu_ids else torch.device('cpu')
     for i, data in enumerate(dataset):
         if i >= opt.num_test:  # only apply our model to opt.num_test images.
             break
-        realA=data['A'].to(device) # ellen
-        fake_B_uresnet=model_uresnet(realA) #elleh - output image
-        fake_B_scattering=model_scattering(realA) #elleh - output image
-        fake_b_G = model_totalG(realA)
+        visual_retc3 = OrderedDict()
+        visual_ret1 = OrderedDict()
+        realA=data['A'].to(device) # ellen type:torch.Tensor
+        visual_retc3[label_c3[0]] =realA
+        fakeB = model_totalG(realA)
+        visual_retc3[label_c3[1]] =fakeB
+        fakeB_uresnet=model_uresnet(realA) #elleh - output image type:torch.Tensor
+        visual_retc3[label_c3[2]] =fakeB
+        fakeB_scattering=model_scattering(realA) #elleh - output image
+        visual_retc3[label_c3[3]] =fakeB
 
         img_path = data['A_paths']
         if i % 5 == 0:  # save images to an HTML file
             print('processing (%04d)-th image... %s' % (i, img_path))
+        
 
         save_images_branch(webpage, fake_B_uresnet,"unet", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
         save_images_branch(webpage, fake_B_scattering, "scttering", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)

@@ -1506,7 +1506,7 @@ class ellen_dwt_uresnet2_3(nn.Module):
 
     def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
         super(ellen_dwt_uresnet2_3, self).__init__()
-        self.uresnet = ellen_uresnet_new(input_nc, output_nc, ngf, norm_layer=norm_layer,
+        self.uresnet = ellen_uresnet(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                      use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks)
         self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16)
         self.fusion = nn.Sequential(nn.ReflectionPad2d(
