@@ -34,7 +34,7 @@ if sys.version_info[0] == 2:
 else:
     VisdomExceptionBase = ConnectionError
 
-def channel_spilt(tensorimage, ret)
+def channel_spilt(tensorimage, ret):
     im = util.tensor2im(tensorimage)
     for i in range(3):
         imm = im1[:,:,i]

@@ -43,25 +43,29 @@ import random
 import pdb
 import os
 import sys # fiqa
-# sys.path.append("/home/guest1/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -medi change!!
-sys.path.append("/root/jieunoh/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -miv2 
+sys.path.append("/home/guest1/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -medi change!!
+# sys.path.append("/root/jieunoh/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -miv2 
 from Main_EyeQuality_train_func import FIQA_during_training
 
-random_seed = 42
-np.random.seed(random_seed) #1.numpy randomness
-random.seed(random_seed) #2.python randomness
-torch.manual_seed(random_seed) #3.pytorch randomness
-torch.cuda.manual_seed(random_seed) # 4. gpu randomness 
-torch.cuda.manual_seed_all(random_seed) # 4. gpu randomness - multi gpu
-torch.backends.cudnn.deteministic = True #5.cuDNN randomness - might make computaion slow
-torch.backends.cudnn.benchmark = False
-# 6. Data loader randomness in multi process fix -> in /data/__init__.py -> ellen_made
-os.environ['PYTHONHASHSEED'] = str(random_seed)  #7.python hash seed 고정
-##################################################
+
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options
-    # pathh = os.path.join("/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/checkpoints", opt.name, "temp")#fiqa -medi change!!
-    pathh = os.path.join("/root/jieunoh/ellen_code/RetinaImage_model_MW/checkpoints", opt.name, "temp")#fiqa -miv2 change!! # eyeQ path change 필요
+    pathh = os.path.join("/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/checkpoints", opt.name, "temp")#fiqa -medi change!!
+    # pathh = os.path.join("/root/jieunoh/ellen_code/RetinaImage_model_MW/checkpoints", opt.name, "temp")#fiqa -miv2 change!! # eyeQ path change 필요
+   
+
+    random_seed = opt.random_seed
+    np.random.seed(random_seed) #1.numpy randomness
+    random.seed(random_seed) #2.python randomness
+    torch.manual_seed(random_seed) #3.pytorch randomness
+    torch.cuda.manual_seed(random_seed) # 4. gpu randomness 
+    torch.cuda.manual_seed_all(random_seed) # 4. gpu randomness - multi gpu
+    torch.backends.cudnn.deteministic = True #5.cuDNN randomness - might make computaion slow
+    torch.backends.cudnn.benchmark = False
+    # 6. Data loader randomness in multi process fix -> in /data/__init__.py -> ellen_made
+    os.environ['PYTHONHASHSEED'] = str(random_seed)  #7.python hash seed 고정
+    ##################################################
+
     # create a dataset given opt.dataset_mode and other options
     dataset = create_dataset(opt)
     dataset_size = len(dataset)    # get the number of images in the dataset.
@@ -93,6 +97,7 @@ if __name__ == '__main__':
     # create a visualizer that display/save images and plots
     visualizer = Visualizer(opt)
     total_iters = 0  # the total number of training iterations
+    val_fiqa_iters =0
 
     # outer loop for different epochs; we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>
     for epoch in range(opt.epoch_count, opt.n_epochs + opt.n_epochs_decay + 1):
@@ -162,11 +167,12 @@ if __name__ == '__main__':
             with torch.no_grad(): # 이렇게 해야지 gpu 사용량 안늘면서 돌아감 train아닐때
                 model.set_input(data)                
                 iter_current_val_loss_G.append(float(model.forward_val_get_loss()))# val loss가져오기
-                if epoch%10==0:
+                if epoch%opt.fiqa_epoch==0:
+
                     model.save_fake_B() # image 저장
             torch.cuda.empty_cache()
         # pdb.set_trace()
-        if epoch%10 ==0:
+        if epoch%opt.fiqa_epoch == 0:
             fiqa=FIQA_during_training(opt.name, pathh)
             fiqa_list.append(fiqa)
 
@@ -181,7 +187,7 @@ if __name__ == '__main__':
             #FIQA
             ax2=ax1.twinx()
             ax2.set_ylabel("FIQA")
-            ax2.plot(range(1, len(val_loss_G)+1, 10),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
+            ax2.plot(range(1, len(val_loss_G)+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
             ax2.legend(loc='upper right')
             ax2.set_ylim([0,1])
             ax2.set_yticks(np.arange(0,1,0.05))
@@ -240,7 +246,7 @@ if __name__ == '__main__':
     #FIQA
     ax2=ax1.twinx()
     ax2.set_ylabel("FIQA")
-    ax2.plot(range(1, len(val_loss_G)+1, 50),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
+    ax2.plot(range(1, len(val_loss_G)+1,opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
     ax2.legend(loc='upper right')
     ax2.set_ylim([0,1])
     ax2.set_yticks(np.arange(0,1,0.05))
@@ -253,19 +259,3 @@ if __name__ == '__main__':
     plt.grid(True)
     plt.tight_layout()
     plt.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
-
-    # loss_fig= plt.figure(figsize=(10,8))
-    # plt.plot(range(1, len(train_loss_G)+1), train_loss_G, label="Training Loss")
-    # plt.plot(range(1,  len(val_loss_G)+1), val_loss_G, label= "Validation Loss")
-    # plt.plot(range(1,  len(val_loss_G)+1, 10), fiqa_list, label= "FIQA")
-    # plt.axvline(stopped_epoch, linestyle='--', color='r', label="Early Stopping CheckPoint: "+str(stopped_epoch))
-    # plt.xlabel("epochs")
-    # plt.ylabel("loss")
-    # plt.title(opt.name)
-    # plt.ylim(0,5)
-    # plt.xlim(0,len(train_loss_G)+1)
-    # plt.grid(True)
-    # plt.legend()
-    # plt.tight_layout()
-    # plt.show()
-    # loss_fig.savefig(opt.checkpoints_dir+"/"+opt.name+"/loss_plot.png", bbox_inches='tight')

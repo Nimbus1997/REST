@@ -202,6 +202,14 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
     elif netG == 'ellen_dwt_uresnet2_3':  # 2_1 based - scattering branch instead of dwt branch
         net = ellen_dwt_uresnet2_3(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
+
+    elif netG == 'ellen_dwt_uresnet2_3_b1':  # 2_1 based - scattering branch instead of dwt branch
+        net = ellen_dwt_uresnet2_3_b1(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
+    
+    elif netG == 'ellen_dwt_uresnet2_3_b2':  # 2_1 based - scattering branch instead of dwt branch
+        net = ellen_dwt_uresnet2_3_b2(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
     
     elif netG == 'ellen_dwt_uresnet2_3_2':  # 2_3 based - Unet: Tconv->resize&conv
         net = ellen_dwt_uresnet2_3_2(input_nc, output_nc, ngf, norm_layer=norm_layer,
@@ -1339,7 +1347,7 @@ class scattering_Unet(nn.Module):
         self.dlayer3 = dlayer3
         self.dlayer2 = dlayer2
         self.dlayer1 = dlayer1
-        # self.tail_conv1 = nn.Conv2d(32, output_nc, 3, padding=1, bias=True)
+        # self.tail_conv1 = nn.Conv2d(32, output_nc, 3, padding=1, bias=True) # 2_3_ori
         self.tail_conv1 = nn.Sequential(nn.Conv2d(32, output_nc, 3, padding=1, bias=True), nn.Tanh()) # made - 2022.11.21
 
     def forward(self, x):
@@ -1521,6 +1529,56 @@ class ellen_dwt_uresnet2_3(nn.Module):
         x = torch.cat([result_scattering, result_uresnet], 1)
 
         return self.fusion(x)
+        # return result_uresnet
+
+class ellen_dwt_uresnet2_3_b1(nn.Module):
+    """
+    made by ellen _2022.12.09 
+    > model2_3 - only unet
+    """
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
+        super(ellen_dwt_uresnet2_3_b1, self).__init__()
+        self.uresnet = ellen_uresnet(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                     use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks)
+        # self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16)
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(
+            3), nn.Conv2d(3, 3, kernel_size=7, padding=0), nn.Tanh())
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        result_uresnet = self.uresnet(input)
+        # result_scattering = self.scattering_model(input)
+        # x = torch.cat([result_scattering, result_uresnet], 1)
+
+        return self.fusion(result_uresnet)
+        # return result_uresnet
+
+class ellen_dwt_uresnet2_3_b2(nn.Module):
+    """
+    made by ellen _2022.12.09 
+    > model2_3 - only scattering
+    """
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
+        super(ellen_dwt_uresnet2_3_b2, self).__init__()
+        # self.uresnet = ellen_uresnet(input_nc, output_nc, ngf, norm_layer=norm_layer,
+        #                              use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks)
+        self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16)
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(
+            3), nn.Conv2d(3, 3, kernel_size=7, padding=0), nn.Tanh())
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        # result_uresnet = self.uresnet(input)
+        result_scattering = self.scattering_model(input)
+        # x = torch.cat([result_scattering, result_uresnet], 1)
+
+        return self.fusion(result_scattering)
         # return result_uresnet
 
 class ellen_dwt_uresnet2_3_2(nn.Module):
