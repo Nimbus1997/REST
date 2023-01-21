@@ -1,3 +1,4 @@
+# wandb, nohup_out, checkpoints, results  폴더 필요
 nohup_out/*
 nohup_out_new/*
 wandb/*

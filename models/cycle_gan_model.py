@@ -158,7 +158,7 @@ class CycleGANModel(BaseModel):
         # save fake_B file
         temp_path=os.path.join(self.save_dir, "temp")
         best_path=os.path.join(self.save_dir, "fiqa_bast")
-        for image in range(os.listdir(temp_path)):
+        for image in os.listdir(temp_path):
             source_path = temp_path +"/" +image
             copy_path= best_path +"/" +image
             shutil.copy(source_path,copy_path)

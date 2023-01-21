@@ -163,6 +163,7 @@ if __name__ == '__main__':
         train_loss_G.append(current_train_loss_G)
         torch.cuda.empty_cache()
 
+        model.eval()
         # validation ellen ----------------------------------------------------------------------
         iter_current_val_loss_G = []
         for i, data in enumerate(val_dataset):
@@ -171,9 +172,10 @@ if __name__ == '__main__':
                 model.set_input(data)                
                 iter_current_val_loss_G.append(float(model.forward_val_get_loss()))# val loss가져오기
                 if epoch%opt.fiqa_epoch==0:
-
                     model.save_fake_B() # image 저장
             torch.cuda.empty_cache()
+        current_val_loss_G = np.average(iter_current_val_loss_G)
+        val_loss_G.append(current_val_loss_G)
 
         if epoch%opt.fiqa_epoch == 0:
             fiqa=FIQA_during_training(opt.name, pathh)
@@ -241,6 +243,8 @@ if __name__ == '__main__':
 
         print('End of epoch %d / %d \t Time Taken: %d sec' % (epoch,
               opt.n_epochs + opt.n_epochs_decay, time.time() - epoch_start_time))
+        
+        model.train()
 
     # for early stopping visualization - ellen --------------------------------------------------
     # LOSS
