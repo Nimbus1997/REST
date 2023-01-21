@@ -99,6 +99,9 @@ if __name__ == '__main__':
     total_iters = 0  # the total number of training iterations
     val_fiqa_iters =0
 
+    # ellen 
+    best_fiqa=0.0
+
     # outer loop for different epochs; we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>
     for epoch in range(opt.epoch_count, opt.n_epochs + opt.n_epochs_decay + 1):
         # epoch_count: staring epoch count
@@ -160,7 +163,7 @@ if __name__ == '__main__':
         train_loss_G.append(current_train_loss_G)
         torch.cuda.empty_cache()
 
-        # validation for early stopping - ellen ----------------------------------------------------------------------
+        # validation ellen ----------------------------------------------------------------------
         iter_current_val_loss_G = []
         for i, data in enumerate(val_dataset):
             print("[val] (epoch:", epoch, ", iter: ", i,")")
@@ -171,7 +174,7 @@ if __name__ == '__main__':
 
                     model.save_fake_B() # image 저장
             torch.cuda.empty_cache()
-        # pdb.set_trace()
+
         if epoch%opt.fiqa_epoch == 0:
             fiqa=FIQA_during_training(opt.name, pathh)
             fiqa_list.append(fiqa)
@@ -200,27 +203,32 @@ if __name__ == '__main__':
             plt.grid(True)
             plt.tight_layout()
             plt.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
-        # if epoch 몇 -> 저장한 val FIQA
-        # 위에 impot Main_eyeQuality_trian_func
-        # loss그래프에 같이 그리기 
+            # if epoch 몇 -> 저장한 val FIQA
+            # 위에 impot Main_eyeQuality_trian_func
+            # loss그래프에 같이 그리기 
 
+            if fiqa >= best_fiqa: # fiqa가 가장 높으면, model save & output save
+                print("best_fiqa")
+                save_suffix = '0_best_fiqa_%d' % epoch 
+                model.save_networks(save_suffix)
+                model.save_best_fake_B()
 
-        # for early stopping visualization - ellen --------------------------------------------------
-        current_val_loss_G = np.average(iter_current_val_loss_G)
-        val_loss_G.append(current_val_loss_G) # for visualization 
+        # # for early stopping visualization - ellen --------------------------------------------------
+        # current_val_loss_G = np.average(iter_current_val_loss_G)
+        # val_loss_G.append(current_val_loss_G) # for visualization 
 
-        if current_val_loss_G > last_val_loss_G:
-            patience_count += 1
-            if patience_count >= patience:
-                print("--------------------------------------------------------")
-                print("Stopped because it passed patience %d times, Latest update: %d epoch" %(patience, stopped_epoch))
-                break
-        else:
-            stopped_epoch = epoch
-            model.save_networks('latest')
-            patience_count =0
-        last_val_loss_G = current_val_loss_G
-        # ------------------------------------------------------------------------------------------------
+        # if current_val_loss_G > last_val_loss_G:
+        #     patience_count += 1
+        #     if patience_count >= patience:
+        #         print("--------------------------------------------------------")
+        #         print("Stopped because it passed patience %d times, Latest update: %d epoch" %(patience, stopped_epoch))
+        #         break
+        # else:
+        #     stopped_epoch = epoch
+        #     model.save_networks('latest')
+        #     patience_count =0
+        # last_val_loss_G = current_val_loss_G
+        # # ------------------------------------------------------------------------------------------------
 
         # cache our model every <save_epoch_freq> epochs
         if epoch % opt.save_epoch_freq == 0:             

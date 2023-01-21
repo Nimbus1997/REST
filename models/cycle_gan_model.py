@@ -3,9 +3,11 @@ import itertools
 from util.image_pool import ImagePool
 from .base_model import BaseModel
 from . import networks
+# ellen
 import pdb
-from util import util # ellen
-import os # ellen
+from util import util 
+import os 
+import shutil
 
 class CycleGANModel(BaseModel):
     """
@@ -132,7 +134,7 @@ class CycleGANModel(BaseModel):
         # GAN loss D_B(G_B(B))
         self.loss_G_B = self.criterionGAN(self.netD_B(self.fake_A), True)
         # Forward cycle loss || G_B(G_A(A)) - A||
-        self.loss_cycle_A = self.criterionCycle(self.rec_A, self.real_A) * lambda_A * 2 # *2: ellen 
+        self.loss_cycle_A = self.criterionCycle(self.rec_A, self.real_A) * lambda_A * self.opt.lambda_coeffi # *2: ellen2 
         # Backward cycle loss || G_A(G_B(B)) - B||
         self.loss_cycle_B = self.criterionCycle(self.rec_B, self.real_B) * lambda_B
         # combined loss and calculate gradients
@@ -151,6 +153,15 @@ class CycleGANModel(BaseModel):
             whole_path=os.path.join(self.save_dir, "temp", name)
             util.save_image(im,whole_path, aspect_ratio=1.0 )
 
+    def save_best_fake_B(self):
+        '''ellen made for FIQA'''
+        # save fake_B file
+        temp_path=os.path.join(self.save_dir, "temp")
+        best_path=os.path.join(self.save_dir, "fiqa_bast")
+        for image in range(os.listdir(temp_path)):
+            source_path = temp_path +"/" +image
+            copy_path= best_path +"/" +image
+            shutil.copy(source_path,copy_path)
 
     def backward_D_basic(self, netD, real, fake):
         """Calculate GAN loss for the discriminator
@@ -193,7 +204,7 @@ class CycleGANModel(BaseModel):
         if lambda_idt > 0:
             # G_A should be identity if real_B is fed: ||G_A(B) - B||
             self.idt_A = self.netG_A(self.real_B)
-            self.loss_idt_A = self.criterionIdt(self.idt_A, self.real_B) * lambda_B * 2* lambda_idt # *2: ellen 
+            self.loss_idt_A = self.criterionIdt(self.idt_A, self.real_B) * lambda_B * self.opt.lambda_coeffi * lambda_idt # *2: ellen2 
             # G_B should be identity if real_A is fed: ||G_B(A) - A||
             self.idt_B = self.netG_B(self.real_A)
             self.loss_idt_B = self.criterionIdt(self.idt_B, self.real_A) * lambda_A * lambda_idt
@@ -206,7 +217,7 @@ class CycleGANModel(BaseModel):
         # GAN loss D_B(G_B(B))
         self.loss_G_B = self.criterionGAN(self.netD_B(self.fake_A), True)
         # Forward cycle loss || G_B(G_A(A)) - A||
-        self.loss_cycle_A = self.criterionCycle(self.rec_A, self.real_A) * lambda_A *2 # *2: ellen 
+        self.loss_cycle_A = self.criterionCycle(self.rec_A, self.real_A) * lambda_A * self.opt.lambda_coeffi # *2: ellen2 
         # Backward cycle loss || G_A(G_B(B)) - B||
         self.loss_cycle_B = self.criterionCycle(self.rec_B, self.real_B) * lambda_B
         # combined loss and calculate gradients

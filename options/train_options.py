@@ -40,6 +40,7 @@ class TrainOptions(BaseOptions):
         parser.add_argument('--patience', type = int, default=5, help='patience- trian.py') # patience
         parser.add_argument('--fiqa_epoch', type =int, default = 5,help ="Calcluating FIQA" ) 
         parser.add_argument('--random_seed', type = int, default = 42, help = "fix a random seed for training")
+        parser.add_argument('--lambda_coeffi', type = int, default = 1, help = "constant that will be multiplied for loss definde at cycle_gan_model.py")  #REST에는 2
 
         self.isTrain = True
         return parser

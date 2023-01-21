@@ -1,10 +1,10 @@
-nohup_out/
-wandb/
+nohup_out/*
+nohup_out_new/*
+wandb/*
 .DS_Store
 debug*
-datasets/
-checkpoints/
-results/
+checkpoints/*
+results/*
 build/
 dist/
 *.png
