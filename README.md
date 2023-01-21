@@ -1,4 +1,4 @@
-<br><br><br>
+
 # Cycle GAN based REST for UKB (mediwhale server)
 date: 2023.01.21
 
