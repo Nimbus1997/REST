@@ -87,6 +87,8 @@ if __name__ == '__main__':
 
     if not os.path.exists(os.path.join(opt.checkpoints_dir, opt.name, "temp")):
         os.makedirs(os.path.join(opt.checkpoints_dir, opt.name, "temp"))
+    if not os.path.exists(os.path.join(opt.checkpoints_dir, opt.name, "best_fiqa")):
+        os.makedirs(os.path.join(opt.checkpoints_dir, opt.name, "best_fiqa"))
     fiqa_list=[]
     # create a model given opt.model and other options
     model = create_model(opt)

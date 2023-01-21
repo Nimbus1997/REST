@@ -157,7 +157,7 @@ class CycleGANModel(BaseModel):
         '''ellen made for FIQA'''
         # save fake_B file
         temp_path=os.path.join(self.save_dir, "temp")
-        best_path=os.path.join(self.save_dir, "fiqa_bast")
+        best_path=os.path.join(self.save_dir, "best_fiqa")
         for image in os.listdir(temp_path):
             source_path = temp_path +"/" +image
             copy_path= best_path +"/" +image
