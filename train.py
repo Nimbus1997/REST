@@ -213,9 +213,11 @@ if __name__ == '__main__':
 
             if fiqa >= best_fiqa: # fiqa가 가장 높으면, model save & output save
                 print("best_fiqa")
-                save_suffix = '0_best_fiqa_%d' % epoch 
+                # save_suffix = '0_best_fiqa_%d' % epoch 
+                save_suffix = "0_best_fiqa"
                 model.save_networks(save_suffix)
                 model.save_best_fake_B()
+                best_fiqa=fiqa
 
         # # for early stopping visualization - ellen --------------------------------------------------
         # current_val_loss_G = np.average(iter_current_val_loss_G)
