@@ -43,15 +43,15 @@ import random
 import pdb
 import os
 import sys # fiqa
-sys.path.append("/home/guest1/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -medi change!!
-# sys.path.append("/root/jieunoh/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -miv2 
+# sys.path.append("/home/guest1/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -medi change!!
+sys.path.append("/root/jieunoh/ellen_code/eyeQ_ellen/MCF_Net") #fiqa -miv2 
 from Main_EyeQuality_train_func import FIQA_during_training
 
 
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options
-    pathh = os.path.join("/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/checkpoints", opt.name, "temp")#fiqa -medi change!!
-    # pathh = os.path.join("/root/jieunoh/ellen_code/RetinaImage_model_MW/checkpoints", opt.name, "temp")#fiqa -miv2 change!! # eyeQ path change 필요
+    # pathh = os.path.join("/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/checkpoints", opt.name, "temp")#fiqa -medi change!!
+    pathh = os.path.join("/root/jieunoh/ellen_code/RetinaImage_model_ukb/checkpoints", opt.name, "temp")#fiqa -miv2 change!! # eyeQ path change 필요
    
 
     random_seed = opt.random_seed
@@ -180,7 +180,7 @@ if __name__ == '__main__':
         val_loss_G.append(current_val_loss_G)
 
         if epoch%opt.fiqa_epoch == 0:
-            fiqa=FIQA_during_training(opt.name, pathh)
+            fiqa=FIQA_during_training(opt.name, pathh, opt.gpu_ids)
             fiqa_list.append(fiqa)
 
             # LOSS
