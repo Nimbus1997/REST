@@ -1,6 +1,8 @@
 
-# Cycle GAN based REST for UKB (mediwhale server)
-date: 2023.01.21
+# Cycle GAN based REST for EyeQ (miv server)
+date: 2023.01.30
+based on RetinaImage_model_ukb 
+-> even though the name of the repository is "*_eyeq", the folder on the server should be named "*_ukb" (2023.01.30)
 
 ## based on 
 based on: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix
