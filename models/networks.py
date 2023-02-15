@@ -218,6 +218,11 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
     elif netG == 'ellen_dwt_uresnet2_3_b2':  # 2_1 based - scattering branch instead of dwt branch
         net = ellen_dwt_uresnet2_3_b2(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
+
+    elif netG == 'ellen_dwt_uresnet2_5':  # 2_1 based - scattering branch instead of dwt branch
+        net = ellen_dwt_uresnet2_5(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
+
     
     elif netG == 'ellen_dwt_uresnet2_3_2':  # 2_3 based - Unet: Tconv->resize&conv
         net = ellen_dwt_uresnet2_3_2(input_nc, output_nc, ngf, norm_layer=norm_layer,
@@ -1329,7 +1334,7 @@ class ellen_dwt_uresnet2_5(nn.Module):
     """
 
     def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
-        super(ellen_dwt_uresnet2_3, self).__init__()
+        super(ellen_dwt_uresnet2_5, self).__init__()
         self.uresnet = ellen_uresnet(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                      use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks)
         self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16,kind=1)
