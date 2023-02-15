@@ -51,9 +51,8 @@ from Main_EyeQuality_train_func import FIQA_during_training
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options
     # pathh = os.path.join("/home/guest1/ellen_code/pytorch-CycleGAN-and-pix2pix_ellen/checkpoints", opt.name, "temp")#fiqa -medi change!!
-    pathh = os.path.join("/root/jieunoh/ellen_code/RetinaImage_model_ukb/checkpoints", opt.name, "temp")#fiqa -miv2 change!! # eyeQ path change 필요
-   
-
+    pathh = os.path.join("/root/jieunoh/ellen_code/RetinaImage_model_MW/checkpoints", opt.name, "temp")#fiqa -miv2 change!! # eyeQ path change 필요
+    
     random_seed = opt.random_seed
     np.random.seed(random_seed) #1.numpy randomness
     random.seed(random_seed) #2.python randomness
@@ -83,12 +82,10 @@ if __name__ == '__main__':
     # for loss and early stopping visualization & FIQA - ellen ---------------------
     train_loss_G =[]
     val_loss_G =[]
-    stopped_epoch = opt.epoch_count + opt.n_epochs + opt.n_epochs_decay
+    # stopped_epoch = opt.epoch_count + opt.n_epochs + opt.n_epochs_decay
 
     if not os.path.exists(os.path.join(opt.checkpoints_dir, opt.name, "temp")):
         os.makedirs(os.path.join(opt.checkpoints_dir, opt.name, "temp"))
-    if not os.path.exists(os.path.join(opt.checkpoints_dir, opt.name, "best_fiqa")):
-        os.makedirs(os.path.join(opt.checkpoints_dir, opt.name, "best_fiqa"))
     fiqa_list=[]
     # create a model given opt.model and other options
     model = create_model(opt)
@@ -100,9 +97,6 @@ if __name__ == '__main__':
     visualizer = Visualizer(opt)
     total_iters = 0  # the total number of training iterations
     val_fiqa_iters =0
-
-    # ellen 
-    best_fiqa=0.0
 
     # outer loop for different epochs; we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>
     for epoch in range(opt.epoch_count, opt.n_epochs + opt.n_epochs_decay + 1):
@@ -165,8 +159,7 @@ if __name__ == '__main__':
         train_loss_G.append(current_train_loss_G)
         torch.cuda.empty_cache()
 
-        model.eval()
-        # validation ellen ----------------------------------------------------------------------
+        # validation for early stopping - ellen ----------------------------------------------------------------------
         iter_current_val_loss_G = []
         for i, data in enumerate(val_dataset):
             print("[val] (epoch:", epoch, ", iter: ", i,")")
@@ -176,52 +169,59 @@ if __name__ == '__main__':
                 if epoch%opt.fiqa_epoch==0:
                     model.save_fake_B() # image 저장
             torch.cuda.empty_cache()
+            
         current_val_loss_G = np.average(iter_current_val_loss_G)
-        val_loss_G.append(current_val_loss_G)
-
+        val_loss_G.append(current_val_loss_G) # for visualization 
+        # pdb.set_trace()
         if epoch%opt.fiqa_epoch == 0:
+            # fiqa_epoch 마다 val_loss ---------
+            for i, data in enumerate(val_dataset):
+                print("[val] (epoch:", epoch, ", iter: ", i,")")
+                with torch.no_grad(): # 이렇게 해야지 gpu 사용량 안늘면서 돌아감 train아닐때
+                    model.set_input(data)                
+                    iter_current_val_loss_G.append(float(model.forward_val_get_loss()))# val loss가져오기
+                    model.save_fake_B() # image 저장
+                torch.cuda.empty_cache()
+                
+            current_val_loss_G = np.average(iter_current_val_loss_G)
+            val_loss_G.append(current_val_loss_G) # for visualization 
+
+            # fiqa 구하기 ----------
             fiqa=FIQA_during_training(opt.name, pathh, opt.gpu_ids)
             fiqa_list.append(fiqa)
 
+            # plot -------------
             # LOSS
             fig, ax1 = plt.subplots()
             ax1.set_xlabel('epochs')
             ax1.set_ylabel('loss')
             ax1.plot(range(1, len(train_loss_G)+1), train_loss_G, color='mediumseagreen', label="Training Loss")
-            ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, color='dodgerblue', label= "Validation Loss")
+            # ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, color='dodgerblue', label= "Validation Loss") # every epoch
+            ax1.plot(range(1, len(val_loss_G)+1, opt.fiqa_epoch), val_loss_G, color='dodgerblue', label= "Validation Loss") # fiqa_epoch마다만
             ax1.legend(loc='upper left')
             ax1.set_ylim([0,10])
             #FIQA
             ax2=ax1.twinx()
             ax2.set_ylabel("FIQA")
-            ax2.plot(range(opt.fiqa_epoch, len(val_loss_G)+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
+            ax2.plot(range(1, len(val_loss_G)+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
             ax2.legend(loc='upper right')
             ax2.set_ylim([0,1])
             ax2.set_yticks(np.arange(0,1,0.05))
             #EARLY STOPPING
-            plt.axvline(stopped_epoch, linestyle='--', color='r', label="Early Stopping CheckPoint: "+str(stopped_epoch))
+            # plt.axvline(stopped_epoch, linestyle='--', color='r', label="Early Stopping CheckPoint: "+str(stopped_epoch))
             
-            plt.title(opt.name)    
+            plt.title(opt.name+"(fiqa fq: "+str(opt.fiqa_epoch)+")") 
             plt.xlim(0,len(train_loss_G)+1)
-            plt.xticks(range(0,len(train_loss_G)+1, 50))
+            plt.xticks(range(0,len(train_loss_G)+1, 10))
             plt.grid(True)
             plt.tight_layout()
             plt.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
-            # if epoch 몇 -> 저장한 val FIQA
-            # 위에 impot Main_eyeQuality_trian_func
-            # loss그래프에 같이 그리기 
+        # if epoch 몇 -> 저장한 val FIQA
+        # 위에 impot Main_eyeQuality_trian_func
+        # loss그래프에 같이 그리기 
 
-            if fiqa >= best_fiqa: # fiqa가 가장 높으면, model save & output save
-                print("best_fiqa")
-                # save_suffix = '0_best_fiqa_%d' % epoch 
-                save_suffix = "0_best_fiqa"
-                model.save_networks(save_suffix)
-                model.save_best_fake_B()
-                best_fiqa=fiqa
 
-        # # for early stopping visualization - ellen --------------------------------------------------
-        # current_val_loss_G = np.average(iter_current_val_loss_G)
-        # val_loss_G.append(current_val_loss_G) # for visualization 
+        # # for early stopping visualization - ellen -------------------------------------------------
 
         # if current_val_loss_G > last_val_loss_G:
         #     patience_count += 1
@@ -247,8 +247,6 @@ if __name__ == '__main__':
 
         print('End of epoch %d / %d \t Time Taken: %d sec' % (epoch,
               opt.n_epochs + opt.n_epochs_decay, time.time() - epoch_start_time))
-        
-        model.train()
 
     # for early stopping visualization - ellen --------------------------------------------------
     # LOSS
@@ -256,22 +254,23 @@ if __name__ == '__main__':
     ax1.set_xlabel('epochs')
     ax1.set_ylabel('loss')
     ax1.plot(range(1, len(train_loss_G)+1), train_loss_G, color='mediumseagreen', label="Training Loss")
-    ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, color='dodgerblue', label= "Validation Loss")
+    # ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, color='dodgerblue', label= "Validation Loss") # every epoch
+    ax1.plot(range(1, len(val_loss_G)+1, opt.fiqa_epoch), val_loss_G, color='dodgerblue', label= "Validation Loss") # fiqa_epoch마다만
     ax1.legend(loc='upper left')
     ax1.set_ylim([0,10])
     #FIQA
     ax2=ax1.twinx()
     ax2.set_ylabel("FIQA")
-    ax2.plot(range(opt.fiqa_epoch, len(val_loss_G)+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
+    ax2.plot(range(1, len(val_loss_G)+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
     ax2.legend(loc='upper right')
     ax2.set_ylim([0,1])
     ax2.set_yticks(np.arange(0,1,0.05))
     #EARLY STOPPING
-    plt.axvline(stopped_epoch, linestyle='--', color='r', label="Early Stopping CheckPoint: "+str(stopped_epoch))
+    # plt.axvline(stopped_epoch, linestyle='--', color='r', label="Early Stopping CheckPoint: "+str(stopped_epoch))
     
-    plt.title(opt.name)    
+    plt.title(opt.name+"(fiqa fq: "+str(opt.fiqa_epoch)+")")    
     plt.xlim(0,len(train_loss_G)+1)
-    plt.xticks(range(0,len(train_loss_G)+1, 50))
+    plt.xticks(range(0,len(train_loss_G)+1, 10))
     plt.grid(True)
     plt.tight_layout()
     plt.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
