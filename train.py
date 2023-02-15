@@ -192,13 +192,13 @@ if __name__ == '__main__':
             ax1.set_ylabel('loss')
             ax1.plot(range(1, len(train_loss_G)+1), train_loss_G, color='mediumseagreen', label="Training Loss")
             # ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, color='dodgerblue', label= "Validation Loss") # every epoch
-            ax1.plot(range(1, len(val_loss_G)+1, opt.fiqa_epoch), val_loss_G, color='dodgerblue', label= "Validation Loss") # fiqa_epoch마다만
+            ax1.plot(range(opt.fiqa_epoch, len(train_loss_G)+1, opt.fiqa_epoch), val_loss_G, color='dodgerblue', label= "Validation Loss") # fiqa_epoch마다만
             ax1.legend(loc='upper left')
             ax1.set_ylim([0,10])
             #FIQA
             ax2=ax1.twinx()
             ax2.set_ylabel("FIQA")
-            ax2.plot(range(1, len(val_loss_G)+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
+            ax2.plot(range(opt.fiqa_epoch, len(train_loss_G)+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
             ax2.legend(loc='upper right')
             ax2.set_ylim([0,1])
             ax2.set_yticks(np.arange(0,1,0.05))
@@ -246,13 +246,13 @@ if __name__ == '__main__':
     ax1.set_ylabel('loss')
     ax1.plot(range(1, len(train_loss_G)+1), train_loss_G, color='mediumseagreen', label="Training Loss")
     # ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, color='dodgerblue', label= "Validation Loss") # every epoch
-    ax1.plot(range(1, len(val_loss_G)+1, opt.fiqa_epoch), val_loss_G, color='dodgerblue', label= "Validation Loss") # fiqa_epoch마다만
+    ax1.plot(range(1, len(train_loss_G)+1, opt.fiqa_epoch), val_loss_G, color='dodgerblue', label= "Validation Loss") # fiqa_epoch마다만
     ax1.legend(loc='upper left')
     ax1.set_ylim([0,10])
     #FIQA
     ax2=ax1.twinx()
     ax2.set_ylabel("FIQA")
-    ax2.plot(range(1, len(val_loss_G)+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
+    ax2.plot(range(opt.fiqa_epoch, len(train_loss_G)+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
     ax2.legend(loc='upper right')
     ax2.set_ylim([0,1])
     ax2.set_yticks(np.arange(0,1,0.05))
