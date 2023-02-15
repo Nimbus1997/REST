@@ -1,5 +1,6 @@
 
-# Cycle GAN based REST for EyeQ (miv server1)
+# Cycle GAN based REST for EyeQ (miv server1)  
+✨only change code in miv1 & pull it in other server"✨
 date: 2023.02.15 
 based on RetinaImage_model_ukb  
 -> even though the name of the repository is "*_eyeq", the folder on the server should be named "*_ukb" (2023.01.30)
