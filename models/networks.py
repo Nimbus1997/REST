@@ -219,17 +219,24 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
         net = ellen_dwt_uresnet2_3_b2(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
 
-    elif netG == 'ellen_dwt_uresnet2_5':  # 2_1 based - scattering branch instead of dwt branch
+    elif netG == 'ellen_dwt_uresnet2_5':  # 2_3 based - sum
         net = ellen_dwt_uresnet2_5(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
+    elif netG == 'ellen_dwt_uresnet2_5_1':  # 2_5 based batch norm O
+        net = ellen_dwt_uresnet2_5_1(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
+
+    elif netG == 'ellen_dwt_uresnet2_5_2':  # 2_5_1 based scattering attention 
+        net = ellen_dwt_uresnet2_5_2(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
 
     
-    elif netG == 'ellen_dwt_uresnet2_3_2':  # 2_3 based - Unet: Tconv->resize&conv
-        net = ellen_dwt_uresnet2_3_2(input_nc, output_nc, ngf, norm_layer=norm_layer,
-                                   use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
+    # elif netG == 'ellen_dwt_uresnet2_3_2':  # 2_3 based - Unet: Tconv->resize&conv
+    #     net = ellen_dwt_uresnet2_3_2(input_nc, output_nc, ngf, norm_layer=norm_layer,
+    #                                use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
     
-    elif netG == 'ellen_scattering':  # 2_1 based - scattering branch instead of dwt branch
-        net = ellen_scattering(input_size=input_size)
+    # elif netG == 'ellen_scattering':  # 2_1 based - scattering branch instead of dwt branch
+    #     net = ellen_scattering(input_size=input_size)
 
     # elif netG == 'ellen_dwt_uresnet2_4':  # 2_3 based - gray scale input for scattering branch
     #     net = ellen_dwt_uresnet2_4(input_nc, output_nc, ngf, norm_layer=norm_layer,
@@ -262,13 +269,13 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
     #     net = ellen_dwt_uresnet1_5(input_nc, output_nc, ngf, norm_layer=norm_layer,
     #                                use_dropout=use_dropout, num_downs=6)
 
-    elif netG == 'ellen_dwt_uresnet1_6':
-        if is_A:
-            net = ellen_dwt_uresnet1_6A(
-                input_nc, output_nc, nf=16, norm_layer=norm_layer, use_dropout=use_dropout)
-        elif not is_A:
-            net = ellen_dwt_uresnet1_6B(
-                input_nc, output_nc, nf=16, norm_layer=norm_layer, use_dropout=use_dropout)
+    # elif netG == 'ellen_dwt_uresnet1_6':
+    #     if is_A:
+    #         net = ellen_dwt_uresnet1_6A(
+    #             input_nc, output_nc, nf=16, norm_layer=norm_layer, use_dropout=use_dropout)
+    #     elif not is_A:
+    #         net = ellen_dwt_uresnet1_6B(
+    #             input_nc, output_nc, nf=16, norm_layer=norm_layer, use_dropout=use_dropout)
 
     else:
         raise NotImplementedError(
