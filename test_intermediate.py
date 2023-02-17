@@ -130,7 +130,7 @@ def save_images_branch_total(webpage, visuals0, visuals1,visuals2,visuals3,image
     # pdb.set_trace()
     for ii, img in enumerate([visuals1,visuals2,visuals3]):
         for i in range(4):
-            im=img[i]
+            im=util.tensor2im(img[i])
             label = label_list[(4*ii)+i]
             image_name = '%s_%s.png' % (name, label)
             save_path = os.path.join(image_dir, image_name)
