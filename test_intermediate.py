@@ -106,7 +106,7 @@ def save_images_branch_total(webpage, visuals0, visuals1,visuals2,visuals3,image
     ims, txts, links = [], [], []
     ims_dict = {}
     
-    label_list=["fakeB_0", "fakeB_1", "fakeB_2","fakeB_3","fakeB_unet0","fakeB_unet1" "fakeB_unet2", "fakeB_unet3","fakeB_scatter0", "fakeB_scatter1","fakeB_scatter2","fakeB_scatter3"]
+    label_list=["fakeB_0", "fakeB_1", "fakeB_2","fakeB_3","fakeB_unet0","fakeB_unet1","fakeB_unet2", "fakeB_unet3","fakeB_scatter0", "fakeB_scatter1","fakeB_scatter2","fakeB_scatter3"]
 
 
     im_data=visuals0
@@ -125,12 +125,11 @@ def save_images_branch_total(webpage, visuals0, visuals1,visuals2,visuals3,image
     if use_wandb:
         ims_dict[label] = wandb.Image(imm)
 
-    im_data=visuals
-    im = util.tensor2im(im_data)
+
     # pdb.set_trace()
     for ii, img in enumerate([visuals1,visuals2,visuals3]):
         for i in range(4):
-            im=util.tensor2im(img[i])
+            im=util.tensor2im(img)
             label = label_list[(4*ii)+i]
             image_name = '%s_%s.png' % (name, label)
             save_path = os.path.join(image_dir, image_name)
@@ -139,7 +138,7 @@ def save_images_branch_total(webpage, visuals0, visuals1,visuals2,visuals3,image
                 h = imm.shape[1]
                 util.save_image(imm, save_path, aspect_ratio=aspect_ratio)
             else:
-                imm = im[:,:,i]
+                imm = im[:,:,i-1]
                 h = imm.shape[0]
                 # pdb.set_trace()
                 # imm =imm.reshape((h,h,1))
