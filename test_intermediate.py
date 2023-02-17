@@ -102,7 +102,6 @@ def save_images_branch_total(webpage, visuals0, visuals1,visuals2,visuals3,image
     image_dir = webpage.get_image_dir()
     short_path = ntpath.basename(image_path[0])
     name = os.path.splitext(short_path)[0]
-    typee = typee
     webpage.add_header(name)
     ims, txts, links = [], [], []
     ims_dict = {}
@@ -113,7 +112,7 @@ def save_images_branch_total(webpage, visuals0, visuals1,visuals2,visuals3,image
     im_data=visuals0
     lable="realA"
     im = util.tensor2im(im_data)
-    image_name = '%s_%s_%s%s.png' % (name, label, typee,str(i))
+    image_name = '%s_%s.png' % (name, label)
     save_path = os.path.join(image_dir, image_name)
     imm = im
     h = imm.shape[1]
@@ -125,7 +124,6 @@ def save_images_branch_total(webpage, visuals0, visuals1,visuals2,visuals3,image
     links.append(image_name)
     if use_wandb:
         ims_dict[label] = wandb.Image(imm)
-
 
     im_data=visuals
     im = util.tensor2im(im_data)
@@ -207,6 +205,7 @@ if __name__ == '__main__':
             break
         visual_retc3 = OrderedDict()
         visual_ret1 = OrderedDict()
+
         realA=data['A'].to(device) # ellen type:torch.Tensor
         visual_retc3[label_c3[0]] =realA
         fakeB = model_totalG(realA)
@@ -225,6 +224,6 @@ if __name__ == '__main__':
         # save_images_branch(webpage, fake_B_scattering, "scttering", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
         # save_images_branch(webpage, fake_b_G, "Generator", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
         
-        save_images_branch_total(webpage, realA,fake_b_G, fake_B_uresnet,fake_B_scattering, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+        save_images_branch_total(webpage, realA,fakeB, fakeB_uresnet,fakeB_scattering, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
 
     webpage.save()  # save the HTML
