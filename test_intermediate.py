@@ -110,7 +110,7 @@ def save_images_branch_total(webpage, visuals0, visuals1,visuals2,visuals3,image
 
 
     im_data=visuals0
-    lable="realA"
+    label="realA"
     im = util.tensor2im(im_data)
     image_name = '%s_%s.png' % (name, label)
     save_path = os.path.join(image_dir, image_name)
