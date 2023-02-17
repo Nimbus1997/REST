@@ -84,6 +84,79 @@ def save_images_branch(webpage, visuals, typee,image_path, aspect_ratio=1.0, wid
     if use_wandb:
         wandb.log(ims_dict)
 
+
+
+def save_images_branch_total(webpage, visuals0, visuals1,visuals2,visuals3,image_path, aspect_ratio=1.0, width=256, use_wandb=False):
+    """Save images to the disk.
+
+    Parameters:
+        webpage (the HTML class) -- the HTML webpage class that stores these imaegs (see html.py for more details)
+        visuals (tensor)    -- ellen change -> just an tensor
+        type(string)          --ellen made -> name of the model
+        image_path (str)         -- the string is used to create image paths
+        aspect_ratio (float)     -- the aspect ratio of saved images
+        width (int)              -- the images will be resized to width x width
+
+    This function will save images stored in 'visuals' to the HTML file specified by 'webpage'.
+    """
+    image_dir = webpage.get_image_dir()
+    short_path = ntpath.basename(image_path[0])
+    name = os.path.splitext(short_path)[0]
+    typee = typee
+    webpage.add_header(name)
+    ims, txts, links = [], [], []
+    ims_dict = {}
+    
+    label_list=["fakeB_0", "fakeB_1", "fakeB_2","fakeB_3","fakeB_unet0","fakeB_unet1" "fakeB_unet2", "fakeB_unet3","fakeB_scatter0", "fakeB_scatter1","fakeB_scatter2","fakeB_scatter3"]
+
+
+    im_data=visuals0
+    lable="realA"
+    im = util.tensor2im(im_data)
+    image_name = '%s_%s_%s%s.png' % (name, label, typee,str(i))
+    save_path = os.path.join(image_dir, image_name)
+    imm = im
+    h = imm.shape[1]
+    # pdb.set_trace()
+    # imm =imm.reshape((h,h,1))
+    util.save_image(imm, save_path, aspect_ratio=aspect_ratio)
+    ims.append(image_name)
+    txts.append(label)
+    links.append(image_name)
+    if use_wandb:
+        ims_dict[label] = wandb.Image(imm)
+
+
+    im_data=visuals
+    im = util.tensor2im(im_data)
+    # pdb.set_trace()
+    for ii, img in enumerate([visuals1,visuals2,visuals3]):
+        for i in range(4):
+            im=img[i]
+            label = label_list[(4*ii)+i]
+            image_name = '%s_%s.png' % (name, label)
+            save_path = os.path.join(image_dir, image_name)
+            if i==0:
+                imm=im
+                h = imm.shape[1]
+                util.save_image(imm, save_path, aspect_ratio=aspect_ratio)
+            else:
+                imm = im[:,:,i]
+                h = imm.shape[0]
+                # pdb.set_trace()
+                # imm =imm.reshape((h,h,1))
+                util.save_image_(imm, save_path, aspect_ratio=aspect_ratio)
+            ims.append(image_name)
+            txts.append(label)
+            links.append(image_name)
+            if use_wandb:
+                ims_dict[label] = wandb.Image(imm)
+
+
+    webpage.add_images(ims, txts, links, width=width)
+    if use_wandb:
+        wandb.log(ims_dict)
+
 try:
     import wandb
 except ImportError:
@@ -148,8 +221,10 @@ if __name__ == '__main__':
             print('processing (%04d)-th image... %s' % (i, img_path))
         
 
-        save_images_branch(webpage, fake_B_uresnet,"unet", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
-        save_images_branch(webpage, fake_B_scattering, "scttering", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
-        save_images_branch(webpage, fake_b_G, "Generator", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+        # save_images_branch(webpage, fake_B_uresnet,"unet", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+        # save_images_branch(webpage, fake_B_scattering, "scttering", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+        # save_images_branch(webpage, fake_b_G, "Generator", img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+        
+        save_images_branch_total(webpage, realA,fake_b_G, fake_B_uresnet,fake_B_scattering, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
 
     webpage.save()  # save the HTML
