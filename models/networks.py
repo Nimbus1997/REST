@@ -230,6 +230,10 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
         net = ellen_dwt_uresnet2_5_2(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
 
+                                   
+    elif netG == 'ellen_dwt_uresnet2_6':  # 2_3 based - sum
+        net = ellen_dwt_uresnet2_6(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=4, n_blocks=0, input_size=input_size)
     
     # elif netG == 'ellen_dwt_uresnet2_3_2':  # 2_3 based - Unet: Tconv->resize&conv
     #     net = ellen_dwt_uresnet2_3_2(input_nc, output_nc, ngf, norm_layer=norm_layer,
@@ -1607,14 +1611,14 @@ class ellen_dwt_uresnet2_6(nn.Module):
     """
     made by ellen _2022.02.18
     > model 2_5_1 based
-        1) uresnet layer 수 증가 3-> 5 (checker boad artifact없애보기 위해서)
-        2) scattering layer 수 감소 (연산 줄이기 위해서)
+        1) uresnet layer 수 증가 3-> 5 (checker boad artifact없애보기 위해서) - down은 2-> 4
+        2) scattering layer 수 감소 6-> 4 (연산 줄이기 위해서) down 은 5-> 3 
     
     input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
     """
 
     def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=True, num_downs=5, n_blocks=9, input_size=512):
-        super(ellen_dwt_uresnet2_5_1, self).__init__()
+        super(ellen_dwt_uresnet2_6, self).__init__()
         self.uresnet = ellen_uresnet(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                      use_dropout=use_dropout, num_downs=5, n_blocks=n_blocks,batch_norm=True)
         self.scattering_model = scattering_Unet2_6(input_size, output_nc=3, nf=16,kind=1,dropout=use_dropout,batch_norm=True)
