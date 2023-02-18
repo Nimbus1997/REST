@@ -1783,7 +1783,7 @@ class ellen_dwt_uresnet1_7(nn.Module):
     def __init__(self, use_dropout=True, input_size=512):
         super(ellen_dwt_uresnet1_7, self).__init__()
 
-        self.scattering_model = scattering_Uresnet1_7(input_size, output_nc=3, nf=16,kind=1,dropout=use_dropout,batch_norm=True,scattering_attention=False)
+        self.scattering_model = scattering_Uresnet1_7(input_size, output_nc=3, nf=32,kind=1,dropout=use_dropout,batch_norm=True,scattering_attention=False)
 
     def forward(self, input):
         """Standard forward"""
