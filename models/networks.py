@@ -1536,7 +1536,7 @@ class scattering_Uresnet1_7(nn.Module):
             # self.tailnorm=nn.BatchNorm2d(output_nc)
 
         # self.tail_conv1 = nn.Conv2d(32, output_nc, 3, padding=1, bias=True) # 2_3_ori
-        self.tail_conv1 = nn.Sequential(nn.Conv2d(nf, output_nc, 3, padding=1, bias=True),nn.BatchNorm2d(output_nc), nn.Tanh()) # made - should place tnah last 
+        self.tail_conv1 = nn.Sequential(nn.Conv2d(nf, output_nc, 3, padding=1, bias=True), nn.Tanh()) # made - should place tnah last --> erasied batch norm at the last layer 23.02.19
 
         
         
@@ -1671,7 +1671,8 @@ class scattering_Uresnet1_8(nn.Module):
             # self.tailnorm=nn.BatchNorm2d(output_nc)
 
         # self.tail_conv1 = nn.Conv2d(32, output_nc, 3, padding=1, bias=True) # 2_3_ori
-        self.tail_conv1 = nn.Sequential(nn.Conv2d(nf, output_nc, 3, padding=1, bias=True),nn.BatchNorm2d(output_nc), nn.Tanh()) # made - should place tnah last 
+        self.tail_conv1 = nn.Sequential(nn.Conv2d(nf, output_nc, 3, padding=1, bias=True), nn.Tanh()) # made - should place tnah last -> erasied batch norm at the last layer 23.02.19
+
 
         
         
@@ -2070,4 +2071,4 @@ class PixelDiscriminator(nn.Module):
         """Standard forward."""
         return self.net(input)
 #------------------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------cd
