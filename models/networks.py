@@ -1808,7 +1808,7 @@ class ellen_dwt_uresnet2_3(nn.Module):
         dwt barnch -> scattering branch
         Tconv -> resize & conv
     > edit 23.02.15 
-        can use drop out in scattering_unet
+        can use drop out in scattering_unet & unet (unet 도 원래 drop out 안씀)
         can use batch norm in scattering_unet & ellen_uresnet tail (unet block은 원래 썼음)
     
     input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
