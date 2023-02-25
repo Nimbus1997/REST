@@ -26,7 +26,7 @@ Ellen modified
             - []pytorch FID module official: https://pytorch.org/ignite/generated/ignite.metrics.FID.html , https://github.com/pytorch/ignite
             - [v]pytorch FID module base of the official: https://github.com/mseitzer/pytorch-fid/tree/3d604a25516746c3a4a5548c8610e99010b2c819 
 """
-from cmath import inf 
+from cmath import inf
 from random import triangular
 import time
 from options.train_options import TrainOptions
@@ -35,6 +35,7 @@ from models import create_model
 from util.visualizer import Visualizer
 import numpy as np
 import matplotlib.pyplot as plt
+
 
 ####### To fix the random seed & fiqa -- ellen ###########
 import torch
