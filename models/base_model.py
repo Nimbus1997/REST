@@ -157,7 +157,7 @@ class BaseModel(ABC):
         ellen_losses_list =[]
         for name in self.loss_names_ellen:
             if isinstance(name, str):
-                ellen_losses_list.append =float(getattr(self, 'loss_' + name))  # float(...) works for both scalar tensor and float number
+                ellen_losses_list.append(float(getattr(self, 'loss_' + name)))  # float(...) works for both scalar tensor and float number
         return ellen_losses_list
 
     def get_current_loss_G(self):
