@@ -159,6 +159,7 @@ class CycleGANModel(BaseModel):
     
     def save_fake_B(self):
         '''ellen made for FIQA'''
+        self.fake_B = self.netG_A(self.real_A)
         # save fake_B file
         for i in range(len(self.fake_B)):
             name = self.image_paths[i].split("/")[-1]
