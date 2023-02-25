@@ -211,6 +211,7 @@ if __name__ == '__main__':
             plt.grid(True)
             plt.tight_layout()
             plt.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
+            plt.close()
             # if epoch 몇 -> 저장한 val FIQA
             # 위에 impot Main_eyeQuality_trian_func
             # loss그래프에 같이 그리기 
@@ -265,3 +266,4 @@ if __name__ == '__main__':
     plt.grid(True)
     plt.tight_layout()
     plt.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
+    plt.close()
