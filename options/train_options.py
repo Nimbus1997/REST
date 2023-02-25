@@ -42,7 +42,7 @@ class TrainOptions(BaseOptions):
         parser.add_argument('--random_seed', type = int, default = 42, help = "fix a random seed for training")
         parser.add_argument('--lambda_coeffi', type = int, default = 1, help = "constant that will be multiplied for loss definde at cycle_gan_model.py")  #REST에는 2
         parser.add_argument('--no_evalmode',action='store_true', help = "if stored model.eval()& model.train() will not done")
-        parser.add_argument('--smaller_lr_D', action='store_true', help = "1/100 smaller learning rate for discriminator")
+        parser.add_argument('--smaller_lr_D', type=float, default=1.0, help = "how much smaller learning rate for discriminator")
         
         self.isTrain = True
         return parser

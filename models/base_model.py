@@ -38,6 +38,7 @@ class BaseModel(ABC):
         if opt.preprocess != 'scale_width':  # with [scale_width], input images might have different sizes, which hurts the performance of cudnn.benchmark.
             torch.backends.cudnn.benchmark = True
         self.loss_names = []
+        self.loss_names_ellen =[]
         self.model_names = []
         self.visual_names = []
         self.optimizers = []
@@ -148,6 +149,16 @@ class BaseModel(ABC):
             if isinstance(name, str):
                 errors_ret[name] = float(getattr(self, 'loss_' + name))  # float(...) works for both scalar tensor and float number
         return errors_ret
+
+
+    def get_current_losses_ellen(self):
+        """ellen made 2023.02.25 
+            for the plot"""
+        ellen_losses_list =[]
+        for name in self.loss_names_ellen:
+            if isinstance(name, str):
+                ellen_losses_list.append =float(getattr(self, 'loss_' + name))  # float(...) works for both scalar tensor and float number
+        return ellen_losses_list
 
     def get_current_loss_G(self):
         # ellen mande- for early stopping 

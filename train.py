@@ -81,8 +81,10 @@ if __name__ == '__main__':
 
     opt.phase = "train"
     # for loss and early stopping visualization & FIQA - ellen ---------------------
-    train_loss_G =[]
-    val_loss_G =[]
+    ellen_train_loss = [[],[],[],[],[]] # D_real, D_fake, G_A, cycle_A, idt_A # 23.02.25
+    ellen_train_loss_name = ['D_A_real','D_A_fake','G_A', 'cycle_A', 'idt_A']
+    now_n_epoch =0
+    # val_loss_G =[]
     stopped_epoch = opt.epoch_count + opt.n_epochs + opt.n_epochs_decay
 
     if not os.path.exists(os.path.join(opt.checkpoints_dir, opt.name, "temp")):
@@ -105,7 +107,8 @@ if __name__ == '__main__':
     best_fiqa=0.0
 
     # outer loop for different epochs; we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>
-    for epoch in range(opt.epoch_count, opt.n_epochs + opt.n_epochs_decay + 1):
+    for num_epoch_i , epoch in enumerate(range(opt.epoch_count, opt.n_epochs + opt.n_epochs_decay + 1)):
+        now_n_epoch =num_epoch_i+1
         # epoch_count: staring epoch count
         # n_epochs: number of epochs with the initial learning rate
         # n_epochs_decay: number of epochs to linearly deay learning rate to zero
@@ -120,7 +123,8 @@ if __name__ == '__main__':
         # update learning rates in the beginning of every epoch.
         model.update_learning_rate()
 
-        iter_current_train_loss_G =[]#ellen -  for early stopping visualization 
+        # iter_current_train_loss_G =[]#ellen -  for early stopping visualization 
+        ellen_train_loss_iter =[[],[],[],[],[]]
         for i, data in enumerate(dataset):  # inner loop within one epoch
             iter_start_time = time.time()  # timer for computation per iteration
             if total_iters % opt.print_freq == 0:
@@ -128,58 +132,58 @@ if __name__ == '__main__':
 
             total_iters += opt.batch_size
             epoch_iter += opt.batch_size
-            # unpack data from dataset and apply preprocessing
-            model.set_input(data)
-            
-            # calculate loss functions, get gradients, update network weights
-            model.optimize_parameters()
+            model.set_input(data)# unpack data from dataset and apply preprocessing
+            model.optimize_parameters()# calculate loss functions, get gradients, update network weights
 
 
             if total_iters % opt.display_freq == 0:   # display images on visdom and save images to a HTML file
                 save_result = total_iters % opt.update_html_freq == 0
                 model.compute_visuals()
-                visualizer.display_current_results(
-                    model.get_current_visuals(), epoch, save_result)
-            losses = model.get_current_losses()
-            t_comp = (time.time() - iter_start_time) / opt.batch_size
-            visualizer.print_current_losses(
-                    epoch, epoch_iter, losses, t_comp, t_data)
+                visualizer.display_current_results(model.get_current_visuals(), epoch, save_result)
+                
             if total_iters % opt.print_freq == 0:    # print training losses and save logging information to the disk
                 losses = model.get_current_losses()
                 t_comp = (time.time() - iter_start_time) / opt.batch_size
-                visualizer.print_current_losses(
-                    epoch, epoch_iter, losses, t_comp, t_data)
+                visualizer.print_current_losses(epoch, epoch_iter, losses, t_comp, t_data)
                 if opt.display_id > 0:
-                    visualizer.plot_current_losses(
-                    epoch, float(epoch_iter) / dataset_size, losses)
+                    visualizer.plot_current_losses(epoch, float(epoch_iter) / dataset_size, losses)
             
             if total_iters % opt.save_latest_freq == 0:   # cache our latest model every <save_latest_freq> iterations
                 print('saving the latest model (epoch %d, total_iters %d)' %
                       (epoch, total_iters))
                 save_suffix = 'iter_%d' % total_iters if opt.save_by_iter else 'latest'
                 model.save_networks(save_suffix)
-            iter_current_train_loss_G.append(model.get_current_loss_G()) #ellen -  for early stopping visualization
+            # collecting loss every iteration -ellen
+            ellen_iter_losses = model.get_current_losses_ellen()
+            for i,ellen_loss in enumerate(ellen_iter_losses):
+                ellen_train_loss_iter[i].append(ellen_loss)
 
             iter_data_time = time.time()
-        current_train_loss_G = np.average(iter_current_train_loss_G)
-        train_loss_G.append(current_train_loss_G)
+        # averaging losses - ellen 
+        for i in range(len(ellen_train_loss_name)): 
+            ellen_train_loss[i].append(np.average(ellen_train_loss_iter[i]))
+            
+        # current_train_loss_G = np.average(iter_current_train_loss_G)
+        # train_loss_G.append(current_train_loss_G)
+
+
         torch.cuda.empty_cache()
         if not opt.no_evalmode: # 2023.02.13
             model.eval()
         # validation ellen ----------------------------------------------------------------------
-        iter_current_val_loss_G = []
+        # iter_current_val_loss_G = []
         if epoch%opt.fiqa_epoch == 0:
             # fiqa_epoch 마다 val_loss ---------
             for i, data in enumerate(val_dataset):
                 print("[val] (epoch:", epoch, ", iter: ", i,")")
                 with torch.no_grad(): # 이렇게 해야지 gpu 사용량 안늘면서 돌아감 train아닐때
                     model.set_input(data)                
-                    iter_current_val_loss_G.append(float(model.forward_val_get_loss()))# val loss가져오기
+                    # iter_current_val_loss_G.append(float(model.forward_val_get_loss()))# val loss가져오기
                     model.save_fake_B() # image 저장
                 torch.cuda.empty_cache()
                 
-            current_val_loss_G = np.average(iter_current_val_loss_G)
-            val_loss_G.append(current_val_loss_G) # for visualization 
+            # current_val_loss_G = np.average(iter_current_val_loss_G)
+            # val_loss_G.append(current_val_loss_G) # for visualization 
 
             # fiqa 구하기 ----------
             fiqa=FIQA_during_training(opt.name, pathh, opt.gpu_ids)
@@ -190,24 +194,27 @@ if __name__ == '__main__':
             fig, ax1 = plt.subplots()
             ax1.set_xlabel('epochs')
             ax1.set_ylabel('loss')
-            ax1.plot(range(1, len(train_loss_G)+1), train_loss_G, color='mediumseagreen', label="Training Loss")
-            # ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, color='dodgerblue', label= "Validation Loss") # every epoch
-            ax1.plot(range(opt.fiqa_epoch, len(train_loss_G)+1, opt.fiqa_epoch), val_loss_G, color='dodgerblue', label= "Validation Loss") # fiqa_epoch마다만
-            ax1.legend(loc='upper left')
-            ax1.set_ylim([0,10])
+            ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[0], color='lightblue', label=ellen_train_loss_name[0]) # D_A_real
+            ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[1], color='lightslategray', label=ellen_train_loss_name[1]) # D_A_fake
+            ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[2], color='salmon', label=ellen_train_loss_name[2]) # G_A
+            ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[3], color='pink', label=ellen_train_loss_name[3]) # cycle_A
+            ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[4], color='rosybrown', label=ellen_train_loss_name[4]) # idt_A
+            
+            ax1.legend(loc='lower left')
+            ax1.set_ylim([0,5])
             #FIQA
             ax2=ax1.twinx()
             ax2.set_ylabel("FIQA")
-            ax2.plot(range(opt.fiqa_epoch, len(train_loss_G)+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
-            ax2.legend(loc='upper right')
+            ax2.plot(range(opt.fiqa_epoch, now_n_epoch+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
+            ax2.legend(loc='lower right')
             ax2.set_ylim([0,1])
             ax2.set_yticks(np.arange(0,1,0.05))
             #EARLY STOPPING
             # plt.axvline(stopped_epoch, linestyle='--', color='r', label="Early Stopping CheckPoint: "+str(stopped_epoch))
             
             plt.title(opt.name+"(fiqa fq: "+str(opt.fiqa_epoch)+")") 
-            plt.xlim(0,len(train_loss_G)+1)
-            plt.xticks(range(0,len(train_loss_G)+1, 10))
+            plt.xlim(0,now_n_epoch+1)
+            plt.xticks(range(0,now_n_epoch+1, 5))
             plt.grid(True)
             plt.tight_layout()
             plt.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
@@ -240,30 +247,36 @@ if __name__ == '__main__':
         if not opt.no_evalmode: # 2023.02.13
             model.train()
 
-    # for early stopping visualization - ellen --------------------------------------------------
+    # plot -------------
     # LOSS
     fig, ax1 = plt.subplots()
     ax1.set_xlabel('epochs')
     ax1.set_ylabel('loss')
-    ax1.plot(range(1, len(train_loss_G)+1), train_loss_G, color='mediumseagreen', label="Training Loss")
-    # ax1.plot(range(1,  len(val_loss_G)+1), val_loss_G, color='dodgerblue', label= "Validation Loss") # every epoch
-    ax1.plot(range(1, len(train_loss_G)+1, opt.fiqa_epoch), val_loss_G, color='dodgerblue', label= "Validation Loss") # fiqa_epoch마다만
-    ax1.legend(loc='upper left')
-    ax1.set_ylim([0,10])
+    ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[0], color='lightblue', label=ellen_train_loss_name[0]) # D_A_real
+    ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[1], color='lightslategray', label=ellen_train_loss_name[1]) # D_A_fake
+    ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[2], color='salmon', label=ellen_train_loss_name[2]) # G_A
+    ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[3], color='pink', label=ellen_train_loss_name[3]) # cycle_A
+    ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[4], color='rosybrown', label=ellen_train_loss_name[4]) # idt_A
+    
+    ax1.legend(loc='lower left')
+    ax1.set_ylim([0,5])
     #FIQA
     ax2=ax1.twinx()
     ax2.set_ylabel("FIQA")
-    ax2.plot(range(opt.fiqa_epoch, len(train_loss_G)+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
-    ax2.legend(loc='upper right')
+    ax2.plot(range(opt.fiqa_epoch, now_n_epoch+1, opt.fiqa_epoch),fiqa_list, color='palevioletred', marker='o', linestyle='--', label= "FIQA")
+    ax2.legend(loc='lower right')
     ax2.set_ylim([0,1])
     ax2.set_yticks(np.arange(0,1,0.05))
     #EARLY STOPPING
     # plt.axvline(stopped_epoch, linestyle='--', color='r', label="Early Stopping CheckPoint: "+str(stopped_epoch))
     
-    plt.title(opt.name+"(fiqa fq: "+str(opt.fiqa_epoch)+")")    
-    plt.xlim(0,len(train_loss_G)+1)
-    plt.xticks(range(0,len(train_loss_G)+1, 10))
+    plt.title(opt.name+"(fiqa fq: "+str(opt.fiqa_epoch)+")") 
+    plt.xlim(0,now_n_epoch+1)
+    plt.xticks(range(0,now_n_epoch+1, 5))
     plt.grid(True)
     plt.tight_layout()
     plt.savefig(opt.checkpoints_dir+"/"+opt.name+"/0_loss_plot.png", bbox_inches='tight')
     plt.close()
+    # if epoch 몇 -> 저장한 val FIQA
+    # 위에 impot Main_eyeQuality_trian_func
+    # loss그래프에 같이 그리기 

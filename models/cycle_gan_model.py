@@ -56,7 +56,9 @@ class CycleGANModel(BaseModel):
         """
         BaseModel.__init__(self, opt)
         # specify the training losses you want to print out. The training/test scripts will call <BaseModel.get_current_losses>
-        self.loss_names = ['D_A', 'G_A', 'cycle_A', 'idt_A', 'D_B', 'G_B', 'cycle_B', 'idt_B']
+        # self.loss_names = ['D_A', 'G_A', 'cycle_A', 'idt_A', 'D_B', 'G_B', 'cycle_B', 'idt_B'] # defualt 
+        self.loss_names = ['D_A', 'D_A_real','D_A_fake','G_A', 'cycle_A', 'idt_A', 'D_B', 'G_B', 'cycle_B', 'idt_B']  # ellen changed 23.02.25
+        self.loss_names_ellen =['D_A_real','D_A_fake','G_A', 'cycle_A', 'idt_A']
         # specify the images you want to save/display. The training/test scripts will call <BaseModel.get_current_visuals>
         
         if self.opt.dataset_mode =='single': 
@@ -102,10 +104,7 @@ class CycleGANModel(BaseModel):
             self.criterionIdt = torch.nn.L1Loss()
             # initialize optimizers; schedulers will be automatically created by function <BaseModel.setup>.
             self.optimizer_G = torch.optim.Adam(itertools.chain(self.netG_A.parameters(), self.netG_B.parameters()), lr=opt.lr, betas=(opt.beta1, 0.999)) # opt.beta1: 0.5 - random성 없어보임
-            if not opt.smaller_lr_D:
-                self.optimizer_D = torch.optim.Adam(itertools.chain(self.netD_A.parameters(), self.netD_B.parameters()), lr=opt.lr, betas=(opt.beta1, 0.999))
-            else:
-                self.optimizer_D = torch.optim.Adam(itertools.chain(self.netD_A.parameters(), self.netD_B.parameters()), lr=(1e-2)*opt.lr, betas=(opt.beta1, 0.999))
+            self.optimizer_D = torch.optim.Adam(itertools.chain(self.netD_A.parameters(), self.netD_B.parameters()), lr=opt.smaller_lr_D*opt.lr, betas=(opt.beta1, 0.999))
             self.optimizers.append(self.optimizer_G)
             self.optimizers.append(self.optimizer_D)
 
@@ -199,17 +198,18 @@ class CycleGANModel(BaseModel):
         # Combined loss and calculate gradients
         loss_D = (loss_D_real + loss_D_fake) * 0.5
         loss_D.backward()
-        return loss_D
+        # return loss_D #default
+        return loss_D,loss_D_real,loss_D_fake # ellen changed 23.02.25
 
     def backward_D_A(self):
         """Calculate GAN loss for discriminator D_A"""
         fake_B = self.fake_B_pool.query(self.fake_B)
-        self.loss_D_A = self.backward_D_basic(self.netD_A, self.real_B, fake_B)
+        self.loss_D_A, self.loss_D_A_real, self.loss_D_A_fake = self.backward_D_basic(self.netD_A, self.real_B, fake_B)
 
     def backward_D_B(self):
         """Calculate GAN loss for discriminator D_B"""
         fake_A = self.fake_A_pool.query(self.fake_A)
-        self.loss_D_B = self.backward_D_basic(self.netD_B, self.real_A, fake_A)
+        self.loss_D_B,_,_= self.backward_D_basic(self.netD_B, self.real_A, fake_A)
 
     def backward_G(self):
         """Calculate the loss for generators G_A and G_B"""
