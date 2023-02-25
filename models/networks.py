@@ -2003,7 +2003,7 @@ class ellen_scatter_resnet2_1(nn.Module):
 
     def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=3, input_size=512):
         super(ellen_scatter_resnet2_1, self).__init__()
-        self.resnet = ResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, n_blocks=3)
+        self.resnet = ResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=T, n_blocks=3)
         self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16,kind=0,dropout=use_dropout,batch_norm=False)
         self.fusion = nn.Sequential(nn.ReflectionPad2d(
             3), nn.Conv2d(6, 3, kernel_size=7, padding=0), nn.Tanh())
