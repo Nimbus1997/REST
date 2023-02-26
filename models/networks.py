@@ -241,7 +241,22 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
     elif netG == 'ellen_scatter_resnet2_1':  # 2_3 based - with renset branch for no scattering
         net = ellen_scatter_resnet2_1(input_nc, output_nc, 64, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=4, n_blocks=3, input_size=input_size)
+    elif netG == 'ellen_scatter_resnet2_1_b1':  
+        net = ellen_scatter_resnet2_1_b1(input_nc, output_nc, 64, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=4, n_blocks=3, input_size=input_size)
+    elif netG == 'ellen_scatter_resnet2_1_b2':  
+        net = ellen_scatter_resnet2_1_b1(input_nc, output_nc, 64, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=4, n_blocks=3, input_size=input_size)
 
+    elif netG == 'ellen_scatter_resnet2_2':  # 2_5_1 based scattering attention 
+        net = ellen_scatter_resnet2_2(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
+    elif netG == 'ellen_scatter_resnet2_2_b1':  # 2_5_1 based scattering attention 
+        net = ellen_scatter_resnet2_2_b1(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
+    elif netG == 'ellen_scatter_resnet2_2_b2':  # 2_5_1 based scattering attention 
+        net = ellen_scatter_resnet2_2_b2(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
 
     elif netG == 'ellen_dwt_uresnet1_7':  # scattering and uresnet in one branch
         net = ellen_dwt_uresnet1_7(use_dropout=use_dropout,  input_size=input_size)
@@ -2019,6 +2034,147 @@ class ellen_scatter_resnet2_1(nn.Module):
         return self.fusion(x)
         # return result_uresnet
 
+class ellen_scatter_resnet2_1_b1(nn.Module):
+    """
+    made by ellen _2023.02.25
+    > model 2_3 based
+        scattering branch -> 그대로
+        Unet -> resnet
+    > edit 23.02.15 
+    
+    input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
+    """
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=3, input_size=512):
+        super(ellen_scatter_resnet2_1_b1, self).__init__()
+        self.resnet = ResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=True, n_blocks=3)
+        # self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16,kind=0,dropout=use_dropout,batch_norm=False)
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(
+            3), nn.Conv2d(3, 3, kernel_size=7, padding=0), nn.Tanh())
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        result_resnet = self.resnet(input)
+        # result_scattering = self.scattering_model(input)
+        # x = torch.cat([result_scattering, result_resnet], 1)
+
+        return self.fusion(result_resnet)
+        # return result_uresnet
+
+class ellen_scatter_resnet2_1_b2(nn.Module):
+    """
+    made by ellen _2023.02.25
+    > model 2_3 based
+        scattering branch -> 그대로
+        Unet -> resnet
+    > edit 23.02.15 
+    
+    input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
+    """
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=3, input_size=512):
+        super(ellen_scatter_resnet2_1_b2, self).__init__()
+        # self.resnet = ResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=True, n_blocks=3)
+        self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16,kind=0,dropout=use_dropout,batch_norm=False)
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(
+            3), nn.Conv2d(3, 3, kernel_size=7, padding=0), nn.Tanh())
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        # result_resnet = self.resnet(input)
+        result_scattering = self.scattering_model(input)
+        # x = torch.cat([result_scattering, result_resnet], 1)
+
+        return self.fusion(result_scattering)
+        # return result_uresnet
+
+
+class ellen_scatter_resnet2_2(nn.Module):
+    """
+    made by ellen _2023.02.26
+    > model ellen_scatter_resnet2_1 + 2_5_2 based
+        1) normal branch: resnet 
+        2) scattering branch: 5_2_1 branch
+    
+    input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
+    """
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
+        super(ellen_scatter_resnet2_2, self).__init__()
+        self.resnet = ResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=True, n_blocks=3)
+        self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16,kind=1,dropout=use_dropout,batch_norm=True, scattering_attention=True)
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(
+            3), nn.Conv2d(6, 3, kernel_size=7, padding=0), nn.Tanh())
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        result_resnet = self.resnet(input)
+        result_scattering = self.scattering_model(input)
+        x = torch.cat([result_scattering, result_resnet], 1)
+
+        return self.fusion(x)
+        # return result_uresnet
+
+class ellen_scatter_resnet2_2_b1(nn.Module):
+    """
+    made by ellen _2023.02.26
+    > model ellen_scatter_resnet2_1 + 2_5_2 based
+        1) normal branch: resnet 
+        2) scattering branch: 5_2_1 branch
+    
+    input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
+    """
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
+        super(ellen_scatter_resnet2_2_b1, self).__init__()
+        self.resnet = ResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=True, n_blocks=3)
+        # self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16,kind=1,dropout=use_dropout,batch_norm=True, scattering_attention=True)
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(
+            3), nn.Conv2d(3, 3, kernel_size=7, padding=0), nn.Tanh())
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        result_resnet = self.resnet(input)
+        # result_scattering = self.scattering_model(input)
+        # x = torch.cat([result_scattering, result_resnet], 1)
+
+        return self.fusion(result_resnet)
+        # return result_uresnet
+
+class ellen_scatter_resnet2_2_b2(nn.Module):
+    """
+    made by ellen _2023.02.26
+    > model ellen_scatter_resnet2_1 + 2_5_2 based
+        1) normal branch: resnet 
+        2) scattering branch: 5_2_1 branch
+    
+    input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
+    """
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
+        super(ellen_scatter_resnet2_2_b2, self).__init__()
+        # self.resnet = ResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=True, n_blocks=3)
+        self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16,kind=1,dropout=use_dropout,batch_norm=True, scattering_attention=True)
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(
+            3), nn.Conv2d(3, 3, kernel_size=7, padding=0), nn.Tanh())
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        # result_resnet = self.resnet(input)
+        result_scattering = self.scattering_model(input)
+        # x = torch.cat([result_scattering, result_resnet], 1)
+
+        return self.fusion(result_scattering)
 
 class ellen_dwt_uresnet1_7(nn.Module):
     """
