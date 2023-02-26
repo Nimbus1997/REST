@@ -202,7 +202,7 @@ if __name__ == '__main__':
             ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[4], color='rosybrown', label=ellen_train_loss_name[4]) # idt_A
             
             ax1.legend(loc='lower left')
-            ax1.set_ylim([0,0.5])
+            ax1.set_ylim([0,1])
             #FIQA
             ax2=ax1.twinx()
             ax2.set_ylabel("FIQA")
@@ -260,7 +260,7 @@ if __name__ == '__main__':
     ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[4], color='rosybrown', label=ellen_train_loss_name[4]) # idt_A
     
     ax1.legend(loc='lower left')
-    ax1.set_ylim([0,0.5])
+    ax1.set_ylim([0,1])
     #FIQA
     ax2=ax1.twinx()
     ax2.set_ylabel("FIQA")
