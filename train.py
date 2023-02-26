@@ -195,14 +195,14 @@ if __name__ == '__main__':
             fig, ax1 = plt.subplots()
             ax1.set_xlabel('epochs')
             ax1.set_ylabel('loss')
-            ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[0], color='lightblue', label=ellen_train_loss_name[0]) # D_A_real
+            ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[0], color='cadetblue', label=ellen_train_loss_name[0]) # D_A_real
             ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[1], color='lightslategray', label=ellen_train_loss_name[1]) # D_A_fake
             ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[2], color='salmon', label=ellen_train_loss_name[2]) # G_A
             ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[3], color='pink', label=ellen_train_loss_name[3]) # cycle_A
             ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[4], color='rosybrown', label=ellen_train_loss_name[4]) # idt_A
             
             ax1.legend(loc='lower left')
-            ax1.set_ylim([0,5])
+            ax1.set_ylim([0,0.5])
             #FIQA
             ax2=ax1.twinx()
             ax2.set_ylabel("FIQA")
@@ -253,14 +253,14 @@ if __name__ == '__main__':
     fig, ax1 = plt.subplots()
     ax1.set_xlabel('epochs')
     ax1.set_ylabel('loss')
-    ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[0], color='lightblue', label=ellen_train_loss_name[0]) # D_A_real
+    ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[0], color='cadetblue', label=ellen_train_loss_name[0]) # D_A_real
     ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[1], color='lightslategray', label=ellen_train_loss_name[1]) # D_A_fake
     ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[2], color='salmon', label=ellen_train_loss_name[2]) # G_A
     ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[3], color='pink', label=ellen_train_loss_name[3]) # cycle_A
     ax1.plot(range(1, now_n_epoch+1), ellen_train_loss[4], color='rosybrown', label=ellen_train_loss_name[4]) # idt_A
     
     ax1.legend(loc='lower left')
-    ax1.set_ylim([0,5])
+    ax1.set_ylim([0,0.5])
     #FIQA
     ax2=ax1.twinx()
     ax2.set_ylabel("FIQA")
