@@ -67,6 +67,9 @@ if __name__ == '__main__':
     model = create_model(opt)      # create a model given opt.model and other options
     model.setup(opt)               # regular setup: load and print networks; create schedulers
 
+    if opt.ellen_test:
+        if not os.path.isdir(os.path.join("./results", opt.name,"fakeB")):
+            os.makedirs(os.path.join("./results", opt.name,"fakeB"))
     # initialize logger
     if opt.use_wandb:
         wandb_run = wandb.init(project='CycleGAN-and-pix2pix', name=opt.name, config=opt) if not wandb.run else wandb.run
