@@ -44,6 +44,7 @@ class TrainOptions(BaseOptions):
         parser.add_argument('--no_evalmode',action='store_true', help = "if stored model.eval()& model.train() will not done")
         parser.add_argument('--smaller_lr_D', type=float, default=1.0, help = "how much smaller learning rate for discriminator")
         parser.add_argument('--ganloss_lambda', type=float, default=1.0, help = "weight of the GAN loss")  # 23.02.28
-        
+        parser.add_argument('--adamw',action='store_true', help = "if stored, adamw optimizer will be selected. otherwise, adam")  # 23.03.02
+
         self.isTrain = True
         return parser

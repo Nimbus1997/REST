@@ -38,6 +38,7 @@ import random
 import torch
 import numpy as np
 import random 
+from tqdm import tqdm
 
 random_seed = 42
 torch.manual_seed(random_seed) #1.pytorch randomness
@@ -95,19 +96,22 @@ if __name__ == '__main__':
         sample_list.sort()
         
 
-    for i, data in enumerate(dataset):
+    for i, data in enumerate(tqdm(dataset)):
         if i >= opt.num_test:  # only apply our model to opt.num_test images.
             break
         model.set_input(data)  # unpack data from data loader
-        model.test()           # run inference
-        visuals = model.get_current_visuals()  # get image results
-        img_path = model.get_image_paths()     # get image paths
-        if i % 5 == 0:  # save images to an HTML file
-            print('processing (%04d)-th image... %s' % (i, img_path))
-
-        if opt.result_sample: #sample 할때는 100개의 randome 이미지만 저장하고, 아니면 모든 이미지 다 저장
-            if i in sample_list:
-                save_images(webpage, visuals, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+        if opt.ellen_test:
+            model.save_fake_B_in_test()
         else:
-            save_images(webpage, visuals, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+            model.test()           # run inference
+            visuals = model.get_current_visuals()  # get image results
+            img_path = model.get_image_paths()     # get image paths
+            if i % 5 == 0:  # save images to an HTML file
+                print('processing (%04d)-th image... %s' % (i, img_path))
+
+            if opt.result_sample: #sample 할때는 100개의 randome 이미지만 저장하고, 아니면 모든 이미지 다 저장
+                if i in sample_list:
+                    save_images(webpage, visuals, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
+            else:
+                save_images(webpage, visuals, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize, use_wandb=opt.use_wandb)
     webpage.save()  # save the HTML

@@ -103,8 +103,13 @@ class CycleGANModel(BaseModel):
             self.criterionCycle = torch.nn.L1Loss()
             self.criterionIdt = torch.nn.L1Loss()
             # initialize optimizers; schedulers will be automatically created by function <BaseModel.setup>.
-            self.optimizer_G = torch.optim.Adam(itertools.chain(self.netG_A.parameters(), self.netG_B.parameters()), lr=opt.lr, betas=(opt.beta1, 0.999)) # opt.beta1: 0.5 - random성 없어보임
-            self.optimizer_D = torch.optim.Adam(itertools.chain(self.netD_A.parameters(), self.netD_B.parameters()), lr=opt.smaller_lr_D*opt.lr, betas=(opt.beta1, 0.999))
+            if opt.adamw:  # ellen 23.03.02
+                self.optimizer_G = torch.optim.AdamW(itertools.chain(self.netG_A.parameters(), self.netG_B.parameters()), lr=opt.lr, betas=(opt.beta1, 0.999)) # opt.beta1: 0.5 - random성 없어보임
+                self.optimizer_D = torch.optim.AdamW(itertools.chain(self.netD_A.parameters(), self.netD_B.parameters()), lr=opt.smaller_lr_D*opt.lr, betas=(opt.beta1, 0.999))
+            else:
+                self.optimizer_G = torch.optim.Adam(itertools.chain(self.netG_A.parameters(), self.netG_B.parameters()), lr=opt.lr, betas=(opt.beta1, 0.999)) # opt.beta1: 0.5 - random성 없어보임
+                self.optimizer_D = torch.optim.Adam(itertools.chain(self.netD_A.parameters(), self.netD_B.parameters()), lr=opt.smaller_lr_D*opt.lr, betas=(opt.beta1, 0.999))
+            
             self.optimizers.append(self.optimizer_G)
             self.optimizers.append(self.optimizer_D)
 
@@ -131,7 +136,7 @@ class CycleGANModel(BaseModel):
             self.fake_B = self.netG_A(self.real_A)  # G_A(A)
             self.rec_A = self.netG_B(self.fake_B)   # G_B(G_A(A))
         else:
-            self.fake_B = self.netG_A(self.real_A)  # G_A(A)
+            self.fake_B = self.netG_A(self.real_A)  # G_A(A)s
             self.rec_A = self.netG_B(self.fake_B)   # G_B(G_A(A))
             self.fake_A = self.netG_B(self.real_B)  # G_B(B)
             self.rec_B = self.netG_A(self.fake_A)   # G_A(G_B(B))
@@ -167,6 +172,18 @@ class CycleGANModel(BaseModel):
             im = util.tensor2im_val(img)
 
             whole_path=os.path.join(self.save_dir, "temp", name)
+            util.save_image(im,whole_path, aspect_ratio=1.0 )
+
+    def save_fake_B_in_test(self):
+        """ to speed up testing - ellen 23.03.07"""
+        self.fake_B = self.netG_A(self.real_A)
+        # save fake_B file
+        for i in range(len(self.fake_B)):
+            name = self.image_paths[i].split("/")[-1]
+            img = self.fake_B[i]
+            im = util.tensor2im_val(img)
+
+            whole_path=os.path.join(self.save_dir, name)
             util.save_image(im,whole_path, aspect_ratio=1.0 )
 
     def save_best_fake_B(self):
