@@ -175,7 +175,7 @@ class CycleGANModel(BaseModel):
             util.save_image(im,whole_path, aspect_ratio=1.0 )
 
     def save_fake_B_in_test(self):
-        """ to speed up testing - ellen 23.03.07"""
+        """ ellen_test\ to speed up testing - ellen 23.03.07"""
         self.fake_B = self.netG_A(self.real_A)
         # save fake_B file
         for i in range(len(self.fake_B)):
@@ -183,7 +183,7 @@ class CycleGANModel(BaseModel):
             img = self.fake_B[i]
             im = util.tensor2im_val(img)
 
-            whole_path=os.path.join(self.save_dir, name)
+            whole_path=os.path.join(self.save_dir_ellen_test, name)
             util.save_image(im,whole_path, aspect_ratio=1.0 )
 
     def save_best_fake_B(self):
