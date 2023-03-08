@@ -66,7 +66,7 @@ if __name__ == '__main__':
     dataset = create_dataset(opt)  # create a dataset given opt.dataset_mode and other options
     model = create_model(opt)      # create a model given opt.model and other options
     model.setup(opt)               # regular setup: load and print networks; create schedulers
-
+    opt.eval = True #23.03.08
     if opt.ellen_test:
         if not os.path.isdir(os.path.join("./results", opt.name,"fakeB")):
             os.makedirs(os.path.join("./results", opt.name,"fakeB"))
