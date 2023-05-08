@@ -214,6 +214,11 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
         net = ellen_dwt_uresnet2_3(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
 
+    elif netG == 'ellen_dwt_uresnet2_3_0503':  # 2_1 based - scattering branch instead of dwt branch
+        net = ellen_dwt_uresnet2_3_0503(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
+                                
+                                
     elif netG == 'ellen_dwt_uresnet2_3_b1':  # 2_1 based - scattering branch instead of dwt branch
         net = ellen_dwt_uresnet2_3_b1(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
@@ -757,14 +762,14 @@ class UnetSkipConnectionBlock(nn.Module):
         upnorm = norm_layer(outer_nc)
 
         #실질적 모델 구성 - becuase it has a word "model" in it & upconv가 keep changing
-        if outermost:  # 제일 마지막 module
+        if outermost:  # 제일 밖 module
             upconv = nn.ConvTranspose2d(inner_nc * 2, outer_nc,
                                         kernel_size=4, stride=2,
                                         padding=1)
             down = [downconv]
             up = [uprelu, upconv, nn.Tanh()]
             model = down + [submodule] + up
-        elif innermost:  # 제일 처음 module
+        elif innermost:  # 제일 안 module
             upconv = nn.ConvTranspose2d(inner_nc, outer_nc,
                                         kernel_size=4, stride=2,
                                         padding=1, bias=use_bias)
@@ -1130,7 +1135,7 @@ class ellen_uresnet_new(nn.Module):
         return self.model(input)
 
 
-def blockUNet(in_c, out_c, name, transposed=False, bn=False, relu=True, dropout=False, resize=False):
+def blockUNet(in_c, out_c, name, transposed=False,bn=False, relu=True, dropout=False, resize=False):
     block = nn.Sequential()
     if relu:# up
         block.add_module('%s_relu' % name, nn.ReLU(inplace=True))
@@ -1155,6 +1160,32 @@ def blockUNet(in_c, out_c, name, transposed=False, bn=False, relu=True, dropout=
         block.add_module('%s_dropout' % name, nn.Dropout2d(0.5, inplace=True))
     return block
 
+
+def blockUNetIN(in_c, out_c, name, transposed=False,inn=True, relu=True, dropout=False, resize=False):
+    # 2023.05.08 batchnorm -> instance norm
+    block = nn.Sequential()
+    if relu:# up
+        block.add_module('%s_relu' % name, nn.ReLU(inplace=True))
+    else: # down
+        block.add_module('%s_leakyrelu' %
+                         name, nn.LeakyReLU(0.2, inplace=True))
+
+    if not transposed:  # when going down
+        block.add_module('%s_conv' % name, nn.Conv2d(
+            in_c, out_c, 4, 2, 1, bias=False)) # SIZE 1/2 - K, S, P
+    elif transposed and not resize:  # original going up
+        block.add_module('%s_tconv' % name, nn.ConvTranspose2d(
+            in_c, out_c, 4, 2, 1, bias=False))
+    # to reduce checkerboard artifact -> for model 1_6 (same size conv)
+    elif transposed and resize:
+        block.add_module('%s_conv' % name, nn.Conv2d(
+            in_c, out_c, 3, 1, 1, bias=False))
+
+    if inn:
+        block.add_module('%s_in' % name, nn.InstanceNorm2d(out_c))
+    if dropout:
+        block.add_module('%s_dropout' % name, nn.Dropout2d(0.5, inplace=True))
+    return block
 
 
 
@@ -1191,6 +1222,54 @@ class scatter_transform(nn.Module):
         if self.scattering_attention:
             scatter_output=scatter_output*100.
         scatter_output = self.conv1x1(scatter_output)
+        scatter_output=self.leakyrelu(scatter_output) #added with kind
+        if self.dropout:
+            scatter_output=self.dropout_layer(scatter_output)
+        return scatter_output
+
+class scatter_transform_norm(nn.Module):
+    # 2023.05.08
+    # no norm -> instance norm (after scattering)
+    def __init__(self, in_channels, out_channels, size, level, kind=0,norm_layer =nn.InstanceNorm2d ,dropout=False,scattering_attention=False):
+        super(scatter_transform_norm, self).__init__()
+        self.kind = kind # [0: cat & S0, S1], [1: sum & only S1]
+        self.dropout=dropout
+        self.scattering_attention=scattering_attention
+        if dropout:
+            self.dropout_layer=nn.Dropout(0.5)
+        self.output_size = int(size/(2**level))
+        input_size = int(size/(2**(level-1)))
+        J = 1
+        self.Scattering = Scattering2D(
+            J, (input_size, input_size))  # backend='torch_skcuda
+        if self.kind ==0:
+            self.normm = norm_layer(in_channels*9)
+            self.conv1x1 = nn.Conv2d(
+                in_channels*9, out_channels, kernel_size=1, padding=0)
+        elif self.kind ==1:
+            self.normm = norm_layer(in_channels)
+            self.conv1x1 = nn.Conv2d(
+                in_channels, out_channels, kernel_size=1, padding=0)
+        self.leakyrelu=nn.LeakyReLU(0.2, inplace=True)
+        self.normm2 = norm_layer(out_channels)
+
+
+
+    def forward(self, x):
+        scatter_output = self.Scattering.scattering(x)
+        if self.kind ==0:
+            scatter_output = scatter_output.view(scatter_output.size(
+                0), -1, self.output_size, self.output_size)
+            scatter_output = self.normm(scatter_output)
+        elif self.kind ==1:
+            scatter_output=torch.sum(scatter_output[:,:,1:,:,:],2) #batch, channel, 9, H, W 
+            scatter_output =self.normm(scatter_output)
+        
+        if self.scattering_attention:
+            scatter_output=scatter_output*100.
+        scatter_output = self.conv1x1(scatter_output)
+        scatter_output =self.normm2(scatter_output)
+
         scatter_output=self.leakyrelu(scatter_output) #added with kind
         if self.dropout:
             scatter_output=self.dropout_layer(scatter_output)
@@ -1405,6 +1484,223 @@ class scattering_Unet(nn.Module):
             tail1=self.tailnorm(tail1)
             return tail1
 
+class scattering_Unet_norm(nn.Module):
+    # 2023.05.08 
+    # (1) instance norm 추가 (batch norm 대신)
+    # (2) layer 2까지
+    # (3) 기본 
+
+    def __init__(self, input_size, output_nc, norm_layer = nn.InstanceNorm2d, nf=16,kind=0,dropout=False,norm=False,scattering_attention=False):
+        super(scattering_Unet_norm, self).__init__()
+        if type(norm_layer) == functools.partial:
+            inn = norm_layer.func == nn.InstanceNorm2d
+        else:
+            inn = norm_layer == nn.InstanceNorm2d
+        layer_idx = 1
+        name = 'layer%d' % layer_idx
+        layer1 = nn.Sequential()
+        layer1.add_module(name, nn.Conv2d(3, nf-1, 4, 2, 1, bias=False)) # SIZE 1/2 동일
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer2 = blockUNetIN(nf, nf*2-2, name, transposed=False,
+                           inn=inn, relu=False, dropout=dropout)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer3 = blockUNetIN(nf*2, nf*4-4, name, transposed=False,
+                           inn=inn, relu=False, dropout=dropout)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer4 = blockUNetIN(nf*4, nf*8-8, name, transposed=False,
+                           inn=inn, relu=False, dropout=dropout)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer5 = blockUNetIN(nf*8, nf*8-16, name, transposed=False,
+                           inn=inn, relu=False, dropout=dropout)
+        layer_idx += 1
+        name = 'layer%d' % layer_idx
+        layer6 = blockUNetIN(nf*8, nf*8, name, transposed=False,
+                           inn=inn, relu=False, dropout=dropout)
+
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer6 = blockUNetIN(nf * 8, nf * 8, name,
+                            transposed=True, inn=inn, relu=True, dropout=dropout, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer5 = blockUNetIN(nf * 16, nf * 8, name,
+                            transposed=True, inn=inn, relu=True, dropout=dropout, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer4 = blockUNetIN(nf * 16, nf * 4, name,
+                            transposed=True, inn=inn, relu=True, dropout=dropout, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer3 = blockUNetIN(nf * 8, nf * 2, name,
+                            transposed=True, inn=inn, relu=True, dropout=dropout, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer2 = blockUNetIN(nf * 4, nf, name, transposed=True,
+                            inn=inn, relu=True, dropout=dropout, resize=True)
+        layer_idx -= 1
+        name = 'dlayer%d' % layer_idx
+        dlayer1 = blockUNetIN(nf * 2, nf * 2, name,
+                            transposed=True, inn=inn, relu=True, dropout=dropout, resize=True)
+
+        self.layer1 = layer1
+        self.scattering_down_1 = scatter_transform_norm(3, 1, input_size, 1, kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
+        self.layer2 = layer2
+        self.scattering_down_2 = scatter_transform_norm(16, 2, input_size, 2,kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
+        self.layer3 = layer3
+        self.scattering_down_3 = scatter_transform_norm(32, 4, input_size, 3,kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
+        self.layer4 = layer4
+        self.scattering_down_4 = scatter_transform_norm(64, 8, input_size, 4,kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
+        self.layer5 = layer5
+        self.scattering_down_5 = scatter_transform_norm(128, 16, input_size, 5,kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
+        self.layer6 = layer6
+        self.dlayer6 = dlayer6
+        self.dlayer5 = dlayer5
+        self.dlayer4 = dlayer4
+        self.dlayer3 = dlayer3
+        self.dlayer2 = dlayer2
+        self.dlayer1 = dlayer1
+
+        self.norm = norm
+        if norm:
+            self.l1norm=nn.InstanceNorm2d(nf)
+            self.l2norm=nn.InstanceNorm2d(nf*2)
+            self.l3norm=nn.InstanceNorm2d(nf*4)
+            self.l4norm=nn.InstanceNorm2d(nf*8)
+            self.l5norm=nn.InstanceNorm2d(nf*8)
+            self.l6norm=nn.InstanceNorm2d(nf*8)
+
+            self.dl6norm=nn.InstanceNorm2d(nf*8)
+            self.dl5norm=nn.InstanceNorm2d(nf*8)
+            self.dl4norm=nn.InstanceNorm2d(nf*4)
+            self.dl3norm=nn.InstanceNorm2d(nf*2)
+            self.dl2norm=nn.InstanceNorm2d(nf)
+            self.dl1norm=nn.InstanceNorm2d(nf*2)
+            self.tailnorm=nn.InstanceNorm2d(output_nc)
+
+        # self.tail_conv1 = nn.Conv2d(32, output_nc, 3, padding=1, bias=True) # 2_3_ori
+        self.tail_conv1 = nn.Sequential(nn.Conv2d(32, output_nc, 3, padding=1, bias=True), nn.Tanh()) # made - 2022.11.21
+
+    def forward(self, x):
+        if not self.norm:
+            conv_out1 = self.layer1(x)
+            scattering1 = self.scattering_down_1(x)
+            out1 = torch.cat([conv_out1, scattering1], 1)
+            conv_out2 = self.layer2(out1)
+            scattering2 = self.scattering_down_2(out1)
+            out2 = torch.cat([conv_out2, scattering2], 1)
+            conv_out3 = self.layer3(out2)
+            scattering3 = self.scattering_down_3(out2)
+            out3 = torch.cat([conv_out3, scattering3], 1)
+            conv_out4 = self.layer4(out3)
+            scattering4 = self.scattering_down_4(out3)
+            out4 = torch.cat([conv_out4, scattering4], 1)
+            conv_out5 = self.layer5(out4)
+            scattering5 = self.scattering_down_5(out4)
+            out5 = torch.cat([conv_out5, scattering5], 1)
+            out6 = self.layer6(out5)
+
+            sizee = out6.shape[-1]*2
+
+            tin6 = interpolate(out6, size=(sizee, sizee), mode='bilinear')
+            dout6 = self.dlayer6(tin6)
+
+            Tout6_out5 = torch.cat([dout6, out5], 1)
+            sizee = sizee*2
+            tin5 = interpolate(Tout6_out5, size=(sizee, sizee), mode='bilinear')
+            Tout5 = self.dlayer5(tin5)
+
+            Tout5_out4 = torch.cat([Tout5, out4], 1)
+            sizee = sizee*2
+            tin4 = interpolate(Tout5_out4, size=(sizee, sizee), mode='bilinear')
+            Tout4 = self.dlayer4(tin4)
+
+            Tout4_out3 = torch.cat([Tout4, out3], 1)
+            sizee = sizee*2
+            tin3 = interpolate(Tout4_out3, size=(sizee, sizee), mode='bilinear')
+            Tout3 = self.dlayer3(tin3)
+
+            Tout3_out2 = torch.cat([Tout3, out2], 1)
+            sizee = sizee*2
+            tin2 = interpolate(Tout3_out2, size=(sizee, sizee), mode='bilinear')
+            Tout2 = self.dlayer2(tin2)
+
+            Tout2_out1 = torch.cat([Tout2, out1], 1)
+            sizee = sizee*2
+            tin1 = interpolate(Tout2_out1, size=(sizee, sizee), mode='bilinear')
+            Tout1 = self.dlayer1(tin1)
+
+            tail1 = self.tail_conv1(Tout1)
+            return tail1
+
+        else: 
+            conv_out1 = self.layer1(x)
+            scattering1 = self.scattering_down_1(x)
+            out1 = torch.cat([conv_out1, scattering1], 1)
+            out1=self.l1norm(out1)
+            conv_out2 = self.layer2(out1)
+            scattering2 = self.scattering_down_2(out1)
+            out2 = torch.cat([conv_out2, scattering2], 1)
+            out2=self.l2norm(out2)
+            conv_out3 = self.layer3(out2)
+            scattering3 = self.scattering_down_3(out2)
+            out3 = torch.cat([conv_out3, scattering3], 1)
+            out3=self.l3norm(out3)
+            conv_out4 = self.layer4(out3)
+            scattering4 = self.scattering_down_4(out3)
+            out4 = torch.cat([conv_out4, scattering4], 1)
+            out4=self.l4norm(out4)
+            conv_out5 = self.layer5(out4)
+            scattering5 = self.scattering_down_5(out4)
+            out5 = torch.cat([conv_out5, scattering5], 1)
+            out5=self.l5norm(out5)
+            out6 = self.layer6(out5)
+            out6=self.l6norm(out6)
+
+            sizee = out6.shape[-1]*2
+
+            tin6 = interpolate(out6, size=(sizee, sizee), mode='bilinear')
+            dout6 = self.dlayer6(tin6)
+            dout6=self.dl6norm(dout6)
+            
+
+            Tout6_out5 = torch.cat([dout6, out5], 1)
+            sizee = sizee*2
+            tin5 = interpolate(Tout6_out5, size=(sizee, sizee), mode='bilinear')
+            Tout5 = self.dlayer5(tin5)
+            Tout5=self.dl5norm(Tout5)
+
+            Tout5_out4 = torch.cat([Tout5, out4], 1)
+            sizee = sizee*2
+            tin4 = interpolate(Tout5_out4, size=(sizee, sizee), mode='bilinear')
+            Tout4 = self.dlayer4(tin4)
+            Tout4=self.dl4norm(Tout4)
+
+            Tout4_out3 = torch.cat([Tout4, out3], 1)
+            sizee = sizee*2
+            tin3 = interpolate(Tout4_out3, size=(sizee, sizee), mode='bilinear')
+            Tout3 = self.dlayer3(tin3)
+            Tout3=self.dl3norm(Tout3)
+
+            Tout3_out2 = torch.cat([Tout3, out2], 1)
+            sizee = sizee*2
+            tin2 = interpolate(Tout3_out2, size=(sizee, sizee), mode='bilinear')
+            Tout2 = self.dlayer2(tin2)
+            Tout2=self.dl2norm(Tout2)
+
+            Tout2_out1 = torch.cat([Tout2, out1], 1)
+            sizee = sizee*2
+            tin1 = interpolate(Tout2_out1, size=(sizee, sizee), mode='bilinear')
+            Tout1 = self.dlayer1(tin1)
+            Tout1=self.dl1norm(Tout1)
+
+            tail1 = self.tail_conv1(Tout1)
+            tail1=self.tailnorm(tail1)
+            return tail1
+        
 
 class scattering_Unet2_6(nn.Module):
     # scattering unet for 2_6 : layer 6-> 4
@@ -1853,6 +2149,36 @@ class ellen_dwt_uresnet2_3(nn.Module):
 
         return self.fusion(x)
         # return result_uresnet
+
+class ellen_dwt_uresnet2_3_0503(nn.Module):
+    """
+    made by ellen _2023.05.08
+    > model 2_3 based
+        * scatteing branch에서, changed batch norm -> instance norm  (unet branch는 원래 instance였음)
+        * change norm = Ture
+        * 
+         
+    """
+
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.InstanceNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
+        super(ellen_dwt_uresnet2_3_0503, self).__init__()
+        self.uresnet = ellen_uresnet(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                     use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks,batch_norm=True)
+        self.scattering_model = scattering_Unet_norm(input_size, output_nc=3,norm_layer=norm_layer, nf=16,kind=0,dropout=use_dropout,batch_norm=False)
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(
+            3), nn.Conv2d(6, 3, kernel_size=7, padding=0), nn.Tanh())
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        result_uresnet = self.uresnet(input)
+        result_scattering = self.scattering_model(input)
+        x = torch.cat([result_scattering, result_uresnet], 1)
+
+        return self.fusion(x)
+        # return result_uresnet
+
 
 
 class ellen_dwt_uresnet2_3_b1(nn.Module):
