@@ -98,7 +98,7 @@ if __name__ == '__main__':
     
     # regular setup: load and print networks; create schedulers
     model.setup(opt)
-   
+    print(model)
     # create a visualizer that display/save images and plots
     visualizer = Visualizer(opt)
     total_iters = 0  # the total number of training iterations
