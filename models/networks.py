@@ -221,7 +221,9 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
     elif netG == 'ellen_dwt_uresnet2_3_0511':  # 2_1 based - scattering branch instead of dwt branch
         net = ellen_dwt_uresnet2_3_0511(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
-                                
+    elif netG == 'ellen_dwt_uresnet2_3_0517':  # 2_1 based - scattering branch instead of dwt branch
+        net = ellen_dwt_uresnet2_3_0517(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                   use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)                            
                                 
     elif netG == 'ellen_dwt_uresnet2_3_b1':  # 2_1 based - scattering branch instead of dwt branch
         net = ellen_dwt_uresnet2_3_b1(input_nc, output_nc, ngf, norm_layer=norm_layer,
@@ -1165,7 +1167,7 @@ def blockUNet(in_c, out_c, name, transposed=False,bn=False, relu=True, dropout=F
     return block
 
 
-def blockUNetIN(in_c, out_c, name, transposed=False,inn=True, relu=True, dropout=False, resize=False, bias_use = False):
+def blockUNetIN(in_c, out_c, name, transposed=False,inn=True, relu=True, dropout=False, resize=False, bais_use = False):
     # 2023.05.08 batchnorm -> instance norm
     
     block = nn.Sequential()
@@ -1177,14 +1179,14 @@ def blockUNetIN(in_c, out_c, name, transposed=False,inn=True, relu=True, dropout
 
     if not transposed:  # when going down
         block.add_module('%s_conv' % name, nn.Conv2d(
-            in_c, out_c, 4, 2, 1, bias=bias_use)) # SIZE 1/2 - K, S, P
+            in_c, out_c, 4, 2, 1, bias=bais_use)) # SIZE 1/2 - K, S, P
     elif transposed and not resize:  # original going up
         block.add_module('%s_tconv' % name, nn.ConvTranspose2d(
-            in_c, out_c, 4, 2, 1, bias=bias_use))
+            in_c, out_c, 4, 2, 1, bias=bais_use))
     # to reduce checkerboard artifact -> for model 1_6 (same size conv)
     elif transposed and resize:
         block.add_module('%s_conv' % name, nn.Conv2d(
-            in_c, out_c, 3, 1, 1, bias=bias_use))
+            in_c, out_c, 3, 1, 1, bias=bais_use))
 
     if inn:
         block.add_module('%s_in' % name, nn.InstanceNorm2d(out_c))
@@ -1813,19 +1815,19 @@ class scattering_Unet_norm3(nn.Module):
         self.scattering_onlyone = scatter_transform_norm3(input_size,norm_layer = norm_layer, dropout=dropout,nf = nf)
 
         self.head_conv = self.fusion = nn.Sequential(nn.ReflectionPad2d(
-            1), nn.Conv2d(3,nf - nf/4, 3, 1, 0), nn.InstanceNorm2d(nf/4), nn.LeakyReLU(0.2, inplace=True))
+            1), nn.Conv2d(3,nf - nf//4, 3, 1, 0), nn.InstanceNorm2d(nf/4), nn.LeakyReLU(0.2, inplace=True))
 
         layer_idx = 1
         name = 'layer%d' % layer_idx
-        self.layer1 = blockUNetIN(nf, nf-nf/4, name, transposed=False,
+        self.layer1 = blockUNetIN(nf, nf-nf//4, name, transposed=False,
                            inn=inn, relu=False, dropout=dropout, bais_use = bais_use)
         layer_idx += 1
         name = 'layer%d' % layer_idx
-        self.layer2 = blockUNetIN(nf, nf*2-nf*2/4, name, transposed=False,
+        self.layer2 = blockUNetIN(nf, nf*2-nf*2//4, name, transposed=False,
                            inn=inn, relu=False, dropout=dropout, bais_use = bais_use)
         layer_idx += 1
         name = 'layer%d' % layer_idx
-        self.layer3 = blockUNetIN(nf*2, nf*4-nf*4/4, name, transposed=False,
+        self.layer3 = blockUNetIN(nf*2, nf*4-nf*4//4, name, transposed=False,
                            inn=inn, relu=False, dropout=dropout, bais_use = bais_use)
         
         layer_idx += 1
@@ -2393,6 +2395,31 @@ class ellen_dwt_uresnet2_3_0511(nn.Module):
         x = torch.cat([result_uresnet, result_scattering], 1)
 
         return self.fusion(x)
+        # return result_uresnet
+
+class ellen_dwt_uresnet2_3_0517(nn.Module):
+    """
+    made by ellen _2023.05.17
+    > ellen_dwt_uresnet2_3_0511  based
+        * only scattering branch but with higher nf
+    """
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.InstanceNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
+        super(ellen_dwt_uresnet2_3_0517, self).__init__()
+        # self.uresnet = ellen_uresnet(input_nc, output_nc, ngf, norm_layer=norm_layer,
+                                    #  use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks,batch_norm=True) # True로 바꿈 0511
+        self.scattering_model = scattering_Unet_norm3(input_size, output_nc=3, norm_layer=norm_layer, nf=64, kind=0, dropout=use_dropout)
+        self.fusion = nn.Sequential(nn.ReflectionPad2d(
+            1), nn.Conv2d(3, 3, kernel_size=3, padding=0),nn.InstanceNorm2d(3), nn.Tanh(), nn.ReflectionPad2d(
+            1), nn.Conv2d(3, 3, kernel_size=3, padding=0), nn.Tanh())
+
+    def forward(self, input):
+        """Standard forward"""
+        # print(type(input)) # <class 'torch.Tensor'>
+        # print(input.shape) # torch.Size([1, 3, 512, 512])
+        # result_uresnet = self.uresnet(input)
+        result_scattering = self.scattering_model(input)
+
+        return self.fusion(result_scattering)
         # return result_uresnet
 
 
