@@ -1853,7 +1853,7 @@ class scattering_Unet_norm3(nn.Module):
                             transposed=True, inn=inn, relu=True, dropout=dropout, resize=True, bais_use = bais_use)
 
 
-        self.tail_conv1 = nn.Sequential(nn.Conv2d(32, output_nc, 3, padding=1, bias=bais_use), nn.InstanceNorm2d(output_nc), nn.Tanh()) # made - 2022.11.21
+        self.tail_conv1 = nn.Sequential(nn.Conv2d(nf * 2, output_nc, 3, padding=1, bias=bais_use), nn.InstanceNorm2d(output_nc), nn.Tanh()) # made - 2022.11.21
 
     def forward(self, x):
         s0,s1,s2,s3=self.scattering_onlyone(x)
