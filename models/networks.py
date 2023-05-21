@@ -1371,22 +1371,22 @@ class scattering_Unet(nn.Module):
         layer_idx = 1
         name = 'layer%d' % layer_idx
         layer1 = nn.Sequential()
-        layer1.add_module(name, nn.Conv2d(3, nf-1, 4, 2, 1, bias=False)) # SIZE 1/2 동일
+        layer1.add_module(name, nn.Conv2d(3, nf-nf//16, 4, 2, 1, bias=False)) # SIZE 1/2 동일
         layer_idx += 1
         name = 'layer%d' % layer_idx
-        layer2 = blockUNet(nf, nf*2-2, name, transposed=False,
+        layer2 = blockUNet(nf, nf*2-nf//16*2, name, transposed=False,
                            bn=True, relu=False, dropout=dropout)
         layer_idx += 1
         name = 'layer%d' % layer_idx
-        layer3 = blockUNet(nf*2, nf*4-4, name, transposed=False,
+        layer3 = blockUNet(nf*2, nf*4-nf//16*4, name, transposed=False,
                            bn=True, relu=False, dropout=dropout)
         layer_idx += 1
         name = 'layer%d' % layer_idx
-        layer4 = blockUNet(nf*4, nf*8-8, name, transposed=False,
+        layer4 = blockUNet(nf*4, nf*8-nf//16*8, name, transposed=False,
                            bn=True, relu=False, dropout=dropout)
         layer_idx += 1
         name = 'layer%d' % layer_idx
-        layer5 = blockUNet(nf*8, nf*8-16, name, transposed=False,
+        layer5 = blockUNet(nf*8, nf*8-nf//16*16, name, transposed=False,
                            bn=True, relu=False, dropout=dropout)
         layer_idx += 1
         name = 'layer%d' % layer_idx
@@ -1421,13 +1421,13 @@ class scattering_Unet(nn.Module):
         self.layer1 = layer1
         self.scattering_down_1 = scatter_transform(3, 1, input_size, 1, kind,dropout=dropout,scattering_attention=scattering_attention)
         self.layer2 = layer2
-        self.scattering_down_2 = scatter_transform(16, 2, input_size, 2,kind,dropout=dropout,scattering_attention=scattering_attention)
+        self.scattering_down_2 = scatter_transform(nf, nf//16*2, input_size, 2,kind,dropout=dropout,scattering_attention=scattering_attention)
         self.layer3 = layer3
-        self.scattering_down_3 = scatter_transform(32, 4, input_size, 3,kind,dropout=dropout,scattering_attention=scattering_attention)
+        self.scattering_down_3 = scatter_transform(nf*2, nf//16*4, input_size, 3,kind,dropout=dropout,scattering_attention=scattering_attention)
         self.layer4 = layer4
-        self.scattering_down_4 = scatter_transform(64, 8, input_size, 4,kind,dropout=dropout,scattering_attention=scattering_attention)
+        self.scattering_down_4 = scatter_transform(nf*4, nf//16*8, input_size, 4,kind,dropout=dropout,scattering_attention=scattering_attention)
         self.layer5 = layer5
-        self.scattering_down_5 = scatter_transform(128, 16, input_size, 5,kind,dropout=dropout,scattering_attention=scattering_attention)
+        self.scattering_down_5 = scatter_transform(nf*8, nf//16*16, input_size, 5,kind,dropout=dropout,scattering_attention=scattering_attention)
         self.layer6 = layer6
         self.dlayer6 = dlayer6
         self.dlayer5 = dlayer5
@@ -1592,22 +1592,22 @@ class scattering_Unet_norm(nn.Module):
         layer_idx = 1
         name = 'layer%d' % layer_idx
         layer1 = nn.Sequential()
-        layer1.add_module(name, nn.Conv2d(3, nf-1, 4, 2, 1, bias=False)) # SIZE 1/2 동일
+        layer1.add_module(name, nn.Conv2d(3, nf-nf//16, 4, 2, 1, bias=False)) # SIZE 1/2 동일
         layer_idx += 1
         name = 'layer%d' % layer_idx
-        layer2 = blockUNetIN(nf, nf*2-2, name, transposed=False,
+        layer2 = blockUNetIN(nf, nf*2-nf//16 *2, name, transposed=False,
                            inn=inn, relu=False, dropout=dropout)
         layer_idx += 1
         name = 'layer%d' % layer_idx
-        layer3 = blockUNetIN(nf*2, nf*4-4, name, transposed=False,
+        layer3 = blockUNetIN(nf*2, nf*4-nf//16*4, name, transposed=False,
                            inn=inn, relu=False, dropout=dropout)
         layer_idx += 1
         name = 'layer%d' % layer_idx
-        layer4 = blockUNetIN(nf*4, nf*8-8, name, transposed=False,
+        layer4 = blockUNetIN(nf*4, nf*8-nf//16*8, name, transposed=False,
                            inn=inn, relu=False, dropout=dropout)
         layer_idx += 1
         name = 'layer%d' % layer_idx
-        layer5 = blockUNetIN(nf*8, nf*8-16, name, transposed=False,
+        layer5 = blockUNetIN(nf*8, nf*8-nf//16*16, name, transposed=False,
                            inn=inn, relu=False, dropout=dropout)
         layer_idx += 1
         name = 'layer%d' % layer_idx
@@ -1640,15 +1640,15 @@ class scattering_Unet_norm(nn.Module):
                             transposed=True, inn=inn, relu=True, dropout=dropout, resize=True)
 
         self.layer1 = layer1
-        self.scattering_down_1 = scatter_transform_norm(3, 1, input_size, 1, kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
+        self.scattering_down_1 = scatter_transform_norm(3, nf//16, input_size, 1, kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
         self.layer2 = layer2
-        self.scattering_down_2 = scatter_transform_norm(16, 2, input_size, 2,kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
+        self.scattering_down_2 = scatter_transform_norm(nf, nf//16*2, input_size, 2,kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
         self.layer3 = layer3
-        self.scattering_down_3 = scatter_transform_norm(32, 4, input_size, 3,kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
+        self.scattering_down_3 = scatter_transform_norm(nf*2, nf//16*4, input_size, 3,kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
         self.layer4 = layer4
-        self.scattering_down_4 = scatter_transform_norm(64, 8, input_size, 4,kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
+        self.scattering_down_4 = scatter_transform_norm(nf*4, nf//16*8, input_size, 4,kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
         self.layer5 = layer5
-        self.scattering_down_5 = scatter_transform_norm(128, 16, input_size, 5,kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
+        self.scattering_down_5 = scatter_transform_norm(nf*8, nf//16*16, input_size, 5,kind,norm_layer = norm_layer, dropout=dropout,scattering_attention=scattering_attention)
         self.layer6 = layer6
         self.dlayer6 = dlayer6
         self.dlayer5 = dlayer5
