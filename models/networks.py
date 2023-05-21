@@ -1419,7 +1419,7 @@ class scattering_Unet(nn.Module):
                             transposed=True, bn=True, relu=True, dropout=dropout, resize=True)
 
         self.layer1 = layer1
-        self.scattering_down_1 = scatter_transform(3, 1, input_size, 1, kind,dropout=dropout,scattering_attention=scattering_attention)
+        self.scattering_down_1 = scatter_transform(3, nf//16, input_size, 1, kind,dropout=dropout,scattering_attention=scattering_attention)
         self.layer2 = layer2
         self.scattering_down_2 = scatter_transform(nf, nf//16*2, input_size, 2,kind,dropout=dropout,scattering_attention=scattering_attention)
         self.layer3 = layer3
