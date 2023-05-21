@@ -133,7 +133,7 @@ def init_net(net, init_type='normal', init_gain=0.02, gpu_ids=[]):
     return net
 
 
-def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, init_type='normal', init_gain=0.02, gpu_ids=[], is_A=True, input_size=512):
+def define_G(input_nc, output_nc, ngf, nf, netG, norm='batch', use_dropout=False, init_type='normal', init_gain=0.02, gpu_ids=[], is_A=True, input_size=512):
     """Create a generator
 
     Parameters:
@@ -211,7 +211,7 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
     #                                     use_dropout=use_dropout)
 
     elif netG == 'ellen_dwt_uresnet2_3':  # 2_1 based - scattering branch instead of dwt branch
-        net = ellen_dwt_uresnet2_3(input_nc, output_nc, ngf, norm_layer=norm_layer,
+        net = ellen_dwt_uresnet2_3(input_nc, output_nc, ngf, nf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
 
     elif netG == 'ellen_dwt_uresnet2_3_0503':  # 2_1 based - scattering branch instead of dwt branch
@@ -222,7 +222,7 @@ def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, in
         net = ellen_dwt_uresnet2_3_0511(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)
     elif netG == 'ellen_dwt_uresnet2_3_0517':  # 2_1 based - scattering branch instead of dwt branch
-        net = ellen_dwt_uresnet2_3_0517(input_nc, output_nc, ngf, norm_layer=norm_layer,
+        net = ellen_dwt_uresnet2_3_0517(input_nc, output_nc, ngf,  nf, norm_layer=norm_layer,
                                    use_dropout=use_dropout, num_downs=2, n_blocks=0, input_size=input_size)                            
                                 
     elif netG == 'ellen_dwt_uresnet2_3_b1':  # 2_1 based - scattering branch instead of dwt branch
@@ -1814,7 +1814,7 @@ class scattering_Unet_norm3(nn.Module):
 
         self.scattering_onlyone = scatter_transform_norm3(input_size,norm_layer = norm_layer, dropout=dropout,nf = nf)
 
-        self.head_conv = self.fusion = nn.Sequential(nn.ReflectionPad2d(
+        self.head_conv = nn.Sequential(nn.ReflectionPad2d(
             1), nn.Conv2d(3,nf - nf//4, 3, 1, 0), nn.InstanceNorm2d(nf/4), nn.LeakyReLU(0.2, inplace=True))
 
         layer_idx = 1
@@ -2323,11 +2323,11 @@ class ellen_dwt_uresnet2_3(nn.Module):
     input (input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, num_downs=4, n_blocks=3)  
     """
 
-    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
+    def __init__(self, input_nc, output_nc, ngf=64, nf=16, norm_layer=nn.BatchNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
         super(ellen_dwt_uresnet2_3, self).__init__()
         self.uresnet = ellen_uresnet(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                      use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks,batch_norm=False)
-        self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=16,kind=0,dropout=use_dropout,batch_norm=False)
+        self.scattering_model = scattering_Unet(input_size, output_nc=3, nf=nf,kind=0,dropout=use_dropout,batch_norm=False)
         self.fusion = nn.Sequential(nn.ReflectionPad2d(
             3), nn.Conv2d(6, 3, kernel_size=7, padding=0), nn.Tanh())
 
@@ -2350,11 +2350,11 @@ class ellen_dwt_uresnet2_3_0503(nn.Module):
         * change norm = Ture
         * 
     """
-    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.InstanceNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
+    def __init__(self, input_nc, output_nc, ngf=64, nf=16,  norm_layer=nn.InstanceNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
         super(ellen_dwt_uresnet2_3_0503, self).__init__()
         self.uresnet = ellen_uresnet(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                      use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks,batch_norm=True)
-        self.scattering_model = scattering_Unet_norm(input_size, output_nc=3, norm_layer=norm_layer, nf=16, kind=0,dropout=use_dropout)
+        self.scattering_model = scattering_Unet_norm(input_size, output_nc=3, norm_layer=norm_layer, nf=nf, kind=0,dropout=use_dropout)
         self.fusion = nn.Sequential(nn.ReflectionPad2d(
             3), nn.Conv2d(6, 3, kernel_size=7, padding=0), nn.Tanh())
 
@@ -2377,11 +2377,11 @@ class ellen_dwt_uresnet2_3_0511(nn.Module):
         * scattering_Unet_norm -> scattering_Unet_norm3 (with 3 order scattering transform)
         * fusion: 7x7 -> 3x3 두개
     """
-    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.InstanceNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
+    def __init__(self, input_nc, output_nc, ngf=64,nf = 16, norm_layer=nn.InstanceNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
         super(ellen_dwt_uresnet2_3_0511, self).__init__()
         self.uresnet = ellen_uresnet(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                      use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks,batch_norm=True) # True로 바꿈 0511
-        self.scattering_model = scattering_Unet_norm3(input_size, output_nc=3, norm_layer=norm_layer, nf=16, kind=0, dropout=use_dropout)
+        self.scattering_model = scattering_Unet_norm3(input_size, output_nc=3, norm_layer=norm_layer, nf=nf, kind=0, dropout=use_dropout)
         self.fusion = nn.Sequential(nn.ReflectionPad2d(
             1), nn.Conv2d(6, 3, kernel_size=3, padding=0),nn.InstanceNorm2d(3), nn.Tanh(), nn.ReflectionPad2d(
             1), nn.Conv2d(3, 3, kernel_size=3, padding=0), nn.Tanh())
@@ -2403,11 +2403,11 @@ class ellen_dwt_uresnet2_3_0517(nn.Module):
     > ellen_dwt_uresnet2_3_0511  based
         * only scattering branch but with higher nf
     """
-    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.InstanceNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
+    def __init__(self, input_nc, output_nc, ngf=64, nf = 32, norm_layer=nn.InstanceNorm2d, use_dropout=False, num_downs=3, n_blocks=9, input_size=512):
         super(ellen_dwt_uresnet2_3_0517, self).__init__()
         # self.uresnet = ellen_uresnet(input_nc, output_nc, ngf, norm_layer=norm_layer,
                                     #  use_dropout=use_dropout, num_downs=num_downs, n_blocks=n_blocks,batch_norm=True) # True로 바꿈 0511
-        self.scattering_model = scattering_Unet_norm3(input_size, output_nc=3, norm_layer=norm_layer, nf=64, kind=0, dropout=use_dropout)
+        self.scattering_model = scattering_Unet_norm3(input_size, output_nc=3, norm_layer=norm_layer, nf=nf, kind=0, dropout=use_dropout)
         self.fusion = nn.Sequential(nn.ReflectionPad2d(
             1), nn.Conv2d(3, 3, kernel_size=3, padding=0),nn.InstanceNorm2d(3), nn.Tanh(), nn.ReflectionPad2d(
             1), nn.Conv2d(3, 3, kernel_size=3, padding=0), nn.Tanh())
