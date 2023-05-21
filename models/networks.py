@@ -1454,7 +1454,7 @@ class scattering_Unet(nn.Module):
             self.tailnorm=nn.BatchNorm2d(output_nc)
 
         # self.tail_conv1 = nn.Conv2d(32, output_nc, 3, padding=1, bias=True) # 2_3_ori
-        self.tail_conv1 = nn.Sequential(nn.Conv2d(32, output_nc, 3, padding=1, bias=True), nn.Tanh()) # made - 2022.11.21
+        self.tail_conv1 = nn.Sequential(nn.Conv2d(nf*2, output_nc, 3, padding=1, bias=True), nn.Tanh()) # made - 2022.11.21
 
     def forward(self, x):
         if not self.batch_norm:
