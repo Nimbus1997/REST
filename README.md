@@ -1,8 +1,9 @@
 
-# Cycle GAN based REST for EyeQ (miv server1)  
-past: ✨only change code in miv1 & pull it in other server"✨date: 2023.02.15 
-now: ✨only change code in miv4 & pull it in other server"✨date: 2023.04.28
-
+# REST
+This is the code for the MICCAI 2023 Paper "RESToring Clarity: Unpaired Retina Image Enhancement using Scattering Transform".  
+[Links]
+paper: https://link.springer.com/chapter/10.1007/978-3-031-43999-5_45  
+reviews, feedback: https://conferences.miccai.org/2023/papers/540-Paper2936.html  
 
 based on RetinaImage_model_ukb  
 -> even though the name of the repository is "*_eyeq", the folder on the server should be named "*_ukb" (2023.01.30)
