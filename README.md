@@ -1,7 +1,8 @@
 
 # REST
 This is the code for the MICCAI 2023 Paper "RESToring Clarity: Unpaired Retina Image Enhancement using Scattering Transform".  
-![Uploading image.png…]()
+![image](https://github.com/Nimbus1997/REST/assets/66589193/99a433fc-d648-4f08-ae80-2f53084d4100)
+
 
 ## links
 paper: https://link.springer.com/chapter/10.1007/978-3-031-43999-5_45  
