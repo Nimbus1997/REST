@@ -29,8 +29,10 @@ Our code is based on [Cycle GAN] https://github.com/junyanz/pytorch-CycleGAN-and
 Check the 'dataset' folder on the code or [Cycle GAN] explanation for details.
 
 ### run
-```nohup python train.py --dataroot /root/jieunoh/ellen_data/1_ukb_cyclegan_input/ukb_512_1 --name ukb1_ellen53_0508 --fiqa_epoch 10 --save_epoch_freq 10 --model cycle_gan --direction AtoB --gpu_ids 0 --batch_size 4 --no_flip --load_size 256 --crop_size 256 --display_id 0 --n_epochs 200 --n_epochs_decay 200 --netG ellen_dwt_uresnet2_3_0503>./nohup_out_ukb/ukb1_ellen53_0508.txt&```
-
+#### training example
+```python train.py --dataroot /root/jieunoh/ellen_data/1_ukb_cyclegan_input/ukb_512_1 --name ukb1_ellen53_0508 --fiqa_epoch 10 --save_epoch_freq 10 --model cycle_gan --direction AtoB --gpu_ids 0 --batch_size 4 --no_flip --load_size 256 --crop_size 256 --display_id 0 --n_epochs 200 --n_epochs_decay 200 --netG REST```  
+#### test example
+```python test.py --dataroot /root/jieunoh/ellen_data/1_ukb_cyclegan_input/ukb_512_1 --name ukb1_ellen23_b2_0227 --model cycle_gan --direction AtoB --gpu_ids 2 --use_wandb --no_flip --load_size 256 --crop_size 256 --netG REST --epoch 80 --ellen_test```
 
 ## Acknowledgments
 Our code is inspired by [Cycle GAN] https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix 
