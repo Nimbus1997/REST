@@ -12,15 +12,24 @@ reviews, feedback: https://conferences.miccai.org/2023/papers/540-Paper2936.html
 
 ## Model Architecture
 ###  Architecture of the Generator
-![image](https://github.com/Nimbus1997/REST/assets/66589193/856b62fa-1139-47ed-b9fc-d02699ac6b9c)
+![image](https://github.com/Nimbus1997/REST/assets/66589193/c0e4abcd-73a1-4f1a-9926-90670434984f)
+
 
 ### Overall architecture of REST for training
-![image](https://github.com/Nimbus1997/REST/assets/66589193/ab2b4971-00c6-438d-99d2-c6a8aafb517a)
+![image](https://github.com/Nimbus1997/REST/assets/66589193/c773670c-2a5d-465f-a51e-b39823fe9339)
+
 
     
-
 ## Result
 ![image](https://github.com/Nimbus1997/REST/assets/66589193/e87746d7-ebc0-4c9c-96f7-0ae5db3805be)
+
+## Implementation
+### Dataset preparation (splitting)
+Our code is based on [Cycle GAN] https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix.  
+Check the 'dataset' folder on the code or [Cycle GAN] explanation for details.
+
+### run
+'''nohup python train.py --dataroot /root/jieunoh/ellen_data/1_ukb_cyclegan_input/ukb_512_1 --name ukb1_ellen53_0508 --fiqa_epoch 10 --save_epoch_freq 10 --model cycle_gan --direction AtoB --gpu_ids 0 --batch_size 4 --no_flip --load_size 256 --crop_size 256 --display_id 0 --n_epochs 200 --n_epochs_decay 200 --netG ellen_dwt_uresnet2_3_0503>./nohup_out_ukb/ukb1_ellen53_0508.txt&'''
 
 
 ## Acknowledgments
